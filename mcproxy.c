@@ -975,7 +975,7 @@ int query_auth_server() {
     print_hex(auth, (char *)md, SHA_DIGEST_LENGTH);
     //printf("sessionId : %s\n", auth);
 
-    char accessToken[256], userId[256], userName[256];
+    char accessToken[4096], userId[256], userName[256];
     if (!parse_profile(accessToken, userId)) {
         printf("Failed to parse user profile\n");
         return 0;
@@ -1342,7 +1342,7 @@ int main(int ac, char **av) {
     }
 
 #if DEBUG_AUTH
-    char accessToken[256],userId[256];
+    char accessToken[4096],userId[256];
     parse_profile(accessToken, userId);
     printf("accessToken: %s, userId: %s\n", accessToken, userId);
 
