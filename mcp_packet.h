@@ -348,13 +348,6 @@ typedef struct {
     uint8_t     pos;
 } SP_ChatMessage_pkt;
 
-// 0x3b
-typedef struct {
-    int32_t  X,Z;
-    int32_t  count;
-    blkrec  *blocks;
-} SP_MultiBlockChange_pkt;
-
 // 0x11
 typedef struct {
     uint8_t  wid;
@@ -366,15 +359,6 @@ typedef struct {
 typedef struct {
     uint8_t wid;
 } SP_CloseWindow_pkt;
-
-// 0x2d
-typedef struct {
-    uint8_t  wid;
-    char     wtype[256];
-    char    *title;
-    uint8_t  nslots;
-    uint32_t eid;   // horse's ID - only used if the window type is a EntityHorse
-} SP_OpenWindow_pkt;
 
 // 0x13
 typedef struct {
@@ -478,6 +462,15 @@ typedef struct {
     uint8_t     onground;
 } SP_EntityLookRelMove_pkt;
 
+// 0x2d
+typedef struct {
+    uint8_t  wid;
+    char     wtype[256];
+    char    *title;
+    uint8_t  nslots;
+    uint32_t eid;   // horse's ID - only used if the window type is a EntityHorse
+} SP_OpenWindow_pkt;
+
 // 0x30
 typedef struct {
     uint8_t     flags;
@@ -516,12 +509,6 @@ typedef struct {
     uint32_t    tpid;
 } SP_PlayerPositionLook_pkt;
 
-// Deleted
-typedef struct {
-    uint32_t    eid;
-    pos_t       pos;
-} SP_UseBed_pkt;
-
 // 0x36
 typedef struct {
     uint32_t    count;
@@ -535,6 +522,13 @@ typedef struct {
     uint8_t gamemode;
     char    leveltype[32];
 } SP_Respawn_pkt;
+
+// 0x3b
+typedef struct {
+    int32_t  X,Z;
+    int32_t  count;
+    blkrec  *blocks;
+} SP_MultiBlockChange_pkt;
 
 // 0x3f
 typedef struct {
@@ -592,7 +586,11 @@ typedef struct {
     char        line4[64];
 } SP_UpdateSign_pkt;
 
-
+// Deleted
+typedef struct {
+    uint32_t    eid;
+    pos_t       pos;
+} SP_UseBed_pkt;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -638,11 +636,6 @@ typedef struct {
     uint32_t    hand;
 } CP_UseEntity_pkt;
 
-// 0x15
-typedef struct {
-    uint8_t     onground;
-} CP_Player_pkt;
-
 // 0x12
 typedef struct {
     double      x;
@@ -667,6 +660,11 @@ typedef struct {
     float       pitch;
     uint8_t     onground;
 } CP_PlayerLook_pkt;
+
+// 0x15
+typedef struct {
+    uint8_t     onground;
+} CP_Player_pkt;
 
 // 0x18
 typedef struct {
