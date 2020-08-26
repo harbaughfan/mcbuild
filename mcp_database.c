@@ -796,7 +796,7 @@ char *findjavapath() {
     //hope their program files is default directory for now
     //but need a way to programmatically get the path of Minecraft install & the jre version it ships with
     DIR *dp;
-    //Default location for 64-bit Windows OS with Minecraft 13.2
+    //Default location for 64-bit Windows OS with Minecraft 16.2
     javapath = "/cygdrive/c/Progra~2/Minecraft/runtime/jre-x64/bin";
     dp = opendir(javapath);
     if (!dp) {
