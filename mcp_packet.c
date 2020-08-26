@@ -893,29 +893,30 @@ DUMP_BEGIN(SP_Effect) {
 ////////////////////////////////////////////////////////////////////////////////
 // 0x24 SP_JoinGame
 
-DECODE_BEGIN(SP_JoinGame,_1_8_1) {
+DECODE_BEGIN(SP_JoinGame,_1_16_2) {
     Pint(eid);
+    Pchar(ishardcore);
     Pchar(gamemode);
-    Rchar(dimension);
-    tpkt->dimension = (int32_t)((char)dimension);
-    Pchar(difficulty);
-    Pchar(maxplayers);
-    Pstr(leveltype);
+    Pchar(previousgamemode);
+    Pvarint(worldcount);
+    for (int i=0; i<tpkt->worldcount;i++) {
+        Pstr(worldnames[i]);
+    }
+    tpkt->dimensioncodec = nbt_parse(&p);
+    tpkt->dimensionnbt = nbt_parse(&p);
+    Pstr(worldname);
+    Plong(hashedseed);
+    //Pchar(difficulty);
+    Pvarint(maxplayers);
+    //Pstr(leveltype);
+    Pvarint(viewdistance);
     Pchar(reduced_debug_info);
+    Pchar(enablerespawnscreen);
+    Pchar(isdebug);
+    Pchar(isflat);
 
-    // track dimension changes - needed for correct SP_ChunkData decoding
-    is_overworld = (tpkt->dimension == 0);
-} DECODE_END;
-
-DECODE_BEGIN(SP_JoinGame,_1_9_2) {
-    Pint(eid);
-    Pchar(gamemode);
-    Pint(dimension);
-    Pchar(difficulty);
-    Pchar(maxplayers);
-    Pstr(leveltype);
-    Pchar(reduced_debug_info);
-
+    // TODO: Figure out whether this is the overworld using dimensioncodec and dimensionnbt
+    tpkt->dimension = 0;
     // track dimension changes - needed for correct SP_ChunkData decoding
     is_overworld = (tpkt->dimension == 0);
 } DECODE_END;
@@ -925,11 +926,32 @@ DUMP_BEGIN(SP_JoinGame) {
     const char *DIM[]  = { "Overworld", "End", "Unknown", "Nether" };
     const char *DIFF[] = { "Peaceful", "Easy", "Normal", "Hard" };
 
-    printf("eid=%08x, gamemode=%s%s, dimension=%s, difficulty=%s, "
-           "maxplayers=%d, leveltype=%s, reduced_debug_info=%c",
-           tpkt->eid, GM[tpkt->gamemode&3], (tpkt->gamemode&8)?"(hardcore)":"",
-           DIM[tpkt->dimension&3], DIFF[tpkt->difficulty&3],
-           tpkt->maxplayers, tpkt->leveltype, tpkt->reduced_debug_info?'T':'F');
+    printf("eid=%08x, ",tpkt->eid);
+    printf("ishardcore=%c, ",tpkt->ishardcore?'T':'F');
+    printf("gamemode=%i, ",tpkt->gamemode);
+    printf("previousgamemode=%i, ",tpkt->previousgamemode);
+    printf("worldcount=%i, ",tpkt->worldcount);
+    for (int i=0; i<tpkt->worldcount;i++) {
+        printf("worldname[%i]=%s, ",i,tpkt->worldnames[i]);
+    }
+    printf("dimensioncodec=%s, ",tpkt->dimensioncodec? "present" : "none");
+    // if (tpkt->dimensioncodec) nbt_dump(tpkt->dimensioncodec);
+    printf("dimensionnbt=%s, ",tpkt->dimensionnbt? "present" : "none");
+    // if (tpkt->dimensionnbt) nbt_dump(tpkt->dimensionnbt);
+    printf("worldname=%s, ",tpkt->worldname);
+    printf("hashedseed=%08x, ",tpkt->hashedseed);
+    printf("maxplayers=%i, ",tpkt->maxplayers);
+    printf("viewdistance=%i, ",tpkt->viewdistance);
+    printf("reduceddebuginfo=%c, ",tpkt->reduced_debug_info?'T':'F');
+    printf("enablerespawnscreen=%c, ",tpkt->enablerespawnscreen?'T':'F');
+    printf("isdebug=%c, ",tpkt->isdebug?'T':'F');
+    printf("isflat=%c, ",tpkt->isflat?'T':'F');
+
+    //  gamemode=%s%s, dimension=%s, difficulty=%s, "
+    //       "maxplayers=%d, leveltype=%s, reduced_debug_info=%c",
+    //       tpkt->eid, GM[tpkt->gamemode&3], (tpkt->gamemode&8)?"(hardcore)":"",
+    //       DIM[tpkt->dimension&3], DIFF[tpkt->difficulty&3],
+    //       tpkt->maxplayers, tpkt->leveltype, tpkt->reduced_debug_info?'T':'F');
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1890,7 +1912,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_DD  (0x21,SP_Effect,_1_8_1),
         SUPPORT_    (0x22,SP_Particle),
         SUPPORT_    (0x23,SP_UpdateLight),
-        SUPPORT_DD  (0x24,SP_JoinGame,_1_9_2),
+        SUPPORT_DD  (0x24,SP_JoinGame,_1_16_2),
         SUPPORT_    (0x25,SP_Map),
         SUPPORT_    (0x26,SP_TradeList),
         SUPPORT_    (0x27,SP_Entity),

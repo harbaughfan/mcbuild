@@ -413,12 +413,24 @@ typedef struct {
 // 0x24
 typedef struct {
     uint32_t eid;
+    uint8_t  ishardcore;
     uint8_t  gamemode;
-    int32_t  dimension;
-    uint8_t  difficulty;
-    uint8_t  maxplayers;
-    char     leveltype[32];
+    uint8_t  previousgamemode;
+    uint32_t worldcount;
+    char     worldnames[10][100];
+    nbt_t    *dimensioncodec;
+    nbt_t    *dimensionnbt;
+    uint8_t  dimension;
+    char     worldname[1024];
+    int64_t  hashedseed;
+    uint8_t  difficulty;   //removed
+    uint32_t maxplayers;
+    char     leveltype[32]; //removed
+    int32_t  viewdistance;
     uint8_t  reduced_debug_info;
+    uint8_t  enablerespawnscreen;
+    uint8_t  isdebug;
+    uint8_t  isflat;
 } SP_JoinGame_pkt;
 
 // 0x25
