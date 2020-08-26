@@ -277,7 +277,7 @@ DUMP_BEGIN(SP_SpawnExperienceOrb) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x03 SP_SpawnMob
+// 0x02 SP_SpawnMob
 
 DECODE_BEGIN(SP_SpawnMob,_1_13_2) {
     Pvarint(eid);
@@ -310,7 +310,7 @@ FREE_BEGIN(SP_SpawnMob) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x04 SP_SpawnPainting
+// 0x03 SP_SpawnPainting
 
 DECODE_BEGIN(SP_SpawnPainting,_1_13_2) {
     Pvarint(eid);
@@ -328,7 +328,7 @@ DUMP_BEGIN(SP_SpawnPainting) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x05 SP_SpawnPlayer
+// 0x04 SP_SpawnPlayer
 
 DECODE_BEGIN(SP_SpawnPlayer,_1_13_2) {
     Pvarint(eid);
@@ -374,7 +374,7 @@ FREE_BEGIN(SP_UpdateBlockEntity) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x0a SP_BlockAction
+// 0x0A SP_BlockAction
 
 DECODE_BEGIN(SP_BlockAction,_1_8_1) {
     Plong(loc.p);
@@ -450,51 +450,7 @@ FREE_BEGIN(SP_ChatMessage) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x0F SP_MultiBlockChange
-
-DECODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
-    Pint(X);
-    Pint(Z);
-    Pvarint(count);
-    lh_alloc_num(tpkt->blocks, tpkt->count);
-    int i;
-    for(i=0; i<tpkt->count; i++) {
-        Pchar(blocks[i].pos);
-        Pchar(blocks[i].y);
-        Rvarint(bid);
-        tpkt->blocks[i].bid.raw = (uint16_t)bid;
-    }
-} DECODE_END;
-
-ENCODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
-    Wint(X);
-    Wint(Z);
-    Wvarint(count);
-    int i;
-    for(i=0; i<tpkt->count; i++) {
-        Wchar(blocks[i].pos);
-        Wchar(blocks[i].y);
-        Wvarint(blocks[i].bid.raw);
-    }
-} ENCODE_END;
-
-DUMP_BEGIN(SP_MultiBlockChange) {
-    printf("chunk=%d:%d, count=%d",
-           tpkt->X, tpkt->Z, tpkt->count);
-    int i;
-    for(i=0; i<tpkt->count; i++) {
-        blkrec *b = tpkt->blocks+i;
-        printf("\n    coord=%d,%d,%d bid=%x(%d)",
-               b->x,b->z,b->y,b->bid.raw,b->bid.raw);
-    }
-} DUMP_END;
-
-FREE_BEGIN(SP_MultiBlockChange) {
-    lh_free(tpkt->blocks);
-} FREE_END;
-
-////////////////////////////////////////////////////////////////////////////////
-// 0x12 SP_ConfirmTransaction
+// 0x11 SP_ConfirmTransaction
 
 DECODE_BEGIN(SP_ConfirmTransaction,_1_8_1) {
     Pchar(wid);
@@ -507,7 +463,7 @@ DUMP_BEGIN(SP_ConfirmTransaction) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x13 SP_CloseWindow
+// 0x12 SP_CloseWindow
 
 DECODE_BEGIN(SP_CloseWindow,_1_8_1) {
     Pchar(wid);
@@ -522,40 +478,7 @@ DUMP_BEGIN(SP_CloseWindow) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x14 SP_OpenWindow
-
-DECODE_BEGIN(SP_OpenWindow,_1_8_1) {
-    Pchar(wid);
-    Pstr(wtype);
-    Rstr(title);
-    tpkt->title = strdup(title);
-    Pchar(nslots);
-    if (!strcmp(tpkt->wtype, "EntityHorse")) {
-        Pint(eid);
-    }
-} DECODE_END;
-
-ENCODE_BEGIN(SP_OpenWindow,_1_8_1) {
-    Wchar(wid);
-    Wstr(wtype);
-    Wstr(title);
-    Wchar(nslots);
-    if (!strcmp(tpkt->wtype, "EntityHorse")) {
-        Wint(eid);
-    }
-} ENCODE_END;
-
-DUMP_BEGIN(SP_OpenWindow) {
-    printf("wid=%d wtype=%s title=%s nslots=%d eid=%d",
-           tpkt->wid,tpkt->wtype,tpkt->title,tpkt->nslots,tpkt->eid);
-} DUMP_END;
-
-FREE_BEGIN(SP_OpenWindow) {
-    lh_free(tpkt->title);
-} FREE_END;
-
-////////////////////////////////////////////////////////////////////////////////
-// 0x15 SP_WindowItems
+// 0x13 SP_WindowItems
 
 DECODE_BEGIN(SP_WindowItems,_1_13_2) {
     Pchar(wid);
@@ -594,7 +517,7 @@ FREE_BEGIN(SP_WindowItems) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x17 SP_SetSlot
+// 0x15 SP_SetSlot
 
 // Note: bumping to _1_13_2 despite no change in code here, but since read_slot()
 // and write_slot() reimplemented for 1.13.2 protocol
@@ -620,7 +543,7 @@ FREE_BEGIN(SP_SetSlot) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x1e SP_Explosion
+// 0x1b SP_Explosion
 
 DECODE_BEGIN(SP_Explosion,_1_8_1) {
     Pfloat(x);
@@ -660,7 +583,7 @@ FREE_BEGIN(SP_Explosion) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x1f SP_UnloadChunk
+// 0x1c SP_UnloadChunk
 
 DECODE_BEGIN(SP_UnloadChunk,_1_9) {
     Pint(X);
@@ -677,7 +600,7 @@ DUMP_BEGIN(SP_UnloadChunk) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x20 SP_ChangeGameState
+// 0x1d SP_ChangeGameState
 
 DECODE_BEGIN(SP_ChangeGameState, _1_8_1) {
     Pchar(reason);
@@ -694,7 +617,7 @@ DUMP_BEGIN(SP_ChangeGameState) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x22 SP_ChunkData
+// 0x20 SP_ChunkData
 
 static int is_overworld = 1;
 
@@ -952,7 +875,7 @@ FREE_BEGIN(SP_ChunkData) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x23 SP_Effect
+// 0x21 SP_Effect
 
 DECODE_BEGIN(SP_Effect,_1_8_1) {
     Pint(id);
@@ -968,7 +891,7 @@ DUMP_BEGIN(SP_Effect) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x25 SP_JoinGame
+// 0x24 SP_JoinGame
 
 DECODE_BEGIN(SP_JoinGame,_1_8_1) {
     Pint(eid);
@@ -1010,7 +933,7 @@ DUMP_BEGIN(SP_JoinGame) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x26 SP_Map
+// 0x25 SP_Map
 
 DECODE_BEGIN(SP_Map,_1_9) {
     Pvarint(mapid);
@@ -1104,7 +1027,40 @@ DUMP_BEGIN(SP_EntityLookRelMove) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x2e SP_PlayerAbilities
+// 0x2D SP_OpenWindow
+
+DECODE_BEGIN(SP_OpenWindow,_1_8_1) {
+    Pchar(wid);
+    Pstr(wtype);
+    Rstr(title);
+    tpkt->title = strdup(title);
+    Pchar(nslots);
+    if (!strcmp(tpkt->wtype, "EntityHorse")) {
+        Pint(eid);
+    }
+} DECODE_END;
+
+ENCODE_BEGIN(SP_OpenWindow,_1_8_1) {
+    Wchar(wid);
+    Wstr(wtype);
+    Wstr(title);
+    Wchar(nslots);
+    if (!strcmp(tpkt->wtype, "EntityHorse")) {
+        Wint(eid);
+    }
+} ENCODE_END;
+
+DUMP_BEGIN(SP_OpenWindow) {
+    printf("wid=%d wtype=%s title=%s nslots=%d eid=%d",
+           tpkt->wid,tpkt->wtype,tpkt->title,tpkt->nslots,tpkt->eid);
+} DUMP_END;
+
+FREE_BEGIN(SP_OpenWindow) {
+    lh_free(tpkt->title);
+} FREE_END;
+
+////////////////////////////////////////////////////////////////////////////////
+// 0x30 SP_PlayerAbilities
 
 DECODE_BEGIN(SP_PlayerAbilities,_1_8_1) {
     Pchar(flags);
@@ -1124,7 +1080,7 @@ DUMP_BEGIN(SP_PlayerAbilities) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x30 SP_PlayerListItem
+// 0x32 SP_PlayerListItem
 
 DECODE_BEGIN(SP_PlayerListItem,_1_9) {
     Pvarint(action);
@@ -1259,7 +1215,7 @@ FREE_BEGIN(SP_PlayerListItem) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x32 SP_PlayerPositionLook
+// 0x34 SP_PlayerPositionLook
 
 DECODE_BEGIN(SP_PlayerPositionLook,_1_9) {
     Pdouble(x);
@@ -1287,24 +1243,7 @@ DUMP_BEGIN(SP_PlayerPositionLook) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x33 SP_UseBed
-
-DECODE_BEGIN(SP_UseBed,_1_9) {
-    Pvarint(eid);
-    Plong(pos.p);
-} DECODE_END;
-
-ENCODE_BEGIN(SP_UseBed,_1_9) {
-    Wvarint(eid);
-    Wlong(pos.p);
-} ENCODE_END;
-
-DUMP_BEGIN(SP_UseBed) {
-    printf("eid=%d, pos=%d,%d,%d", tpkt->eid, tpkt->pos.x, tpkt->pos.y, tpkt->pos.z);
-} DUMP_END;
-
-////////////////////////////////////////////////////////////////////////////////
-// 0x35 SP_DestroyEntities
+// 0x36 SP_DestroyEntities
 
 DECODE_BEGIN(SP_DestroyEntities,_1_8_1) {
     Pvarint(count);
@@ -1328,7 +1267,7 @@ FREE_BEGIN(SP_DestroyEntities) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x38 SP_Respawn
+// 0x39 SP_Respawn
 
 DECODE_BEGIN(SP_Respawn,_1_8_1) {
     Pint(dimension);
@@ -1359,7 +1298,51 @@ DUMP_BEGIN(SP_Respawn) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x3d SP_HeldItemChange
+// 0x3B SP_MultiBlockChange
+
+DECODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
+    Pint(X);
+    Pint(Z);
+    Pvarint(count);
+    lh_alloc_num(tpkt->blocks, tpkt->count);
+    int i;
+    for(i=0; i<tpkt->count; i++) {
+        Pchar(blocks[i].pos);
+        Pchar(blocks[i].y);
+        Rvarint(bid);
+        tpkt->blocks[i].bid.raw = (uint16_t)bid;
+    }
+} DECODE_END;
+
+ENCODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
+    Wint(X);
+    Wint(Z);
+    Wvarint(count);
+    int i;
+    for(i=0; i<tpkt->count; i++) {
+        Wchar(blocks[i].pos);
+        Wchar(blocks[i].y);
+        Wvarint(blocks[i].bid.raw);
+    }
+} ENCODE_END;
+
+DUMP_BEGIN(SP_MultiBlockChange) {
+    printf("chunk=%d:%d, count=%d",
+           tpkt->X, tpkt->Z, tpkt->count);
+    int i;
+    for(i=0; i<tpkt->count; i++) {
+        blkrec *b = tpkt->blocks+i;
+        printf("\n    coord=%d,%d,%d bid=%x(%d)",
+               b->x,b->z,b->y,b->bid.raw,b->bid.raw);
+    }
+} DUMP_END;
+
+FREE_BEGIN(SP_MultiBlockChange) {
+    lh_free(tpkt->blocks);
+} FREE_END;
+
+////////////////////////////////////////////////////////////////////////////////
+// 0x3F SP_HeldItemChange
 
 DECODE_BEGIN(SP_HeldItemChange,_1_8_1) {
     Pchar(sid);
@@ -1374,7 +1357,7 @@ DUMP_BEGIN(SP_HeldItemChange) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x3f SP_EntityMetadata
+// 0x44 SP_EntityMetadata
 
 DECODE_BEGIN(SP_EntityMetadata,_1_13_2) {
     Pvarint(eid);
@@ -1397,7 +1380,7 @@ FREE_BEGIN(SP_EntityMetadata) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x43 SP_SetExperience
+// 0x48 SP_SetExperience
 
 DECODE_BEGIN(SP_SetExperience,_1_8_1) {
     Pfloat(bar);
@@ -1410,7 +1393,7 @@ DUMP_BEGIN(SP_SetExperience) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x44 SP_UpdateHealth
+// 0x49 SP_UpdateHealth
 
 DECODE_BEGIN(SP_UpdateHealth,_1_8_1) {
     Pfloat(health);
@@ -1424,7 +1407,7 @@ DUMP_BEGIN(SP_UpdateHealth) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x4d SP_SoundEffect
+// 0x50 SP_SoundEffect
 
 DECODE_BEGIN(SP_SoundEffect,_1_10) {
     Pvarint(id);
@@ -1475,7 +1458,7 @@ DUMP_BEGIN(SP_SoundEffect) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x50 SP_EntityTeleport
+// 0x56 SP_EntityTeleport
 
 DECODE_BEGIN(SP_EntityTeleport,_1_9) {
     Pvarint(eid);
@@ -1493,7 +1476,22 @@ DUMP_BEGIN(SP_EntityTeleport) {
            (float)tpkt->yaw/256,(float)tpkt->pitch/256,tpkt->onground);
 } DUMP_END;
 
+////////////////////////////////////////////////////////////////////////////////
+// 0x81 SP_UseBed  DELETED
 
+DECODE_BEGIN(SP_UseBed,_1_9) {
+    Pvarint(eid);
+    Plong(pos.p);
+} DECODE_END;
+
+ENCODE_BEGIN(SP_UseBed,_1_9) {
+    Wvarint(eid);
+    Wlong(pos.p);
+} ENCODE_END;
+
+DUMP_BEGIN(SP_UseBed) {
+    printf("eid=%d, pos=%d,%d,%d", tpkt->eid, tpkt->pos.x, tpkt->pos.y, tpkt->pos.z);
+} DUMP_END;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1515,7 +1513,7 @@ DUMP_BEGIN(CP_TeleportConfirm) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x02 CP_ChatMessage
+// 0x03 CP_ChatMessage
 
 DECODE_BEGIN(CP_ChatMessage,_1_8_1) {
     Pstr(str);
@@ -1526,7 +1524,7 @@ DUMP_BEGIN(CP_ChatMessage) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x06 CP_ConfirmTransaction
+// 0x07 CP_ConfirmTransaction
 
 DECODE_BEGIN(CP_ConfirmTransaction,_1_13_2) {
     Pchar(wid);
@@ -1546,7 +1544,7 @@ DUMP_BEGIN(CP_ConfirmTransaction) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x08 CP_ClickWindow
+// 0x09 CP_ClickWindow
 
 DECODE_BEGIN(CP_ClickWindow,_1_13_2) {
     Pchar(wid);
@@ -1577,7 +1575,7 @@ FREE_BEGIN(CP_ClickWindow) {
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x09 CP_CloseWindow
+// 0x0A CP_CloseWindow
 
 DECODE_BEGIN(CP_CloseWindow,_1_8_1) {
     Pchar(wid);
@@ -1592,7 +1590,7 @@ DUMP_BEGIN(CP_CloseWindow) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x0d CP_UseEntity
+// 0x0E CP_UseEntity
 
 DECODE_BEGIN(CP_UseEntity,_1_9) {
     Pvarint(target);
@@ -1640,18 +1638,7 @@ DUMP_BEGIN(CP_UseEntity) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x0f CP_Player
-
-DECODE_BEGIN(CP_Player,_1_8_1) {
-    Pchar(onground);
-} DECODE_END;
-
-DUMP_BEGIN(CP_Player) {
-    printf("onground=%d",tpkt->onground);
-} DUMP_END;
-
-////////////////////////////////////////////////////////////////////////////////
-// 0x10 CP_PlayerPosition
+// 0x12 CP_PlayerPosition
 
 DECODE_BEGIN(CP_PlayerPosition,_1_8_1) {
     Pdouble(x);
@@ -1666,7 +1653,7 @@ DUMP_BEGIN(CP_PlayerPosition) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x11 CP_PlayerPositionLook
+// 0x13 CP_PlayerPositionLook
 
 DECODE_BEGIN(CP_PlayerPositionLook,_1_8_1) {
     Pdouble(x);
@@ -1692,7 +1679,7 @@ DUMP_BEGIN(CP_PlayerPositionLook) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x12 CP_PlayerLook
+// 0x14 CP_PlayerLook
 
 DECODE_BEGIN(CP_PlayerLook,_1_8_1) {
     Pfloat(yaw);
@@ -1712,7 +1699,18 @@ DUMP_BEGIN(CP_PlayerLook) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x15 CP_PickItem
+// 0x15 CP_Player
+
+DECODE_BEGIN(CP_Player,_1_8_1) {
+    Pchar(onground);
+} DECODE_END;
+
+DUMP_BEGIN(CP_Player) {
+    printf("onground=%d",tpkt->onground);
+} DUMP_END;
+
+////////////////////////////////////////////////////////////////////////////////
+// 0x18 CP_PickItem
 
 DECODE_BEGIN(CP_PickItem,_1_13_2) {
     Pvarint(sid);
@@ -1728,7 +1726,7 @@ DUMP_BEGIN(CP_PickItem) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x18 CP_PlayerDigging
+// 0x1B CP_PlayerDigging
 
 DECODE_BEGIN(CP_PlayerDigging,_1_9) {
     Pvarint(status);
@@ -1748,7 +1746,7 @@ DUMP_BEGIN(CP_PlayerDigging) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x19 CP_EntityAction
+// 0x1C CP_EntityAction
 
 DECODE_BEGIN(CP_EntityAction,_1_8_1) {
     Pvarint(eid);
@@ -1768,7 +1766,7 @@ DUMP_BEGIN(CP_EntityAction) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x21 CP_HeldItemChange
+// 0x25 CP_HeldItemChange
 
 DECODE_BEGIN(CP_HeldItemChange,_1_8_1) {
     Pshort(sid);
@@ -1783,7 +1781,7 @@ DUMP_BEGIN(CP_HeldItemChange) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x27 CP_Animation
+// 0x2C CP_Animation
 
 DECODE_BEGIN(CP_Animation,_1_9) {
     Pvarint(hand);
@@ -1798,7 +1796,7 @@ DUMP_BEGIN(CP_Animation) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x29 CP_PlayerBlockPlacement
+// 0x2E CP_PlayerBlockPlacement
 
 DECODE_BEGIN(CP_PlayerBlockPlacement,_1_11) {
     Plong(bpos.p);
@@ -1825,7 +1823,7 @@ DUMP_BEGIN(CP_PlayerBlockPlacement) {
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x2a CP_UseItem
+// 0x2F CP_UseItem
 
 DECODE_BEGIN(CP_UseItem,_1_9) {
     Pvarint(hand);
@@ -1910,7 +1908,6 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_DEDF(0x32,SP_PlayerListItem,_1_9),
         SUPPORT_    (0x33,SP_FacePlayer),
         SUPPORT_DED (0x34,SP_PlayerPositionLook,_1_9),
-       // SUPPORT_DED (0x33,SP_UseBed,_1_9),
         SUPPORT_    (0x35,SP_UnlockRecipes),
         SUPPORT_DDF (0x36,SP_DestroyEntities,_1_8_1),
         SUPPORT_    (0x37,SP_RemoveEntityEffect),
@@ -2013,136 +2010,158 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
 
 // Uncomment packet IDs that should be dumped
 uint32_t DUMP_ENABLED[] = {
-    // SP_SpawnObject,
-    // SP_SpawnExperienceOrb,
-    // SP_SpawnGlobalEntity,
-    // SP_SpawnMob,
-    // SP_SpawnPainting,
-    // SP_SpawnPlayer,
-    // SP_Animation,
-    // SP_Statistics,
-    // SP_BlockBreakAnimation,
-    // SP_UpdateBlockEntity,
-    // SP_BlockAction,
-    // SP_BlockChange,
-    // SP_BossBar,
-    // SP_ServerDifficulty,
-    // SP_ChatMessage,
-    // SP_MultiBlockChange,
-    // SP_TabComplete,
-    // SP_DeclareCommands,
-    // SP_ConfirmTransaction,
-    // SP_CloseWindow,
-    // SP_OpenWindow,
-    // SP_WindowItems,
-    // SP_WindowProperty,
-    // SP_SetSlot,
-    // SP_SetCooldown,
-    // SP_PluginMessage,
-    // SP_NamedSoundEffect,
-    // SP_Disconnect,
-    // SP_EntityStatus,
-    // SP_NbtQueryResponse,
-    // SP_Explosion,
-    // SP_UnloadChunk,
-    // SP_ChangeGameState,
-    // SP_KeepAlive,
-    // SP_ChunkData,
-    // SP_Effect,
-    // SP_Particle,
-    // SP_JoinGame,
-    // SP_Map,
-    // SP_Entity,
-    // SP_EntityRelMove,
-    // SP_EntityLookRelMove,
-    // SP_EntityLook,
-    // SP_VehicleMove,
-    // SP_OpenSignEditor,
-    // SP_CraftRecipeResponse,
-    // SP_PlayerAbilities,
-    // SP_CombatEffect,
-    // SP_PlayerListItem,
-    // SP_FacePlayer,
-    // SP_PlayerPositionLook,
-    // SP_UseBed,
-    // SP_UnlockRecipes,
-    // SP_DestroyEntities,
-    // SP_RemoveEntityEffect,
-    // SP_ResourcePackSent,
-    // SP_Respawn,
-    // SP_EntityHeadLook,
-    // SP_SelectAdvancementTab,
-    // SP_WorldBorder,
-    // SP_Camera,
-    // SP_HeldItemChange,
-    // SP_DisplayScoreboard,
-    // SP_EntityMetadata,
-    // SP_AttachEntity,
-    // SP_EntityVelocity,
-    // SP_EntityEquipment,
-    // SP_SetExperience,
-    // SP_UpdateHealth,
-    // SP_ScoreboardObjective,
-    // SP_SetPassengers,
-    // SP_Teams,
-    // SP_UpdateScore,
-    // SP_SpawnPosition,
-    // SP_TimeUpdate,
-    // SP_Title,
-    // SP_StopSound,
-    // SP_SoundEffect,
-    // SP_PlayerListHeader,
-    // SP_CollectItem,
-    // SP_EntityTeleport,
-    // SP_Advancements,
-    // SP_EntityProperties,
-    // SP_EntityEffect,
-    // SP_DeclareRecipes,
-    // SP_Tags,
+    SP_SpawnObject,
+    SP_SpawnExperienceOrb,
+    SP_SpawnMob,
+    SP_SpawnPainting,
+    SP_SpawnPlayer,
+    SP_Animation,
+    SP_Statistics,
+    SP_AckPlayerDigging,
+    SP_BlockBreakAnimation,
+    SP_UpdateBlockEntity,
+    SP_BlockAction,
+    SP_BlockChange,
+    SP_BossBar,
+    SP_ServerDifficulty,
+    SP_ChatMessage,
+    SP_TabComplete,
 
-    // CP_TeleportConfirm,
-    // CP_QueryBlockNbt,
-    // CP_ChatMessage,
-    // CP_ClientStatus,
-    // CP_ClientSettings,
-    // CP_TabComplete,
-    // CP_ConfirmTransaction,
-    // CP_EnchantItem,
-    // CP_ClickWindow,
-    // CP_CloseWindow,
-    // CP_PluginMessage,
-    // CP_EditBook,
-    // CP_QueryEntityNbt,
-    // CP_UseEntity,
-    // CP_KeepAlive,
-    // CP_Player,
-    // CP_PlayerPosition,
-    // CP_PlayerPositionLook,
-    // CP_PlayerLook,
-    // CP_VehicleMove,
-    // CP_SteerBoat,
-    // CP_PickItem,
-    // CP_CraftRecipeRequest,
-    // CP_PlayerAbilities,
-    // CP_PlayerDigging,
-    // CP_EntityAction,
-    // CP_SteerVehicle,
-    // CP_RecipeBookData,
-    // CP_NameItem,
-    // CP_ResourcePackStatus,
-    // CP_AdvancementTab,
-    // CP_SelectTrade,
-    // CP_SetBeaconEffect,
-    // CP_HeldItemChange,
-    // CP_UpdateCommandBlock,
-    // CP_UpdateCmdMinecart,
-    // CP_CreativeInventoryAct,
-    // CP_UpdateStructureBlock,
-    // CP_UpdateSign,
-    // CP_Animation,
-    // CP_Spectate,
-    // CP_PlayerBlockPlacement,
-    // CP_UseItem,
+    SP_DeclareCommands,
+    SP_ConfirmTransaction,
+    SP_CloseWindow,
+    SP_WindowItems,
+    SP_WindowProperty,
+    SP_SetSlot,
+    SP_SetCooldown,
+    SP_PluginMessage,
+    SP_NamedSoundEffect,
+    SP_Disconnect,
+    SP_EntityStatus,
+    SP_Explosion,
+    SP_UnloadChunk,
+    SP_ChangeGameState,
+    SP_OpenHorseWindow,
+    SP_KeepAlive,
+
+    SP_ChunkData,
+    SP_Effect,
+    SP_Particle,
+    SP_UpdateLight,
+    SP_JoinGame,
+    SP_Map,
+    SP_TradeList,
+    SP_Entity,
+    SP_EntityRelMove,
+    SP_EntityLookRelMove,
+    SP_EntityLook,
+    SP_VehicleMove,
+    SP_OpenBook,
+    SP_OpenWindow,
+    SP_OpenSignEditor,
+    SP_CraftRecipeResponse,
+
+    SP_PlayerAbilities,
+    SP_CombatEffect,
+    SP_PlayerListItem,
+    SP_FacePlayer,
+    SP_PlayerPositionLook,
+    SP_UnlockRecipes,
+    SP_DestroyEntities,
+    SP_RemoveEntityEffect,
+    SP_ResourcePackSent,
+    SP_Respawn,
+    SP_EntityHeadLook,
+    SP_MultiBlockChange,
+    SP_SelectAdvancementTab,
+    SP_WorldBorder,
+    SP_Camera,
+    SP_HeldItemChange,
+
+    SP_UpdateViewPosition,
+    SP_UpdateViewDistance,
+    SP_SpawnPosition,
+    SP_DisplayScoreboard,
+    SP_EntityMetadata,
+    SP_AttachEntity,
+    SP_EntityVelocity,
+    SP_EntityEquipment,
+    SP_SetExperience,
+    SP_UpdateHealth,
+    SP_ScoreboardObjective,
+    SP_SetPassengers,
+    SP_Teams,
+    SP_UpdateScore,
+    SP_TimeUpdate,
+    SP_Title,
+
+    SP_EntitySoundEffect,
+    SP_SoundEffect,
+    SP_StopSound,
+    SP_PlayerListHeader,
+    SP_NbtQueryResponse,
+    SP_CollectItem,
+    SP_EntityTeleport,
+    SP_Advancements,
+    SP_EntityProperties,
+    SP_EntityEffect,
+    SP_DeclareRecipes,
+    SP_Tags,
+    SP_UpdateSign,
+    SP_UseBed,
+    SP_SpawnGlobalEntity,
+
+
+    CP_TeleportConfirm,
+    CP_QueryBlockNbt,
+    CP_SetDifficulty,
+    CP_ChatMessage,
+    CP_ClientStatus,
+    CP_ClientSettings,
+    CP_TabComplete,
+    CP_ConfirmTransaction,
+    CP_EnchantItem,
+    CP_ClickWindow,
+    CP_CloseWindow,
+    CP_PluginMessage,
+    CP_EditBook,
+    CP_QueryEntityNbt,
+    CP_UseEntity,
+    CP_GenerateStructure,
+    CP_KeepAlive,
+    CP_LockDifficulty,
+    CP_PlayerPosition,
+    CP_PlayerPositionLook,
+    CP_PlayerLook,
+    CP_Player,
+    CP_VehicleMove,
+    CP_SteerBoat,
+    CP_PickItem,
+    CP_CraftRecipeRequest,
+    CP_PlayerAbilities,
+    CP_PlayerDigging,
+    CP_EntityAction,
+    CP_SteerVehicle,
+    CP_SetDisplayedRecipe,
+    CP_SetRecipeBookState,
+    CP_NameItem,
+    CP_ResourcePackStatus,
+    CP_AdvancementTab,
+    CP_SelectTrade,
+    CP_SetBeaconEffect,
+    CP_HeldItemChange,
+    CP_UpdateCommandBlock,
+    CP_UpdateCmdMinecart,
+    CP_CreativeInventoryAct,
+    CP_UpdateJigsawBlock,
+    CP_UpdateStructureBlock,
+    CP_UpdateSign,
+    CP_Animation,
+    CP_Spectate,
+    CP_PlayerBlockPlacement,
+    CP_UseItem,
+    CP_PrepareCraftingGrid,
+    CP_RecipeBookData,
     0xffffffff // Terminator
 };
 
