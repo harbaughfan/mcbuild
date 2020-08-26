@@ -109,6 +109,7 @@
 #define SP_ServerDifficulty     SP(0d)
 #define SP_ChatMessage          SP(0e)
 #define SP_TabComplete          SP(0f)
+
 #define SP_DeclareCommands      SP(10)
 #define SP_ConfirmTransaction   SP(11)
 #define SP_CloseWindow          SP(12)
@@ -125,6 +126,7 @@
 #define SP_ChangeGameState      SP(1d)
 #define SP_OpenHorseWindow      SP(1e) // new
 #define SP_KeepAlive            SP(1f)
+
 #define SP_ChunkData            SP(20)
 #define SP_Effect               SP(21)
 #define SP_Particle             SP(22)
@@ -141,6 +143,7 @@
 #define SP_OpenWindow           SP(2d)
 #define SP_OpenSignEditor       SP(2e)
 #define SP_CraftRecipeResponse  SP(2f)
+
 #define SP_PlayerAbilities      SP(30)
 #define SP_CombatEffect         SP(31)
 #define SP_PlayerListItem       SP(32)
@@ -157,6 +160,7 @@
 #define SP_WorldBorder          SP(3d)
 #define SP_Camera               SP(3e)
 #define SP_HeldItemChange       SP(3f)
+
 #define SP_UpdateViewPosition   SP(40) // new
 #define SP_UpdateViewDistance   SP(41) // new
 #define SP_SpawnPosition        SP(42)
@@ -173,11 +177,12 @@
 #define SP_UpdateScore          SP(4d)
 #define SP_TimeUpdate           SP(4e)
 #define SP_Title                SP(4f)
+
 #define SP_EntitySoundEffect    SP(50)
 #define SP_SoundEffect          SP(51)
 #define SP_StopSound            SP(52)
 #define SP_PlayerListHeader     SP(53)
-#define SP_NBTQueryResponse     SP(54) // new
+#define SP_NbtQueryResponse     SP(54)
 #define SP_CollectItem          SP(55)
 #define SP_EntityTeleport       SP(56)
 #define SP_Advancements         SP(57)
