@@ -183,7 +183,7 @@ int db_load(int protocol_id) {
     json_object *jobjfile, *jobjitems, *jobj, *itemidstructurejson, *itemidjson;
 
     //load the items.json file into a parsed json object in memory
-    jobj = json_object_from_file (itemjsonfilespec);
+    jobjfile = json_object_from_file (itemjsonfilespec);
 
     //there are many registries not just items anymore (1.16.2) so find the items json
     int found=0;
