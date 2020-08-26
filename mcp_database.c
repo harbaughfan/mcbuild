@@ -180,10 +180,18 @@ int db_load(int protocol_id) {
     //  Load items.json into db     //
     //////////////////////////////////
 
-    json_object *jobj, *itemidstructurejson, *itemidjson;
+    json_object jobjfile, *jobjitems, *jobj, *itemidstructurejson, *itemidjson;
 
     //load the items.json file into a parsed json object in memory
     jobj = json_object_from_file (itemjsonfilespec);
+
+    //there are many registries not just items anymore (1.16.2) so find the items json
+    int found=0;
+    found = json_object_object_get_ex(jobjfile,"minecraft:item", &jobjitems);
+    if(!found) printf("Error finding minecraft:item\n");
+    found = json_object_object_get_ex(jobjitems,"entries", &jobj);
+    if(!found) printf("Error finding entries\n");
+
 
      //initialize an iterator. "it" is the iterator and "itEnd" is the end of the json where the iterations stop
     struct json_object_iterator it = json_object_iter_begin(jobj);
