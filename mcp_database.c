@@ -789,7 +789,7 @@ char *findjavapath() {
     //but need a way to programmatically get the path of Minecraft install & the jre version it ships with
     DIR *dp;
     //Default location for 64-bit Windows OS with Minecraft 13.2
-    javapath = "/cygdrive/c/Progra~2/Minecraft/runtime/jre-x64/1.8.0_51/bin";
+    javapath = "/cygdrive/c/Progra~2/Minecraft/runtime/jre-x64/bin";
     dp = opendir(javapath);
     if (!dp) {
         printf("findjavapath(): Directory not found\n");
@@ -918,10 +918,10 @@ int try_to_get_missing_json_files(int protocol_id) {
     char *itemjsonfilespec = malloc(strlen(databasefilepath)+20);
     sprintf(itemjsonfilespec, "%s/items_%d.json",databasefilepath,protocol_id);  //example: "./database/items_404.json"
 
-    rc = rename("./database/generated/reports/items.json", itemjsonfilespec);
+    rc = rename("./database/generated/reports/registries.json", itemjsonfilespec);
     rc |= rename("./database/generated/reports/blocks.json", blockjsonfilespec);
     if (rc) {
-        printf("Error couldnt move the items blocks json to the database directory. %d\n",rc);
+        printf("Error couldnt move the registries.json or blocks.json to the database directory. %d\n",rc);
         return -1;
     }
 
