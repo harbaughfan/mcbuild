@@ -276,7 +276,7 @@ typedef struct {
     uint16_t count;
 } SP_SpawnExperienceOrb_pkt;
 
-// 0x03
+// 0x02
 typedef struct {
     uint32_t    eid;
     uuid_t      uuid;
@@ -293,7 +293,7 @@ typedef struct {
     metadata *meta;
 } SP_SpawnMob_pkt;
 
-// 0x04
+// 0x03
 typedef struct {
     uint32_t    eid;
     uuid_t      uuid;
@@ -303,7 +303,7 @@ typedef struct {
     uint8_t     dir;
 } SP_SpawnPainting_pkt;
 
-// 0x05
+// 0x04
 typedef struct {
     uint32_t    eid;
     uuid_t      uuid;
@@ -343,26 +343,26 @@ typedef struct {
     uint8_t     pos;
 } SP_ChatMessage_pkt;
 
-// 0x0f
+// 0x3b
 typedef struct {
     int32_t  X,Z;
     int32_t  count;
     blkrec  *blocks;
 } SP_MultiBlockChange_pkt;
 
-// 0x12
+// 0x11
 typedef struct {
     uint8_t  wid;
     uint16_t aid;
     uint8_t  accepted;
 } SP_ConfirmTransaction_pkt;
 
-// 0x13
+// 0x12
 typedef struct {
     uint8_t wid;
 } SP_CloseWindow_pkt;
 
-// 0x14
+// 0x2d
 typedef struct {
     uint8_t  wid;
     char     wtype[256];
@@ -371,21 +371,21 @@ typedef struct {
     uint32_t eid;   // horse's ID - only used if the window type is a EntityHorse
 } SP_OpenWindow_pkt;
 
-// 0x15
+// 0x13
 typedef struct {
     uint8_t  wid;
     int16_t  count;
     slot_t   *slots;
 } SP_WindowItems_pkt;
 
-// 0x17
+// 0x15
 typedef struct {
     uint8_t  wid;
     int16_t  sid;
     slot_t   slot;
 } SP_SetSlot_pkt;
 
-// 0x1e
+// 0x1b
 typedef struct {
     float    x,y,z;
     float    radius;
@@ -394,18 +394,18 @@ typedef struct {
     float    vx,vy,vz;
 } SP_Explosion_pkt;
 
-// 0x1f
+// 0x1c
 typedef struct {
     int32_t  X,Z;
 } SP_UnloadChunk_pkt;
 
-// 0x20
+// 0x1d
 typedef struct {
     uint8_t     reason;
     float       value;
 } SP_ChangeGameState_pkt;
 
-// 0x22
+// 0x20
 typedef struct {
     int8_t   cont;          // ground-up continuous
     int8_t   skylight;      // whether skylight was sent;
@@ -413,7 +413,7 @@ typedef struct {
     nbt_t   *te;            // tile entities
 } SP_ChunkData_pkt;
 
-// 0x23
+// 0x21
 typedef struct {
     uint32_t id;
     pos_t    loc;
@@ -421,7 +421,7 @@ typedef struct {
     uint8_t  disvol;
 } SP_Effect_pkt;
 
-// 0x25
+// 0x24
 typedef struct {
     uint32_t eid;
     uint8_t  gamemode;
@@ -432,7 +432,7 @@ typedef struct {
     uint8_t  reduced_debug_info;
 } SP_JoinGame_pkt;
 
-// 0x26
+// 0x25
 typedef struct {
     uint8_t  type;
     uint8_t  x;
@@ -473,14 +473,14 @@ typedef struct {
     uint8_t     onground;
 } SP_EntityLookRelMove_pkt;
 
-// 0x2e
+// 0x30
 typedef struct {
     uint8_t     flags;
     float       speed;
     float       fov;
 } SP_PlayerAbilities_pkt;
 
-// 0x30
+// 0x32
 typedef struct {
     char        pname[64];
     char        pval[MCP_MAXSTR];
@@ -503,7 +503,7 @@ typedef struct {
     lh_arr_declare(pli_t,list);
 } SP_PlayerListItem_pkt;
 
-// 0x32
+// 0x34
 typedef struct {
     double      x,y,z;
     float       yaw,pitch;
@@ -511,19 +511,19 @@ typedef struct {
     uint32_t    tpid;
 } SP_PlayerPositionLook_pkt;
 
-// 0x33
+// Deleted
 typedef struct {
     uint32_t    eid;
     pos_t       pos;
 } SP_UseBed_pkt;
 
-// 0x35
+// 0x36
 typedef struct {
     uint32_t    count;
     uint32_t   *eids;
 } SP_DestroyEntities_pkt;
 
-// 0x38
+// 0x39
 typedef struct {
     int32_t dimension;
     uint8_t difficulty;
@@ -531,32 +531,32 @@ typedef struct {
     char    leveltype[32];
 } SP_Respawn_pkt;
 
-// 0x3d
+// 0x3f
 typedef struct {
     int8_t sid;
 } SP_HeldItemChange_pkt;
 
-// 0x3f
+// 0x44
 typedef struct {
     uint32_t    eid;
     metadata *  meta;
 } SP_EntityMetadata_pkt;
 
-// 0x43
+// 0x48
 typedef struct {
     float    bar;
     int32_t  level;
     int32_t  exp;
 } SP_SetExperience_pkt;
 
-// 0x44
+// 0x49
 typedef struct {
     float    health;
     int32_t  food;
     float    saturation;
 } SP_UpdateHealth_pkt;
 
-// 0x4d
+// 0x51
 typedef struct {
     int32_t     id;
     int32_t     category;
@@ -567,7 +567,7 @@ typedef struct {
     float       pitch;
 } SP_SoundEffect_pkt;
 
-// 0x50
+// 0x56
 typedef struct {
     uint32_t    eid;
     double      x;
@@ -598,19 +598,19 @@ typedef struct {
     uint32_t    tpid;
 } CP_TeleportConfirm_pkt;
 
-// 0x02
+// 0x03
 typedef struct {
     char        str[320];
 } CP_ChatMessage_pkt;
 
-// 0x06
+// 0x07
 typedef struct {
     uint8_t     wid;
     uint16_t    aid;
     uint8_t     accepted;
 } CP_ConfirmTransaction_pkt;
 
-// 0x08
+// 0x09
 typedef struct {
     uint8_t  wid;
     int16_t  sid;
@@ -620,12 +620,12 @@ typedef struct {
     slot_t   slot;
 } CP_ClickWindow_pkt;
 
-// 0x09
+// 0x0a
 typedef struct {
     uint8_t wid;
 } CP_CloseWindow_pkt;
 
-// 0x0d
+// 0x0e
 typedef struct {
     uint32_t    target;
     uint32_t    action;
@@ -633,12 +633,12 @@ typedef struct {
     uint32_t    hand;
 } CP_UseEntity_pkt;
 
-// 0x0f
+// 0x15
 typedef struct {
     uint8_t     onground;
 } CP_Player_pkt;
 
-// 0x10
+// 0x12
 typedef struct {
     double      x;
     double      y;
@@ -646,7 +646,7 @@ typedef struct {
     uint8_t     onground;
 } CP_PlayerPosition_pkt;
 
-// 0x11
+// 0x13
 typedef struct {
     double      x;
     double      y;
@@ -656,43 +656,43 @@ typedef struct {
     uint8_t     onground;
 } CP_PlayerPositionLook_pkt;
 
-// 0x12
+// 0x14
 typedef struct {
     float       yaw;
     float       pitch;
     uint8_t     onground;
 } CP_PlayerLook_pkt;
 
-// 0x15
+// 0x18
 typedef struct {
     uint32_t    sid;
 } CP_PickItem_pkt;
 
-// 0x18
+// 0x1b
 typedef struct {
     uint32_t    status;
     pos_t       loc;
     uint8_t     face;
 } CP_PlayerDigging_pkt;
 
-// 0x19
+// 0x1c
 typedef struct {
     uint32_t    eid;
     uint32_t    action;
     uint32_t    jumpboost;
 } CP_EntityAction_pkt;
 
-// 0x21
+// 0x25
 typedef struct {
     int16_t sid;
 } CP_HeldItemChange_pkt;
 
-// 0x27
+// 0x2c
 typedef struct {
     uint32_t    hand;
 } CP_Animation_pkt;
 
-// 0x29
+// 0x2e
 typedef struct {
     pos_t   bpos;
     int32_t face;
@@ -700,7 +700,7 @@ typedef struct {
     float   cx,cy,cz;
 } CP_PlayerBlockPlacement_pkt;
 
-// 0x2a
+// 0x2f
 typedef struct {
     int32_t     hand;
 } CP_UseItem_pkt;
