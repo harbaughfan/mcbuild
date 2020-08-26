@@ -757,8 +757,8 @@ int db_get_all_ids_matching_blockname(const char *blockname, blid_t *idarray ) {
 // Private:  Converts the protocol ID to its MC version string
 char *protocol_to_ver_string(int protid){
     // TODO: use what we already have
-    if (protid == 404) {
-        return "1.13.2";
+    if (protid == 751) {
+        return "1.16.2";
     }
     return "unknown";
 }
