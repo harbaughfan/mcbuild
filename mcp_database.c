@@ -180,7 +180,7 @@ int db_load(int protocol_id) {
     //  Load items.json into db     //
     //////////////////////////////////
 
-    json_object jobjfile, *jobjitems, *jobj, *itemidstructurejson, *itemidjson;
+    json_object *jobjfile, *jobjitems, *jobj, *itemidstructurejson, *itemidjson;
 
     //load the items.json file into a parsed json object in memory
     jobj = json_object_from_file (itemjsonfilespec);
