@@ -1850,9 +1850,9 @@ DUMP_BEGIN(CP_UseItem) {
 // they are needed to properly look up names for raw packets in dump_packet()
 // and in case the ID has shifted or was removed between the versions
 
-// MC protocol v404 - clients 1.13.2
+// MC protocol v751 - clients 1.16.2
 // https://wiki.vg/Protocol
-const static packet_methods SUPPORT_1_13_2[2][MAXPACKETTYPES] = {
+const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
     {
         SUPPORT_DD  (0x00,SP_SpawnObject,_1_9),
         SUPPORT_DD  (0x01,SP_SpawnExperienceOrb,_1_9),
@@ -2214,7 +2214,7 @@ typedef struct {
 } protocol_support_t;
 
 static protocol_support_t supported[] = {
-    { 404, PROTO_1_13_2,    "1.13.2",   SUPPORT_1_13_2 },
+    { 751, PROTO_1_16_2,    "1.16.2",   SUPPORT_1_16_2 },
     {  -1, PROTO_NONE,  NULL,       NULL },
 };
 
