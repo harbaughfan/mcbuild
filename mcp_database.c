@@ -53,7 +53,7 @@ int db_load(int protocol_id) {
     database_t *newdb = lh_arr_new_c(GAR(dbs));
 
     //TODO: Protocol Specific
-    assert(protocol_id == 404);
+    assert(protocol_id == 751);
 
     char blockjsonfilespec[PATH_MAX], itemjsonfilespec[PATH_MAX], dbfilespec[PATH_MAX];
     sprintf(blockjsonfilespec, "%s/blocks_%d.json",databasefilepath,protocol_id);  //example "./database/blocks_404.json"
