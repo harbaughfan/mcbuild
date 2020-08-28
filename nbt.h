@@ -90,6 +90,7 @@ typedef struct nbt_t {
                         // all following pointers are allocated and must be freed on destruction!
         int8_t *ba;     // NBT_BYTE_ARRAY
         int32_t*ia;     // NBT_INT_ARRAY
+        int64_t*la;     // NBT_LONG_ARRAY
 
         char   *st;     // NBT_STRING
 
