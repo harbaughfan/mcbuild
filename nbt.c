@@ -71,6 +71,13 @@ static void nbt_dump_ind(nbt_t *nbt, int indent) {
             printf(" }\n");
             break;
 
+        case NBT_LONG_ARRAY:
+            printf("Long Array '%s'[%zd] = { ",name,nbt->count);
+            for(i=0; i<nbt->count; i++)
+                printf("%s%d",i?", ":"",nbt->la[i]);
+            printf(" }\n");
+            break;
+
         case NBT_STRING:
             printf("String '%s'=\"%s\"\n",name,nbt->st);
             break;
@@ -158,6 +165,13 @@ static nbt_t * nbt_parse_type(uint8_t **p, uint8_t type, int named) {
             lh_alloc_num(nbt->ia, nbt->count);
             for(i=0; i<nbt->count; i++)
                 nbt->ia[i] = lh_read_int_be(*p);
+            break;
+
+        case NBT_LONG_ARRAY:
+            nbt->count = lh_read_int_be(*p);
+            lh_alloc_num(nbt->la, nbt->count);
+            for(i=0; i<nbt->count; i++)
+                nbt->la[i] = lh_read_long_be(*p);
             break;
 
         case NBT_STRING:
@@ -256,6 +270,12 @@ void nbt_write(uint8_t **w, nbt_t *nbt) {
                 lh_write_int_be(*w, nbt->ia[i]);
             break;
 
+        case NBT_LONG_ARRAY:
+            lh_write_int_be(*w, nbt->count);
+            for(i=0; i<nbt->count; i++)
+                lh_write_long_be(*w, nbt->la[i]);
+            break;
+
         case NBT_STRING:
             lh_write_short_be(*w, strlen(nbt->st));
             memmove(*w, nbt->st, nbt->count);
@@ -292,6 +312,7 @@ void nbt_free(nbt_t *nbt) {
     switch (nbt->type) {
         case NBT_BYTE_ARRAY: lh_free(nbt->ba); break;
         case NBT_INT_ARRAY:  lh_free(nbt->ia); break;
+        case NBT_LONG_ARRAY: lh_free(nbt->la); break;
         case NBT_STRING:     lh_free(nbt->st); break;
         case NBT_LIST:
         case NBT_COMPOUND:
@@ -352,6 +373,11 @@ nbt_t * nbt_clone(nbt_t *src) {
         case NBT_INT_ARRAY:
             lh_alloc_num(dst->ia, dst->count);
             memmove(dst->ia, src->ia, dst->count*sizeof(*dst->ia));
+            break;
+
+        case NBT_LONG_ARRAY:
+            lh_alloc_num(dst->la, dst->count);
+            memmove(dst->la, src->la, dst->count*sizeof(*dst->la));
             break;
 
         case NBT_STRING:
@@ -467,6 +493,13 @@ nbt_t * nbt_new(int type, const char *name, ...) {
             nbt->count = va_arg(ap, int);
             lh_alloc_num(nbt->ia, nbt->count);
             memmove(nbt->ia, values, nbt->count*sizeof(*values));
+            break;
+        }
+        case NBT_LONG_ARRAY: {
+            int64_t *values = va_arg(ap, int64_t *);
+            nbt->count = va_arg(ap, int);
+            lh_alloc_num(nbt->la, nbt->count);
+            memmove(nbt->la, values, nbt->count*sizeof(*values));
             break;
         }
     }
