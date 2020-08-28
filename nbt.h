@@ -65,6 +65,7 @@ Tags
 #define NBT_LIST        9
 #define NBT_COMPOUND   10
 #define NBT_INT_ARRAY  11
+#define NBT_LONG_ARRAY 12
 
 //typedef struct nbt_t nbt_t;
 
