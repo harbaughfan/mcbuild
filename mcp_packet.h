@@ -346,6 +346,7 @@ typedef struct {
 typedef struct {
     char       *json;
     uint8_t     pos;
+    uuid_t      sender;
 } SP_ChatMessage_pkt;
 
 // 0x11
@@ -398,6 +399,7 @@ typedef struct {
 typedef struct {
     int8_t   cont;          // ground-up continuous
     int8_t   skylight;      // whether skylight was sent;
+    uint32_t size;
     chunk_t  chunk;
     nbt_t   *te;            // tile entities
 } SP_ChunkData_pkt;

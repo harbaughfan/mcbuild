@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #include "helpers.h"
+#include "nbt.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // various constants and helpers
@@ -134,14 +135,17 @@ typedef struct {
     bid_t   blocks[4096];
     light_t skylight[2048];
     light_t light[2048];
+    uint16_t numblocks;
 } cube_t;
 
 typedef struct {
     int32_t  X;
     int32_t  Z;
     uint32_t mask;
+    nbt_t *heightmap;
     cube_t   *cubes[16];    // pointers to cubes. The pointers may be NULL meaning air
-    uint8_t  biome[256];
+    uint32_t numberofbiomes;
+    uint32_t  biome[256];
 } chunk_t;
 
 typedef struct {
@@ -169,4 +173,3 @@ typedef struct {
 } cuboid_t;
 
 void free_cuboid(cuboid_t c);
-

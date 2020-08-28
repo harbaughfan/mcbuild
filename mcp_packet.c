@@ -20,6 +20,7 @@
 
 #include "mcp_packet.h"
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // String
 
@@ -436,9 +437,21 @@ ENCODE_BEGIN(SP_ChatMessage,_1_8_1) {
     Wchar(pos);
 } ENCODE_END;
 
-DUMP_BEGIN(SP_ChatMessage) {
-    printf("pos=%x json=%s",tpkt->pos,tpkt->json);
+DECODE_BEGIN(SP_ChatMessage,_1_16_2) {
+    Rstr(json);
+    tpkt->json = strdup(json);
+    Pchar(pos);
+    Puuid(sender);
+} DECODE_END;
 
+ENCODE_BEGIN(SP_ChatMessage,_1_16_2) {
+    Wstr(json);
+    Wchar(pos);
+    Wuuid(sender);
+} ENCODE_END;
+
+DUMP_BEGIN(SP_ChatMessage) {
+    printf("pos=%x json=%s sender=%s",tpkt->pos,tpkt->json,limhex(tpkt->sender,16,16));
     char name[256], message[256];
     if (decode_chat_json(tpkt->json, name, message)) {
         printf(" name=%s message=\"%s\"",name,message);
@@ -627,10 +640,15 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
     int i,j;
     int npal = -1;
 
-    bid_t pal[4096];
+    //in 1.16.2 the server sends the number of non-air blocks for lighting purposes.
+    Rshort(numblocks);
+    cube->numblocks=numblocks;
+    printf("number of blocks in this section = %i\n",cube->numblocks);
+
+    blid_t pal[4096];
     Rchar(nbits);
-    if (nbits==0) { // raw 13-bit values, no palette
-        nbits=13;
+    if (nbits==0) { // raw 14-bit values, no palette
+        nbits=14;
         npal=0;
     }
     uint64_t mask = ((1<<nbits)-1);
@@ -639,14 +657,16 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
     if ( npal<0 ) {
         npal = lh_read_varint(p);
         for(i=0; i<npal; i++) {
-            pal[i].raw = (uint16_t)lh_read_varint(p);
-            char mat[256];
-            //printf("%2d : %03x:%2d (%s)\n", i, pal[i].bid, pal[i].meta, get_bid_name(mat, pal[i]));
+            pal[i] = (uint16_t)lh_read_varint(p);
+
+           // printf("%3d : %3d (%s)\n", i, pal[i] ,  db_get_blk_name(pal[i]) );
         }
     }
 
     // check if the length of the data matches the expected amount
     Rvarint(nblocks);
+    printf("lh_align(512*nbits, 8) = %i\n",lh_align(512*nbits, 8));
+    printf("nblocks*8 = %i\n",nblocks*8);
     assert(lh_align(512*nbits, 8) == nblocks*8);
 
     // read block data, packed nbits palette indices
@@ -669,7 +689,7 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
 
         if (npal > 0) {
             assert(idx<npal);
-            cube->blocks[i] = pal[idx];
+            cube->blocks[i].raw = pal[idx];
         }
         else {
             cube->blocks[i].raw = idx;
@@ -747,6 +767,65 @@ DECODE_BEGIN(SP_ChunkData,_1_9) {
     tpkt->skylight = is_overworld;
 } DECODE_END;
 
+DECODE_BEGIN(SP_ChunkData,_1_16_2) {
+    uint32_t start = p;
+    printf("%c  %2x %08x ",pkt->cl?'C':'S', pkt->rawtype,pkt->pid);
+    printf("%-24s    len=%6zd, raw=%s","Raw",pkt->rawlen,limhex(pkt->raw,pkt->rawlen,2000));
+    printf("\n");
+
+    Pint(chunk.X); printf("position: %i\n",p-start);
+    Pint(chunk.Z);printf("position: %i\n",p-start);
+    Pchar(cont);printf("position: %i\n",p-start);
+    Pvarint(chunk.mask);printf("position: %i\n",p-start);
+    tpkt->chunk.heightmap = nbt_parse(&p);printf("position: %i\n",p-start);
+
+    printf("Decoding Chunk Data x=%i,z=%i   ",tpkt->chunk.X,tpkt->chunk.Z);
+    printf("Full Chunk: %s   ",tpkt->cont?"True":"False");
+    printf("Chunk Mask: %08x  (",tpkt->chunk.mask);
+    uint32_t x = tpkt->chunk.mask;  for (int i=16;i;i--,putchar('0'|(x>>i)&1));
+    printf(")   Heightmap: %s, ",tpkt->chunk.heightmap? "present" : "none");
+    if (tpkt->chunk.heightmap) nbt_dump(tpkt->chunk.heightmap);
+
+    if (tpkt->cont) {
+        printf("Full Chunk so getting Biomes info..");
+        Pvarint(chunk.numberofbiomes);
+        printf("Expecting %i biomes..",tpkt->chunk.numberofbiomes);
+        int i=0;
+        for (; i<tpkt->chunk.numberofbiomes; i++) {
+            Pvarint(chunk.biome[i]);
+        }
+        printf("Got %i Biomes.\n",i);
+    }
+
+    Rvarint(size);
+    printf("Getting chunk data of %i bytes.\n",tpkt->size);
+    int i,j;
+    for(i=tpkt->chunk.mask,j=0; i; i>>=1,j++) {
+        if (i&1) {
+            printf("Reading Cube #%i\n",j);
+            lh_alloc_obj(tpkt->chunk.cubes[j]);
+            p=read_cube(p, tpkt->chunk.cubes[j]);
+        }
+    }
+
+    //if (tpkt->cont) {
+    //    memmove(tpkt->chunk.biome, p, 256);
+    //    p+=256;
+   // }
+
+    Rvarint(nte); // number of tile entities
+    nbt_t *te = nbt_new(NBT_LIST, "TileEntities", 0);
+    for(i=0; i<nte; i++) {
+        nbt_t * tent = nbt_parse(&p);
+        if (tent) {
+            nbt_add(te, tent);
+        }
+    }
+    tpkt->te = te;
+
+    tpkt->skylight = is_overworld;
+} DECODE_END;
+
 uint8_t * write_cube(uint8_t *w, cube_t *cube) {
     int i;
 
@@ -820,6 +899,46 @@ uint8_t * write_cube(uint8_t *w, cube_t *cube) {
 }
 
 ENCODE_BEGIN(SP_ChunkData,_1_9_4) {
+    int i;
+
+    Wint(chunk.X);
+    Wint(chunk.Z);
+    Wchar(cont);
+
+    uint16_t mask = 0;
+    for(i=0; i<16; i++)
+        if (tpkt->chunk.cubes[i])
+            mask |= (1<<i);
+    lh_write_varint(w, mask);
+
+    uint8_t cubes[256*1024];
+    uint8_t *cw = cubes;
+
+    for(i=0; i<16; i++)
+        if (tpkt->chunk.cubes[i])
+            cw = write_cube(cw, tpkt->chunk.cubes[i]);
+    int32_t size = (int32_t)(cw-cubes);
+
+    lh_write_varint(w, size+((tpkt->cont)?256:0));
+    memmove(w, cubes, size);
+    w+=size;
+
+    if (tpkt->cont) {
+        memmove(w, tpkt->chunk.biome, 256);
+        w+=256;
+    }
+
+    assert(tpkt->te->type == NBT_LIST);
+    assert(tpkt->te->ltype == NBT_COMPOUND || tpkt->te->count==0);
+    lh_write_varint(w, tpkt->te->count);
+    for(i=0; i<tpkt->te->count; i++) {
+        tpkt->te->li[i]->name = ""; // Tile Entity compounds must have name
+        nbt_write(&w, tpkt->te->li[i]);
+        tpkt->te->li[i]->name = NULL;
+    }
+} ENCODE_END;
+
+ENCODE_BEGIN(SP_ChunkData,_1_16_2) {
     int i;
 
     Wint(chunk.X);
@@ -1888,7 +2007,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_DED (0x0b,SP_BlockChange,_1_13_2),
         SUPPORT_    (0x0c,SP_BossBar),
         SUPPORT_    (0x0d,SP_ServerDifficulty),
-        SUPPORT_DEDF(0x0e,SP_ChatMessage,_1_8_1),
+        SUPPORT_DEDF(0x0e,SP_ChatMessage,_1_16_2),
         SUPPORT_    (0x0f,SP_TabComplete),
 
         SUPPORT_    (0x10,SP_DeclareCommands),
@@ -1908,7 +2027,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_    (0x1e,SP_OpenHorseWindow),
         SUPPORT_    (0x1f,SP_KeepAlive),
 
-        SUPPORT_DEDF(0x20,SP_ChunkData,_1_9_4),
+        SUPPORT_DEDF(0x20,SP_ChunkData,_1_16_2),
         SUPPORT_DD  (0x21,SP_Effect,_1_8_1),
         SUPPORT_    (0x22,SP_Particle),
         SUPPORT_    (0x23,SP_UpdateLight),
