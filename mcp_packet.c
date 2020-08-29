@@ -293,7 +293,7 @@ DECODE_BEGIN(SP_SpawnMob,_1_13_2) {
     Pshort(vx);
     Pshort(vy);
     Pshort(vz);
-    Pmeta(meta);
+   //Pmeta(meta);
 } DECODE_END;
 
 DUMP_BEGIN(SP_SpawnMob) {
@@ -303,11 +303,11 @@ DUMP_BEGIN(SP_SpawnMob) {
            tpkt->x,tpkt->y,tpkt->z,
            (float)tpkt->yaw/256,(float)tpkt->pitch/256,(float)tpkt->headpitch/256,
            tpkt->vx,tpkt->vy,tpkt->vz);
-    dump_metadata(tpkt->meta, tpkt->mobtype);
+   // dump_metadata(tpkt->meta, tpkt->mobtype);
 } DUMP_END;
 
 FREE_BEGIN(SP_SpawnMob) {
-    free_metadata(tpkt->meta);
+   // free_metadata(tpkt->meta);
 } FREE_END;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2442,7 +2442,7 @@ MCPacket * decode_packet(int is_client, uint8_t *data, ssize_t len) {
     pkt->rawtype = rawtype;
     pkt->pid  = SUPPORT[is_client][rawtype].pid;
     pkt->ver  = PROTO_NONE;
-
+    printf("Got packet %02x\n",pkt->rawtype);
     // make a raw data copy
     pkt->rawlen = data+len-p;
     if (pkt->rawlen <= 0) {
