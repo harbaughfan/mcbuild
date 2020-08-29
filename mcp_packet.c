@@ -1488,16 +1488,54 @@ DECODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
 } DECODE_END;
 
 DECODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
-    Pint(X);
-    Pint(Z);
+    //Pint(X);
+    //Pint(Z);
+    //encoded chunk x and z with each 22 bits, and section y with 20 bits, from left to right
+    Rlong(encodedcubecoord);
+    printf("MultiBlockChangeDecode:  Encoded Cube Coord: %x\n",encodedcubecoord);
+    uint64_t templong;
+    templong = encodedcubecoord & 0xFFFFF80000000000;
+    printf("MultiBlockChangeDecode:  tpkt.X %x\n",templong);
+    templong >>= 42;
+    printf("MultiBlockChangeDecode:  tpkt.X %x\n",templong);
+    tpkt->X = (int)templong;
+    printf("MultiBlockChangeDecode:  tpkt.X %x\n",tpkt->X);
+    templong = encodedcubecoord & 0x000007FFFFF00000;
+    printf("MultiBlockChangeDecode:  tpkt.Z %x\n",templong);
+    templong >>= 20;
+    printf("MultiBlockChangeDecode:  tpkt.Z %x\n",templong);
+    tpkt->Z = (int)templong;
+    printf("MultiBlockChangeDecode:  tpkt.Z %x\n",tpkt->Z);
+    templong = encodedcubecoord & 0x00000000000FFFFF;
+    printf("MultiBlockChangeDecode:  tpkt.Y %x\n",templong);
+    tpkt->Y = (int)templong;
+    printf("MultiBlockChangeDecode:  tpkt.Y %x\n",tpkt->Y);
+
+
+    //trustedges is always inverse the preceding Update Light packet's "Trust Edges" bool
+    Pchar(trustedges);
+
     Pvarint(count);
     lh_alloc_num(tpkt->blocks, tpkt->count);
     int i;
+
+    //Array of VarLong:  Each entry is composed of the block id, shifted right by 12,
+    //and the relative block position in the chunk section (4 bits for x, z, and y, from left to right).
     for(i=0; i<tpkt->count; i++) {
-        Pchar(blocks[i].pos);
-        Pchar(blocks[i].y);
-        Rvarint(bid);
-        tpkt->blocks[i].bid.raw = (uint16_t)bid;
+        Rlong(encodedblockrecord);
+        printf("MultiBlockChangeDecode:  Encoded Block Record: %x\n",encodedblockrecord);
+        templong = encodedblockrecord >> 12;
+        printf("MultiBlockChangeDecode:  Block ID: %x\n",templong);
+        tpkt->blocks[i].bid.raw = (uint16_t)templong;
+        printf("MultiBlockChangeDecode:  Block ID: %x\n",tpkt->blocks[i].bid.raw);
+        templong = encodedblockrecord & 0x0000000000000FF0;
+        printf("MultiBlockChangeDecode:  POS: %x\n",templong);
+        templong >>= 4;
+        printf("MultiBlockChangeDecode:  POS: %x\n",templong);
+        tpkt->blocks[i].pos = templong;
+        printf("MultiBlockChangeDecode:  POS: %x\n",tpkt->blocks[i].pos);
+        tpkt->blocks[i].y = encodedblockrecord & 0x000000000000000F;
+        printf("MultiBlockChangeDecode:  Y: %x\n",tpkt->blocks[i].y);
     }
 } DECODE_END;
 

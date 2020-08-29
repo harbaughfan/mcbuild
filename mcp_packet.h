@@ -545,7 +545,8 @@ typedef struct {
 
 // 0x3b
 typedef struct {
-    int32_t  X,Z;
+    int32_t  X,Y,Z;
+    uint8_t trustedges;
     int32_t  count;
     blkrec  *blocks;
 } SP_MultiBlockChange_pkt;
