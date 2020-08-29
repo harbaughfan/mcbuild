@@ -1438,6 +1438,23 @@ DECODE_BEGIN(SP_Respawn,_1_8_1) {
     is_overworld = (tpkt->dimension == 0);
 } DECODE_END;
 
+DECODE_BEGIN(SP_Respawn,_1_16_2) {
+    Pint(dimension);
+    Pchar(difficulty);
+    Pchar(gamemode);
+
+    // workaround for different world IDs leaking in TotalFreedom mod
+    if (!(tpkt->dimension>=-1 && tpkt->dimension<=1)) {
+        printf("Warning: applying TotalFreedom/Spigot 1.10 workaround! reported dimension=%d\n", tpkt->dimension);
+        tpkt->dimension = 0;
+    }
+
+    Pstr(leveltype);
+
+    // track dimension changes - needed for correct SP_ChunkData decoding
+    is_overworld = (tpkt->dimension == 0);
+} DECODE_END;
+
 DUMP_BEGIN(SP_Respawn) {
     const char *GM[]   = { "Survival", "Creative", "Adventure", "Spectator" };
     const char *DIM[]  = { "Overworld", "End", "Unknown", "Nether" };
@@ -2064,7 +2081,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_DDF (0x36,SP_DestroyEntities,_1_8_1),
         SUPPORT_    (0x37,SP_RemoveEntityEffect),
         SUPPORT_    (0x38,SP_ResourcePackSent),
-        SUPPORT_DD  (0x39,SP_Respawn,_1_8_1),
+        SUPPORT_DD  (0x39,SP_Respawn,_1_16_2),
         SUPPORT_    (0x3a,SP_EntityHeadLook),
         SUPPORT_DEDF(0x3b,SP_MultiBlockChange,_1_13_2),
         SUPPORT_    (0x3c,SP_SelectAdvancementTab),
