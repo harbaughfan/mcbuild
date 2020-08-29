@@ -51,6 +51,7 @@ typedef enum {
     Weather             = 256-30,
     Raider              = 256-31,
     BasePiglin          = 256-32,
+    AbstractVillager    = 256-33,
 
 
     //// Mobs (SP_SpawnMob)

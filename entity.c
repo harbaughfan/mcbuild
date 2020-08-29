@@ -28,6 +28,115 @@
 // Entities
 
 const char * METANAME[][32] = {
+    [AbstractFireball] = { },
+    [AbstractFish] = {
+        [15] = "From bucket",
+    },
+    [AbstractHorse] = {
+        [16] = "flags",
+        [17] = "owner",
+    },
+    [AbstractIllager] = { },
+    [AbstractSkeleton] = { },
+    [AbstractVillager] = {
+        [16] = "Head shake timer",
+    },
+    [ActivatedTNT] = {
+        [7]  = "Fuse time",
+    },
+    [Ageable] = {
+        [15] = "Is baby",
+    },
+    [Ambient] = {
+    },
+    [Animal] = {
+    },
+    [AreaEffectCloud] = {
+        [7]  = "Radius",
+        [8]  = "Color",
+        [9]  = "Single point",
+        [10]  = "Particle ID",
+    },
+    [ArmorStand] = {
+        [14] = "Armor stand flags",
+        [15] = "Head position",
+        [16] = "Body position",
+        [17] = "L arm position",
+        [18] = "R arm position",
+        [19] = "L leg position",
+        [20] = "R leg position",
+    },
+    [Arrow] = {
+        [7]  = "Is critical",
+        [8]  = "piercing level",
+    },
+    [BasePiglin] = {
+        [15] = "Immune",
+    },
+    [Bat] = {
+        [15] = "Is hanging",
+    },
+    [Bee] = {
+        [16] = "flags",
+        [17] = "Anger Time",
+    },
+    [Blaze] = {
+        [15] = "On fire",
+    },
+    [Boat] = {
+        [7]  = "Time since hit",
+        [8]  = "Forward direction",
+        [9]  = "Damage taken",
+        [10]  = "Type",
+        [11] = "Right paddle turning",
+        [12] = "Left paddle turning",
+        [13] = "Splash Timer",
+    },
+    [Cat] = {
+        [18]  = "Variant",
+        [19]  = "Lying",
+        [20]  = "Relaxed",
+        [21]  = "Collar Color",
+    },
+    [CaveSpider] = { },
+    [ChestedHorse] = {
+        [18] = "Has Chest",
+    },
+    [Chicken] = { },
+    [Cod] = { },
+    [Cow] = { },
+    [Creature] = {
+    },
+    [Creeper] = {
+        [15] = "Creeper state",
+        [16] = "Charged",
+        [17] = "Ignited",
+    },
+    [Dolphin] = {
+        [15] = "Treasure position",
+        [16] = "Can find treasure",
+        [17] = "Has fish",
+    },
+    [Donkey] = { },
+    [DragonFireball] = { },
+    [Drowned] = { },
+    [Egg] = {
+        [7] = "Item",
+    },
+    [ElderGuardian] = { },
+    [EnderCrystal] = {
+        [7]  = "Beam target",
+        [8]  = "Show bottom",
+    },
+    [EnderDragon] = {
+        [15] = "Phase",
+    },
+    [Enderman] = {
+        [15] = "Carried block",
+        [16] = "Screaming",
+        [17] = "Staring",
+    },
+    [Endermite] = { },
     [Entity] = {
         [0]  = "Flags",
         [1]  = "Air",
@@ -35,311 +144,276 @@ const char * METANAME[][32] = {
         [3]  = "Name visible",
         [4]  = "Is silent",
         [5]  = "No gravity",
+        [6]  = "Pose",
     },
-    [Potion] = {
-        [6]  = "Slot",
-    },
-    [FallingBlock] = {
-        [6]  = "Position",
-    },
-    [AreaEffectCloud] = {
-        [6]  = "Radius",
-        [7]  = "Color",
-        [8]  = "Single point",
-        [9]  = "Particle ID",
-        [10] = "Particle Parameter 1",
-        [11] = "Particle Parameter 2",
-    },
-    [FishingFloat] = {
-        [6]  = "Hooked entity",
-    },
-    [Arrow] = {
-        [6]  = "Is critical",
-    },
-    [TippedArrow] = {
-        [7]  = "Color",
-    },
-    [Boat] = {
-        [6]  = "Time since hit",
-        [7]  = "Forward direction",
-        [8]  = "Damage taken",
-        [9]  = "Type",
-        [10] = "Right paddle turning",
-        [11] = "Left paddle turning",
-    },
-    [EnderCrystal] = {
-        [6]  = "Beam target",
-        [7]  = "Show bottom",
-    },
-    [Fireball] = {
-    },
-    [WitherSkull] = {
-        [6]  = "Invulnerable",
-    },
-    [Fireworks] = {
-        [6] = "Firework info",
-        [7] = "Boosted entity ID",
-    },
-    [Hanging] = {
-    },
-    [ItemFrame] = {
-        [6] = "Item",
-        [7] = "Rotation",
-    },
-    [Item] = {
-        [6] = "Item",
-    },
-    [Living] = {
-        [6]  = "Active hand",
-        [7]  = "Health",
-        [8]  = "Potion effect color",
-        [9]  = "Potion effect ambient",
-        [10] = "Number of arrows",
-    },
-    [Player] = {
-        [11] = "Additional hearts",
-        [12] = "Score",
-        [13] = "Skin flags",
-        [14] = "Main hand",
-        [15] = "Left shoulder",
-        [16] = "Right shoulder",
-    },
-    [ArmorStand] = {
-        [11] = "Armor stand flags",
-        [12] = "Head position",
-        [13] = "Body position",
-        [14] = "L arm position",
-        [15] = "R arm position",
-        [16] = "L leg position",
-        [17] = "R leg position",
-    },
-    [Insentinent] = {
-        [11] = "Insentinent flags",
-    },
-    [Ambient] = {
-    },
-    [Bat] = {
-        [12] = "Is hanging",
-    },
-    [Creature] = {
-    },
-    [Ageable] = {
-        [12] = "Is baby",
-    },
-    [Animal] = {
-    },
-    [Horse] = {
-        [13] = "Horse flags",
-        [14] = "Horse type",
-        [15] = "Horse color",
-        [16] = "Owner UUID",
-        [17] = "Horse armor",
-    },
-    [Pig] = {
-        [13] = "Has saddle",
-        [14] = "Carrot boost time",
-    },
-    [Rabbit] = {
-        [13] = "Rabbit type",
-    },
-    [PolarBear] = {
-        [13] = "Standing",
-    },
-    [Sheep] = {
-        [13] = "Sheep color",
-    },
-    [TameableAnimal] = {
-        [13] = "Tameable flags",
-        [14] = "Owner UUID",
-    },
-    [Ocelot] = {
-        [15] = "Ocelot type",
-    },
-    [Wolf] = {
-        [15] = "Damage",
-        [16] = "Begging",
-        [17] = "Collar color",
-    },
-    [Parrot] = {
-        [15] = "Variant",
-    },
-    [Villager] = {
-        [13] = "Profession",
-    },
-    [Golem] = {
-    },
-    [IronGolem] = {
-        [12] = "created by player",
-    },
-    [Snowman] = {
-        [12] = "Flags",
-    },
-    [Shulker] = {
-        [12] = "Direction",
-        [13] = "Attachment position",
-        [14] = "Shield height",
-    },
-    [Monster] = {
-    },
-    [Blaze] = {
-        [12] = "On fire",
-    },
-    [Creeper] = {
-        [12] = "Creeper state",
-        [13] = "Charged",
-        [14] = "Ignited",
-    },
-    [Guardian] = {
-        [12] = "Flags",
-        [13] = "Target EID",
-    },
-    [Skeleton] = {
-        [12] = "Skeleton type",
-        [13] = "Targeting",
-    },
-    [Spider] = {
-        [12] = "Climbing",
-    },
-    [Witch] = {
-        [12] = "Aggressive",
-    },
-    [Wither] = {
-        [12] = "Target 1",
-        [13] = "Target 2",
-        [14] = "Target 3",
-        [15] = "Invulnerable time",
-    },
-    [Zombie] = {
-        [12] = "Baby zombie",
-        [13] = "Villager zombie",
-        [14] = "Converting zombie",
-        [15] = "Hands up",
-    },
-    [Enderman] = {
-        [12] = "Carried block",
-        [13] = "Screaming",
-    },
-    [EnderDragon] = {
-        [12] = "Phase",
-    },
-    [Flying] = {
-    },
-    [Ghast] = {
-        [12] = "Attacking",
-    },
-    [Slime] = {
-        [12] = "Size",
-    },
-    [Minecart] = {
-        [6]  = "Shaking power",
-        [7]  = "Shaking direction",
-        [8]  = "Shaking multiplier",
-        [9]  = "Block id/data",
-        [10] = "Block y",
-        [11] = "Show block",
-    },
-    [MinecartCommandBlock] = {
-        [12] = "Command",
-        [13] = "Last Output",
-    },
-    [MinecartFurnace] = {
-        [12] = "Powered",
-    },
-    [ActivatedTNT] = {
-        [6]  = "Fuse time",
-    },
-        [AbstractFireball] = { },
-    [AbstractFish] = {
-        [12] = "From bucket",
-    },
-    [AbstractIllager] = {
-        [12] = "Has Target",
-    },
-    [CaveSpider] = { },
-    [ChestedHorse] = {
-        [15] = "Has Chest",
-    },
-    [Chicken] = { },
-    [Cod] = { },
-    [Cow] = { },
-    [Dolphin] = {
-        [12] = "Treasure position",
-        [13] = "Can find treasure",
-        [14] = "Has fish",
-    },
-    [Donkey] = { },
-    [DragonFireball] = { },
-    [Drowned] = { },
-    [Egg] = { },
-    [ElderGuardian] = { },
-    [Endermite] = { },
     [EvocationFangs] = { },
     [EvocationIllager] = { },
     [ExperienceOrb] = { },
-    [EyeOfEnder] = { },
-    [FireCharge] = { },
+    [EyeOfEnder] = {
+        [7] = "Item",
+     },
+    [FallingBlock] = {
+        [7]  = "Position",
+    },
+    [Fireball] = {
+        [7]  = "item",
+    },
+    [FireCharge] = {
+        [7]  = "item",
+    },
+    [Fireworks] = {
+        [7] = "Firework info",
+        [8] = "Boosted entity ID",
+        [9] = "shot at angle",
+    },
+    [FishingFloat] = {
+        [7]  = "Hooked entity",
+        [8]  = "Catchable",
+    },
+    [Flying] = {
+    },
+    [Fox] = {
+        [16]  = "Type",
+        [17]  = "flags",
+        [18]  = "UUID1",
+        [19]  = "UUID2",
+    },
+    [Ghast] = {
+        [15] = "Attacking",
+    },
     [Giant] = { },
+    [Golem] = { },
+    [Guardian] = {
+        [15] = "Flags",
+        [16] = "Target EID",
+    },
+    [Hanging] = {
+    },
+    [Hoglin] = {
+        [16] = "Immune",
+    },
+    [Horse] = {
+        [18] = "Variant",
+    },
     [Husk] = { },
     [IllusionIllager] = { },
+    [Insentinent] = {
+        [12] = "Insentinent flags",
+    },
+    [IronGolem] = {
+        [15] = "created by player",
+    },
+    [Item] = {
+        [7] = "Item",
+    },
+    [ItemFrame] = {
+        [7] = "Item",
+        [8] = "Rotation",
+    },
     [LeashKnot] = { },
     [LightningBolt] = { },
+    [Living] = {
+        [7]  = "Active hand",
+        [8]  = "Health",
+        [9]  = "Potion effect color",
+        [10]  = "Potion effect ambient",
+        [11] = "Number of arrows",
+        [12] = "AbsorptionHealth",
+        [13] = "Sleeping Location",
+    },
     [Llama] = {
-        [16] = "Strength (inventory size)",
-        [17] = "Carpet color",
-        [18] = "Variant",
+        [19] = "Strength (inventory size)",
+        [20] = "Carpet color",
+        [21] = "Variant",
     },
     [LlamaSpit] = { },
     [MagmaCube] = { },
-    [Mooshroom] = { },
+    [Minecart] = {
+        [7]  = "Shaking power",
+        [8]  = "Shaking direction",
+        [9]  = "Shaking multiplier",
+        [10]  = "Block id/data",
+        [11] = "Block y",
+        [12] = "Show block",
+    },
+    [MinecartCommandBlock] = {
+        [12] = "Command",
+        [14] = "Last Output",
+    },
+    [MinecartFurnace] = {
+        [13] = "Powered",
+    },
+    [Monster] = {
+        [14] = "flags",
+    },
+    [Mooshroom] = {
+        [16] = "Variant",
+    },
     [Mule] = { },
+    [Ocelot] = {
+        [16] = "Ocelot type",
+    },
     [Painting] = { },
+    [Panda] = {
+        [16]  = "Breed timer",
+        [17]  = "Sneeze timer",
+        [18]  = "Eat timer",
+        [19]  = "Main gene",
+        [20]  = "Hidden gene",
+        [21]  = "flags",
+    },
+    [Parrot] = {
+        [18] = "Variant",
+    },
     [Phantom] = {
-        [12] = "Size of hitbox",
+        [15] = "Size of hitbox",
+    },
+    [Pig] = {
+        [16] = "Has saddle",
+        [17] = "Carrot boost time",
+    },
+    [Piglin] = {
+        [16] = "Baby",
+        [17] = "Charging Crossbow",
+        [18] = "Dancing",
+    },
+    [PiglinBrute] = { },
+    [Pillager] = { },
+    [Player] = {
+        [14] = "Additional hearts",
+        [15] = "Score",
+        [16] = "Skin flags",
+        [17] = "Main hand",
+        [18] = "Left shoulder",
+        [19] = "Right shoulder",
+    },
+    [PolarBear] = {
+        [16] = "Standing",
+    },
+    [Potion] = {
+        [7]  = "Slot",
     },
     [Pufferfish] = {
-        [13] = "Puffstate",
+        [16] = "Puffstate",
     },
+    [Rabbit] = {
+        [16] = "Rabbit type",
+    },
+    [Raider] = {
+        [15] = "Celebrating",
+    },
+    [Ravager] = { },
     [Salmon] = { },
+    [Sheep] = {
+        [16] = "Sheep color",
+    },
+    [Shulker] = {
+        [15] = "Direction",
+        [16] = "Attachment position",
+        [17] = "Shield height",
+        [18] = "Color",
+    },
     [ShulkerBullet] = { },
     [Silverfish] = { },
+    [Skeleton] = { },
     [SkeletonHorse] = { },
-    [Snowball] = { },
+    [Slime] = {
+        [15] = "Size",
+    },
+    [Snowball] = {
+        [7] = "Item",
+     },
+    [Snowman] = {
+        [15] = "Flags",
+    },
     [SpectralArrow] = { },
     [SpellcasterIllager] = {
-        [13] = "Spell enumerator",
+        [16] = "Spell enumerator",
+    },
+    [Spider] = {
+        [15] = "Climbing",
     },
     [Squid] = { },
     [Stray] = { },
-    [Throwable] = { },
-    [ThrownEnderpearl] = { },
-    [ThrownExpBottle] = { },
-    [Trident] = {
-        [8] = "Loyalty level",
+    [Strider] = {
+        [16] = "Boost time",
+        [17] = "Shaking",
+        [18] = "Saddle",
     },
+    [TameableAnimal] = {
+        [16] = "Tameable flags",
+        [17] = "Owner UUID",
+    },
+    [Throwable] = { },
+    [ThrownEnderpearl] = {
+        [7] = "Item",
+     },
+    [ThrownExpBottle] = {
+        [7] = "Item",
+    },
+    [TippedArrow] = {
+        [9]  = "Color",
+    },
+    [Trident] = {
+        [9] = "Loyalty level",
+        [10] = "has glint",
+    },
+    [TraderLlama] = { },
     [TropicalFish] = {
-        [13] = "Variant",
+        [16] = "Variant",
     },
     [Turtle] = {
-        [13] = "Home position",
-        [14] = "Has egg",
-        [15] = "Laying egg",
-        [16] = "Travel pos",
-        [17] = "Going home",
-        [18] = "Traveling",
+        [16] = "Home position",
+        [17] = "Has egg",
+        [18] = "Laying egg",
+        [19] = "Travel pos",
+        [20] = "Going home",
+        [21] = "Traveling",
     },
     [Vex] = {
-        [12] = "In attack mode",
+        [15] = "In attack mode",
+    },
+    [Villager] = {
+        [14] = "Profession",
     },
     [VindicationIllager] = { },
+    [WanderingTrader] = { },
     [WaterMob] = { },
     [Weather] = { },
+    [Witch] = {
+        [16] = "Drinking",
+    },
+    [Wither] = {
+        [15] = "Target 1",
+        [16] = "Target 2",
+        [17] = "Target 3",
+        [18] = "Invulnerable time",
+    },
     [WitherSkeleton] = { },
+    [WitherSkull] = {
+        [7]  = "Invulnerable",
+    },
+    [Wolf] = {
+        [18] = "Begging",
+        [19] = "Collar color",
+        [20] = "Anger time",
+    },
+    [Zoglin] = {
+        [15] = "Baby",
+    },
+    [Zombie] = {
+        [15] = "Baby zombie",
+        [16] = "Unused",
+        [17] = "Converting zombie",
+    },
     [ZombieHorse] = { },
     [ZombiePigman] = { },
     [ZombieVillager] = {
-        [16] = "Is converting",
-        [17] = "Profession",
+        [18] = "Is converting",
+        [19] = "Profession",
     },
+
+
 };
 
 const EntityType ENTITY_HIERARCHY[] = {
@@ -443,7 +517,7 @@ const EntityType ENTITY_HIERARCHY[] = {
     [TropicalFish]             = AbstractFish,
     [Turtle]                   = Animal,
     [Vex]                      = Monster,
-    [Villager]                 = Ageable,
+    [Villager]                 = AbstractVillager,
     [VindicationIllager]       = AbstractIllager,
     [WaterMob]                 = Creature,
     [Weather]                  = Entity,
@@ -470,6 +544,8 @@ const EntityType ENTITY_HIERARCHY[] = {
     [Zoglin]                   = Monster,
     [Raider]                   = Monster,
     [BasePiglin]               = Monster,
+    [AbstractVillager]         = Ageable,
+    [WanderingTrader]          = AbstractVillager,
 
 };
 
@@ -538,9 +614,6 @@ const char * ENTITY_NAMES[MaxEntityType] = {
     ENUMNAME(LlamaSpit),
     ENUMNAME(MagmaCube),
     ENUMNAME(Minecart),
-    ENUMNAME(MinecartCommandBlock),
-    ENUMNAME(MinecartContainer),
-    ENUMNAME(MinecartFurnace),
     ENUMNAME(Monster),
     ENUMNAME(Mooshroom),
     ENUMNAME(Mule),
@@ -605,6 +678,8 @@ const char * ENTITY_NAMES[MaxEntityType] = {
     ENUMNAME(Zoglin),
     ENUMNAME(Raider),
     ENUMNAME(BasePiglin),
+    ENUMNAME(AbstractVillager),
+    ENUMNAME(WanderingTrader),
 
 };
 
@@ -641,6 +716,9 @@ const char * METATYPES[] = {
     [META_BID]      = "block_id",
     [META_NBT]      = "nbt",
     [META_PARTICLE] = "particle",
+    [META_VILLAGER] = "villager",
+    [META_OPTVARINT]= "optvarint",
+    [META_POSE]     = "pose",
     [META_NONE]     = "-"
 };
 
@@ -890,7 +968,10 @@ void dump_metadata(metadata *meta, EntityType et) {
 
         const char * name = NULL;
         EntityType ett = et;
+        char buf[32];
         while ((!name) && (ett!=IllegalEntityType)) {
+            get_entity_name(buf, ett);
+            printf("%s\n",buf);
             name = METANAME[ett][mm->key];
             ett = ENTITY_HIERARCHY[ett];
         }
