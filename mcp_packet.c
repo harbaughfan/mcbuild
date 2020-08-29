@@ -293,6 +293,22 @@ DECODE_BEGIN(SP_SpawnMob,_1_13_2) {
     Pshort(vx);
     Pshort(vy);
     Pshort(vz);
+    Pmeta(meta);
+} DECODE_END;
+
+DECODE_BEGIN(SP_SpawnMob,_1_16_2) {
+    Pvarint(eid);
+    Puuid(uuid);
+    Pvarint(mobtype);
+    Pdouble(x);
+    Pdouble(y);
+    Pdouble(z);
+    Pchar(yaw);
+    Pchar(pitch);
+    Pchar(headpitch);
+    Pshort(vx);
+    Pshort(vy);
+    Pshort(vz);
    //Pmeta(meta);
 } DECODE_END;
 
@@ -307,6 +323,7 @@ DUMP_BEGIN(SP_SpawnMob) {
 } DUMP_END;
 
 FREE_BEGIN(SP_SpawnMob) {
+   // removed for 16.2 but needed for 13.2
    // free_metadata(tpkt->meta);
 } FREE_END;
 
@@ -1989,7 +2006,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
     {
         SUPPORT_DD  (0x00,SP_SpawnObject,_1_9),
         SUPPORT_DD  (0x01,SP_SpawnExperienceOrb,_1_9),
-        SUPPORT_DDF (0x02,SP_SpawnMob,_1_13_2),
+        SUPPORT_DDF (0x02,SP_SpawnMob,_1_16_2),
         SUPPORT_DD  (0x03,SP_SpawnPainting,_1_13_2),
         SUPPORT_DDF (0x04,SP_SpawnPlayer,_1_13_2),
         SUPPORT_    (0x05,SP_Animation),
