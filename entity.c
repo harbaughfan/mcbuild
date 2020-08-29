@@ -219,7 +219,7 @@ const char * METANAME[][32] = {
         [12] = "Carried block",
         [13] = "Screaming",
     },
-    [Enderdragon] = {
+    [EnderDragon] = {
         [12] = "Phase",
     },
     [Flying] = {
@@ -374,7 +374,7 @@ const EntityType ENTITY_HIERARCHY[] = {
     [Egg]                      = Throwable,
     [ElderGuardian]            = Guardian,
     [EnderCrystal]             = Entity,
-    [Enderdragon]              = Insentinent,
+    [EnderDragon]              = Insentinent,
     [Enderman]                 = Monster,
     [Endermite]                = Monster,
     [EvocationFangs]           = Entity,
@@ -456,6 +456,21 @@ const EntityType ENTITY_HIERARCHY[] = {
     [ZombieHorse]              = AbstractHorse,
     [ZombiePigman]             = Zombie,
     [ZombieVillager]           = Zombie,
+    [Bee]                      = Animal,
+    [Cat]                      = TameableAnimal,
+    [Fox]                      = Animal,
+    [Hoglin]                   = Animal,
+    [Panda]                    = Animal,
+    [Piglin]                   = BasePiglin,
+    [PiglinBrute]              = BasePiglin,
+    [Pillager]                 = AbstractIllager,
+    [Ravager]                  = Raider,
+    [Strider]                  = Animal,
+    [TraderLlama]              = IllegalEntityType,
+    [Zoglin]                   = Monster,
+    [Raider]                   = Monster,
+    [BasePiglin]               = Monster,
+
 };
 
 #define ENUMNAME(name) [name] = #name
@@ -491,7 +506,7 @@ const char * ENTITY_NAMES[MaxEntityType] = {
     ENUMNAME(Egg),
     ENUMNAME(ElderGuardian),
     ENUMNAME(EnderCrystal),
-    ENUMNAME(Enderdragon),
+    ENUMNAME(EnderDragon),
     ENUMNAME(Enderman),
     ENUMNAME(Endermite),
     ENUMNAME(EvocationFangs),
@@ -576,6 +591,21 @@ const char * ENTITY_NAMES[MaxEntityType] = {
     ENUMNAME(ZombieHorse),
     ENUMNAME(ZombiePigman),
     ENUMNAME(ZombieVillager),
+    ENUMNAME(Bee),
+    ENUMNAME(Cat),
+    ENUMNAME(Fox),
+    ENUMNAME(Hoglin),
+    ENUMNAME(Panda),
+    ENUMNAME(Piglin),
+    ENUMNAME(PiglinBrute),
+    ENUMNAME(Pillager),
+    ENUMNAME(Ravager),
+    ENUMNAME(Strider),
+    ENUMNAME(TraderLlama),
+    ENUMNAME(Zoglin),
+    ENUMNAME(Raider),
+    ENUMNAME(BasePiglin),
+
 };
 
 const char * get_entity_name(char *buf, EntityType type) {
