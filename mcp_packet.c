@@ -1487,7 +1487,34 @@ DECODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
     }
 } DECODE_END;
 
+DECODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
+    Pint(X);
+    Pint(Z);
+    Pvarint(count);
+    lh_alloc_num(tpkt->blocks, tpkt->count);
+    int i;
+    for(i=0; i<tpkt->count; i++) {
+        Pchar(blocks[i].pos);
+        Pchar(blocks[i].y);
+        Rvarint(bid);
+        tpkt->blocks[i].bid.raw = (uint16_t)bid;
+    }
+} DECODE_END;
+
+
 ENCODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
+    Wint(X);
+    Wint(Z);
+    Wvarint(count);
+    int i;
+    for(i=0; i<tpkt->count; i++) {
+        Wchar(blocks[i].pos);
+        Wchar(blocks[i].y);
+        Wvarint(blocks[i].bid.raw);
+    }
+} ENCODE_END;
+
+ENCODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
     Wint(X);
     Wint(Z);
     Wvarint(count);
@@ -2087,7 +2114,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_    (0x38,SP_ResourcePackSent),
         SUPPORT_DD  (0x39,SP_Respawn,_1_16_2),
         SUPPORT_    (0x3a,SP_EntityHeadLook),
-        SUPPORT_DEDF(0x3b,SP_MultiBlockChange,_1_13_2),
+        SUPPORT_DEDF(0x3b,SP_MultiBlockChange,_1_16_2),
         SUPPORT_    (0x3c,SP_SelectAdvancementTab),
         SUPPORT_    (0x3d,SP_WorldBorder),
         SUPPORT_    (0x3e,SP_Camera),
