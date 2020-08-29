@@ -775,52 +775,38 @@ DECODE_BEGIN(SP_ChunkData,_1_9) {
 } DECODE_END;
 
 DECODE_BEGIN(SP_ChunkData,_1_16_2) {
-    uint32_t start = p;
-    printf("%c  %2x %08x ",pkt->cl?'C':'S', pkt->rawtype,pkt->pid);
-    printf("%-24s    len=%6zd, raw=%s","Raw",pkt->rawlen,limhex(pkt->raw,pkt->rawlen,2000));
-    printf("\n");
+    Pint(chunk.X);
+    Pint(chunk.Z);
+    Pchar(cont);
+    Pvarint(chunk.mask);
+    tpkt->chunk.heightmap = nbt_parse(&p);
 
-    Pint(chunk.X); printf("position: %i\n",p-start);
-    Pint(chunk.Z);printf("position: %i\n",p-start);
-    Pchar(cont);printf("position: %i\n",p-start);
-    Pvarint(chunk.mask);printf("position: %i\n",p-start);
-    tpkt->chunk.heightmap = nbt_parse(&p);printf("position: %i\n",p-start);
-
-    printf("Decoding Chunk Data x=%i,z=%i   ",tpkt->chunk.X,tpkt->chunk.Z);
-    printf("Full Chunk: %s   ",tpkt->cont?"True":"False");
-    printf("Chunk Mask: %08x  (",tpkt->chunk.mask);
-    uint32_t x = tpkt->chunk.mask;  for (int i=16;i;i--,putchar('0'|(x>>i)&1));
-    printf(")   Heightmap: %s, ",tpkt->chunk.heightmap? "present" : "none");
-    if (tpkt->chunk.heightmap) nbt_dump(tpkt->chunk.heightmap);
+    // printf("Decoding Chunk Data x=%i,z=%i   ",tpkt->chunk.X,tpkt->chunk.Z);
+    // printf("Full Chunk: %s   ",tpkt->cont?"True":"False");
+    // printf("Chunk Mask: %08x  (",tpkt->chunk.mask);
+    // uint32_t x = tpkt->chunk.mask;  for (int i=16;i;i--,putchar('0'|(x>>i)&1));
+    // printf(")   Heightmap: %s, ",tpkt->chunk.heightmap? "present" : "none");
+    // if (tpkt->chunk.heightmap) nbt_dump(tpkt->chunk.heightmap);
 
     if (tpkt->cont) {
-        printf("Full Chunk so getting Biomes info..");
         Pvarint(chunk.numberofbiomes);
-        printf("Expecting %i biomes..",tpkt->chunk.numberofbiomes);
         int i=0;
         for (; i<tpkt->chunk.numberofbiomes; i++) {
             Pvarint(chunk.biome[i]);
         }
-        printf("Got %i Biomes.\n",i);
     }
 
     Rvarint(size);
-    printf("Getting chunk data of %i bytes.\n",tpkt->size);
     int i,j;
     for(i=tpkt->chunk.mask,j=0; i; i>>=1,j++) {
         if (i&1) {
-            printf("Reading Cube #%i\n",j);
             lh_alloc_obj(tpkt->chunk.cubes[j]);
             p=read_cube(p, tpkt->chunk.cubes[j]);
         }
     }
 
-    //if (tpkt->cont) {
-    //    memmove(tpkt->chunk.biome, p, 256);
-    //    p+=256;
-   // }
-
     Rvarint(nte); // number of tile entities
+
     nbt_t *te = nbt_new(NBT_LIST, "TileEntities", 0);
     for(i=0; i<nte; i++) {
         nbt_t * tent = nbt_parse(&p);
@@ -831,6 +817,7 @@ DECODE_BEGIN(SP_ChunkData,_1_16_2) {
     tpkt->te = te;
 
     tpkt->skylight = is_overworld;
+
 } DECODE_END;
 
 uint8_t * write_cube(uint8_t *w, cube_t *cube) {
