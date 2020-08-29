@@ -968,10 +968,7 @@ void dump_metadata(metadata *meta, EntityType et) {
 
         const char * name = NULL;
         EntityType ett = et;
-        char buf[32];
         while ((!name) && (ett!=IllegalEntityType)) {
-            get_entity_name(buf, ett);
-            printf("%s\n",buf);
             name = METANAME[ett][mm->key];
             ett = ENTITY_HIERARCHY[ett];
         }
