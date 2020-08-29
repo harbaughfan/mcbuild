@@ -643,14 +643,21 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
     //in 1.16.2 the server sends the number of non-air blocks for lighting purposes.
     Rshort(numblocks);
     cube->numblocks=numblocks;
-    printf("number of blocks in this section = %i\n",cube->numblocks);
+    //printf("number of nonair blocks in this section = %i\n",cube->numblocks);
 
     blid_t pal[4096];
     Rchar(nbits);
+    //printf("Number of bits (raw): %i\n",nbits);
     if (nbits==0) { // raw 14-bit values, no palette
         nbits=14;
         npal=0;
     }
+    if (nbits<=4) nbits=4; //arraypallete
+    else if (nbits <=9);   //hashmappalette
+    else nbits=14;         //registrypalette
+
+    //printf("Number of bits (refined): %i\n",nbits);
+
     uint64_t mask = ((1<<nbits)-1);
 
     // read the palette data, if available
@@ -658,15 +665,14 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
         npal = lh_read_varint(p);
         for(i=0; i<npal; i++) {
             pal[i] = (uint16_t)lh_read_varint(p);
-
-           // printf("%3d : %3d (%s)\n", i, pal[i] ,  db_get_blk_name(pal[i]) );
+            //printf("%3d : %3d (%s)\n", i, pal[i] ,  db_get_blk_name(pal[i]) );
         }
     }
 
     // check if the length of the data matches the expected amount
     Rvarint(nblocks);
-    printf("lh_align(512*nbits, 8) = %i\n",lh_align(512*nbits, 8));
-    printf("nblocks*8 = %i\n",nblocks*8);
+    //printf("lh_align(512*nbits, 8) = %i\n",lh_align(512*nbits, 8));
+    //printf("nblocks*8 = %i\n",nblocks*8);
     assert(lh_align(512*nbits, 8) == nblocks*8);
 
     // read block data, packed nbits palette indices
@@ -696,13 +702,14 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
         }
     }
 
+    // light is not sent in 1.16.2
     // read block light and skylight data
-    memmove(cube->light, p, sizeof(cube->light));
-    p += sizeof(cube->light);
-    if (is_overworld) {
-        memmove(cube->skylight, p, sizeof(cube->skylight));
-        p += sizeof(cube->skylight);
-    }
+    //memmove(cube->light, p, sizeof(cube->light));
+    //p += sizeof(cube->light);
+    //if (is_overworld) {
+    //    memmove(cube->skylight, p, sizeof(cube->skylight));
+    //    p += sizeof(cube->skylight);
+    // }
 
     return p;
 }
