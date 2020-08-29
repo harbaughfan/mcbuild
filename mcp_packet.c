@@ -1440,8 +1440,11 @@ DECODE_BEGIN(SP_Respawn,_1_8_1) {
 
 DECODE_BEGIN(SP_Respawn,_1_16_2) {
     Pint(dimension);
-    Pchar(difficulty);
+    Pstr(worldname);
+    Plong(hashedseed);
+    //Pchar(difficulty);
     Pchar(gamemode);
+    Pchar(previousgamemode);
 
     // workaround for different world IDs leaking in TotalFreedom mod
     if (!(tpkt->dimension>=-1 && tpkt->dimension<=1)) {
@@ -1449,7 +1452,10 @@ DECODE_BEGIN(SP_Respawn,_1_16_2) {
         tpkt->dimension = 0;
     }
 
-    Pstr(leveltype);
+    //Pstr(leveltype);
+    Pchar(isdebug);
+    Pchar(isflat);
+    Pchar(copymetadata);
 
     // track dimension changes - needed for correct SP_ChunkData decoding
     is_overworld = (tpkt->dimension == 0);
@@ -1460,10 +1466,8 @@ DUMP_BEGIN(SP_Respawn) {
     const char *DIM[]  = { "Overworld", "End", "Unknown", "Nether" };
     const char *DIFF[] = { "Peaceful", "Easy", "Normal", "Hard" };
 
-    printf("gamemode=%s%s, dimension=%s, difficulty=%s, leveltype=%s",
-           GM[tpkt->gamemode&3], (tpkt->gamemode&8)?"(hardcore)":"",
-           DIM[tpkt->dimension&3], DIFF[tpkt->difficulty&3],
-           tpkt->leveltype);
+    printf("gamemode=%s, worldname=%s, dimension=%i",
+           GM[tpkt->gamemode&3],  tpkt->worldname, tpkt->dimension );
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////

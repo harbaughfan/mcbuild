@@ -532,9 +532,15 @@ typedef struct {
 // 0x39
 typedef struct {
     int32_t dimension;
+    char    worldname[100];
+    uint64_t hashedseed;
     uint8_t difficulty;
     uint8_t gamemode;
+    uint8_t previousgamemode;
     char    leveltype[32];
+    uint8_t  isdebug;
+    uint8_t  isflat;
+    uint8_t  copymetadata;
 } SP_Respawn_pkt;
 
 // 0x3b
