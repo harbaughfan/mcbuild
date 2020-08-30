@@ -224,6 +224,12 @@ typedef struct {
         uuid_t      uuid;   // missing UUID is encoded in all-zeros
         uint32_t    block;
         nbt_t*      nbt;
+        struct {
+            uint32_t   vil1;
+            uint32_t   vil2;
+            uint32_t   vil3;
+        };
+        uint32_t    pose;
         //FIXME: particle metadata is ignored and discarded at the moment
     };
 } metadata;

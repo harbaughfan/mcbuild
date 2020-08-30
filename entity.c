@@ -819,6 +819,9 @@ uint8_t * read_metadata(uint8_t *p, metadata **meta) {
     float df;
     slot_t ds;
 
+    // debug
+    hexdump(p,64);
+
     // mark all entries as not present - we use the same 0xff value
     // that Mojang uses as terminator
     for(i=0; i<32; i++) m[i].type = META_NONE;
@@ -897,6 +900,11 @@ uint8_t * read_metadata(uint8_t *p, metadata **meta) {
                                         break;
                                 }
                                 break;
+            case META_VILLAGER:     mm->vil1 = read_varint(p);
+                                    mm->vil2 = read_varint(p);
+                                    mm->vil3 = read_varint(p); break;
+            case META_OPTVARINT:    mm->i = read_varint(p); break;
+            case META_POSE:         mm->i = read_varint(p); break;
         }
     }
 
