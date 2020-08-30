@@ -263,13 +263,16 @@ int decode_chat_json(const char *json, char *name, char *message);
 typedef struct {
     uint32_t    eid;
     uuid_t      uuid;
-    uint8_t     objtype;
+    uint32_t    objtype;
     double      x;
     double      y;
     double      z;
     angle_t     pitch;
     angle_t     yaw;
-    //TODO: object data
+    int32_t     data;
+    int16_t     velx;
+    int16_t     vely;
+    int16_t     velz;
 } SP_SpawnObject_pkt;
 
 // 0x01

@@ -255,6 +255,22 @@ DECODE_BEGIN(SP_SpawnObject,_1_9) {
     //TODO: object data
 } DECODE_END;
 
+DECODE_BEGIN(SP_SpawnObject,_1_16_2) {
+    Pvarint(eid);
+    Puuid(uuid);
+    Pvarint(objtype);
+    Pdouble(x);
+    Pdouble(y);
+    Pdouble(z);
+    Pchar(pitch);
+    Pchar(yaw);
+    Pint(data);
+    Pshort(velx);
+    Pshort(vely);
+    Pshort(velz);
+    //TODO: object data
+} DECODE_END;
+
 DUMP_BEGIN(SP_SpawnObject) {
     printf("eid=%08x, objtype=%d, coord=%.1f,%.1f,%.1f, rot=%.1f,%.1f",
            tpkt->eid, tpkt->objtype, tpkt->x, tpkt->y, tpkt->z,
@@ -2109,7 +2125,7 @@ DUMP_BEGIN(CP_UseItem) {
 // https://wiki.vg/Protocol
 const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
     {
-        SUPPORT_DD  (0x00,SP_SpawnObject,_1_9),
+        SUPPORT_DD  (0x00,SP_SpawnObject,_1_16_2),
         SUPPORT_DD  (0x01,SP_SpawnExperienceOrb,_1_9),
         SUPPORT_DDF (0x02,SP_SpawnMob,_1_16_2),
         SUPPORT_DD  (0x03,SP_SpawnPainting,_1_13_2),
