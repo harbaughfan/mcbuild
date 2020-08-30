@@ -672,11 +672,11 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
     //in 1.16.2 the server sends the number of non-air blocks for lighting purposes.
     Rshort(numblocks);
     cube->numblocks=numblocks;
-    printf("Reading next cube...  Nonair blocks = %i. ",cube->numblocks);
+    //printf("Reading next cube...  Nonair blocks = %i. ",cube->numblocks);
 
     blid_t pal[4096];
     Rchar(nbits);
-    printf("Bits (raw): %i. ",nbits);
+    //printf("Bits (raw): %i. ",nbits);
     if (nbits==0) { // raw 14-bit values, no palette
         nbits=14;
         npal=0;
@@ -685,7 +685,7 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
     else if (nbits <=9);   //hashmappalette
     else nbits=14;         //registrypalette
 
-    printf("Bits (refined): %i. ",nbits);
+    //printf("Bits (refined): %i. ",nbits);
 
     uint64_t mask = ((1<<nbits)-1);
 
@@ -707,8 +707,8 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
 
     //new method, the packing does not span across longs.
     int blocksperlong = 64/nbits;
-    printf("Blocks per long = %i. ",blocksperlong);
-    printf("Number of longs expected: %i. ", 4096/blocksperlong + ((4096%blocksperlong)?1:0));
+    //printf("Blocks per long = %i. ",blocksperlong);
+    //printf("Number of longs expected: %i. ", 4096/blocksperlong + ((4096%blocksperlong)?1:0));
 
     // read block data, packed nbits palette indices
     int abits=0, idx=0, longsread=0;
@@ -749,7 +749,8 @@ static uint8_t * read_cube(uint8_t *p, cube_t *cube) {
             cube->blocks[i].raw = idx;
         }
     }
-    printf("Completed reading at %i longs.\n",longsread);
+    //printf("Completed reading at %i longs.\n",longsread);
+
     // light is not sent in 1.16.2
     // read block light and skylight data
     //memmove(cube->light, p, sizeof(cube->light));
@@ -829,7 +830,7 @@ DECODE_BEGIN(SP_ChunkData,_1_16_2) {
     Pvarint(chunk.mask);
     tpkt->chunk.heightmap = nbt_parse(&p);
 
-    printf("Decoding Chunk Data x=%i,z=%i   ",tpkt->chunk.X,tpkt->chunk.Z);
+    //printf("Decoding Chunk Data x=%i,z=%i   ",tpkt->chunk.X,tpkt->chunk.Z);
     // printf("Full Chunk: %s   ",tpkt->cont?"True":"False");
     // printf("Chunk Mask: %08x  (",tpkt->chunk.mask);
     // uint32_t x = tpkt->chunk.mask;  for (int i=16;i;i--,putchar('0'|(x>>i)&1));
@@ -981,6 +982,7 @@ ENCODE_BEGIN(SP_ChunkData,_1_9_4) {
 } ENCODE_END;
 
 ENCODE_BEGIN(SP_ChunkData,_1_16_2) {
+    printf("Attempting to encode chunk data.\n");
     int i;
 
     Wint(chunk.X);
@@ -1024,7 +1026,7 @@ DUMP_BEGIN(SP_ChunkData) {
     printf("coord=%4d:%4d, cont=%d, skylight=%d, mask=%04x",
            tpkt->chunk.X, tpkt->chunk.Z, tpkt->cont,
            tpkt->skylight, tpkt->chunk.mask);
-    nbt_dump(tpkt->te);
+    //nbt_dump(tpkt->te);
 } DUMP_END;
 
 FREE_BEGIN(SP_ChunkData) {
