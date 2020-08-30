@@ -264,10 +264,6 @@ DECODE_BEGIN(SP_SpawnObject,_1_16_2) {
     Pdouble(z);
     Pchar(pitch);
     Pchar(yaw);
-    Pint(data);
-    Pshort(velx);
-    Pshort(vely);
-    Pshort(velz);
     //TODO: object data
 } DECODE_END;
 
