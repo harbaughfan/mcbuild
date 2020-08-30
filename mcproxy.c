@@ -60,8 +60,8 @@ int query_auth_server();
 
 #define DEFAULT_BIND_ADDR   "0.0.0.0"
 #define DEFAULT_BIND_PORT   25565
-#define DEFAULT_REMOTE_ADDR "2b2t.org"
-#define DEFAULT_REMOTE_PORT 25565
+#define DEFAULT_REMOTE_ADDR "127.0.0.1"
+#define DEFAULT_REMOTE_PORT 31337
 
 const char * o_appname;
 int          o_help = 0;
