@@ -38,7 +38,7 @@
 #include <json-c/json.h>
 
 #define LH_DECLARE_SHORT_NAMES 1
-#define DEBUG_AUTH 1
+#define DEBUG_AUTH 0
 
 #include "lh_debug.h"
 #include "lh_buffers.h"
