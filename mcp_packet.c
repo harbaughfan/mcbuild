@@ -2580,7 +2580,7 @@ MCPacket * decode_packet(int is_client, uint8_t *data, ssize_t len) {
     pkt->rawtype = rawtype;
     pkt->pid  = SUPPORT[is_client][rawtype].pid;
     pkt->ver  = PROTO_NONE;
-    printf("Got packet %02x\n",pkt->rawtype);
+    //printf("Got packet %02x\n",pkt->rawtype);
     // make a raw data copy
     pkt->rawlen = data+len-p;
     if (pkt->rawlen <= 0) {
