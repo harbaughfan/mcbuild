@@ -1358,7 +1358,7 @@ void gm_packet(MCPacket *pkt, MCPacketQueue *tq, MCPacketQueue *bq) {
 
         GMP(SP_JoinGame) {
             queue_packet(pkt, tq);
-            chat_message("Welcome to MCBuild 3.0 for MC 1.13.x Development", tq, "gold", 0);
+            chat_message("Welcome to MCBuild for MC 1.16.2 Development", tq, "gold", 0);
             if (lh_path_exists(".update")) {
                 chat_message("An update is available, use mcb_update to update ( or 'git pull && make && make install' )", tq, "gold", 0);
             }
