@@ -145,7 +145,7 @@ typedef struct {
     nbt_t *heightmap;
     cube_t   *cubes[16];    // pointers to cubes. The pointers may be NULL meaning air
     uint32_t numberofbiomes;
-    uint32_t  biome[256];
+    uint32_t  biome[1024];
 } chunk_t;
 
 typedef struct {

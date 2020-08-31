@@ -837,8 +837,10 @@ DECODE_BEGIN(SP_ChunkData,_1_16_2) {
     // printf(")   Heightmap: %s, ",tpkt->chunk.heightmap? "present" : "none");
     // if (tpkt->chunk.heightmap) nbt_dump(tpkt->chunk.heightmap);
 
+
     if (tpkt->cont) {
         Pvarint(chunk.numberofbiomes);
+        assert(tpkt->chunk.numberofbiomes < 1025);
         int i=0;
         for (; i<tpkt->chunk.numberofbiomes; i++) {
             Pvarint(chunk.biome[i]);
