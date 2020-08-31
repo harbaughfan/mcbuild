@@ -135,9 +135,9 @@
 #define SP_Map                  SP(25)
 #define SP_TradeList            SP(26) // new
 #define SP_Entity               SP(27)
-#define SP_EntityRelMove        SP(28)
-#define SP_EntityLookRelMove    SP(29)
-#define SP_EntityLook           SP(2a)
+#define SP_EntityLookRelMove    SP(28)
+#define SP_EntityLook           SP(29)
+#define SP_EntityRelMove        SP(2a)
 #define SP_VehicleMove          SP(2b)
 #define SP_OpenBook             SP(2c) // new
 #define SP_OpenWindow           SP(2d)
@@ -832,8 +832,8 @@ typedef struct {
         PKT(SP_Effect);             // 23
         PKT(SP_JoinGame);           // 25
         PKT(SP_Map);                // 26
-        PKT(SP_EntityRelMove);      // 28
-        PKT(SP_EntityLookRelMove);  // 29
+        PKT(SP_EntityLookRelMove);  // 28
+        PKT(SP_EntityRelMove);      // 2a
         PKT(SP_PlayerAbilities);    // 2e
         PKT(SP_PlayerListItem);     // 30
         PKT(SP_PlayerPositionLook); // 32
