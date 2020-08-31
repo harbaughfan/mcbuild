@@ -461,19 +461,19 @@ typedef struct {
     int16_t     dx;
     int16_t     dy;
     int16_t     dz;
+    angle_t     yaw;
+    angle_t     pitch;
     uint8_t     onground;
-} SP_EntityRelMove_pkt;
+} SP_EntityLookRelMove_pkt;
 
-// 0x29
+// 0x2a
 typedef struct {
     uint32_t    eid;
     int16_t     dx;
     int16_t     dy;
     int16_t     dz;
-    angle_t     yaw;
-    angle_t     pitch;
     uint8_t     onground;
-} SP_EntityLookRelMove_pkt;
+} SP_EntityRelMove_pkt;
 
 // 0x2d
 typedef struct {
