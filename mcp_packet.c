@@ -1178,24 +1178,9 @@ FREE_BEGIN(SP_Map) {
     lh_free(tpkt->data);
 } FREE_END;
 
-////////////////////////////////////////////////////////////////////////////////
-// 0x28 SP_EntityRelMove
-
-DECODE_BEGIN(SP_EntityRelMove,_1_9) {
-    Pvarint(eid);
-    Pshort(dx);
-    Pshort(dy);
-    Pshort(dz);
-    Pchar(onground);
-} DECODE_END;
-
-DUMP_BEGIN(SP_EntityRelMove) {
-    printf("eid=%08x, delta=%.1f,%.1f,%.1f, onground=%d",tpkt->eid,
-           (float)tpkt->dx/32,(float)tpkt->dy/32,(float)tpkt->dz/32,tpkt->onground);
-} DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
-// 0x29 SP_EntityLookRelMove
+// 0x28 SP_EntityLookRelMove
 
 DECODE_BEGIN(SP_EntityLookRelMove,_1_9) {
     Pvarint(eid);
@@ -1211,6 +1196,22 @@ DUMP_BEGIN(SP_EntityLookRelMove) {
     printf("eid=%08x, delta=%.1f,%.1f,%.1f, rot=%.1f,%.1f, onground=%d",tpkt->eid,
            (float)tpkt->dx/32,(float)tpkt->dy/32,(float)tpkt->dz/32,
            (float)tpkt->yaw/256,(float)tpkt->pitch/256,tpkt->onground);
+} DUMP_END;
+
+////////////////////////////////////////////////////////////////////////////////
+// 0x2A SP_EntityRelMove
+
+DECODE_BEGIN(SP_EntityRelMove,_1_9) {
+    Pvarint(eid);
+    Pshort(dx);
+    Pshort(dy);
+    Pshort(dz);
+    Pchar(onground);
+} DECODE_END;
+
+DUMP_BEGIN(SP_EntityRelMove) {
+    printf("eid=%08x, delta=%.1f,%.1f,%.1f, onground=%d",tpkt->eid,
+           (float)tpkt->dx/32,(float)tpkt->dy/32,(float)tpkt->dz/32,tpkt->onground);
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
