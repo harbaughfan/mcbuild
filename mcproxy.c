@@ -38,7 +38,7 @@
 #include <json-c/json.h>
 
 #define LH_DECLARE_SHORT_NAMES 1
-#define DEBUG_AUTH 0
+#define DEBUG_AUTH 1
 
 #include "lh_debug.h"
 #include "lh_buffers.h"
@@ -549,8 +549,17 @@ void process_play_packet(int is_client, struct timeval ts,
     }
     else {
         // pass the packet to both gamestate and game
+    #if DEBUG_AUTH
+        printf("Passing Packet to Gamestate.\n");
+    #endif
         gs_packet(pkt);
+    #if DEBUG_AUTH
+        printf("Passing Packet to Game.\n");
+    #endif
         gm_packet(pkt, &tq, &bq);  // will queue packet to output as needed
+    #if DEBUG_AUTH
+        printf("Done in Game.\n");
+    #endif
     }
 
     // transmit packets in the queues, if any
@@ -631,7 +640,7 @@ ssize_t handle_proxy(lh_conn *conn) {
 
 #if DEBUG_AUTH
     printf("*** network data %s ***\n",is_client?"C->S":"C<-S");
-    hexdump(sptr, slen);
+    hexdump(sptr, LIM64(slen));
     printf("************************\n");
 #endif
 
@@ -656,7 +665,7 @@ ssize_t handle_proxy(lh_conn *conn) {
 
 #if DEBUG_AUTH
     printf("*** decrypted data %s ***\n",is_client?"C->S":"C<-S");
-    hexdump(rx->P(data), rx->C(data));
+    hexdump(rx->P(data), LIM64(rx->C(data)));
     printf("************************\n");
 #endif
 

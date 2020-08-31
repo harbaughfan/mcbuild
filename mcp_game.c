@@ -912,6 +912,9 @@ void chat_message(const char *str, MCPacketQueue *q, const char *color, int pos)
 
     tpkt->pos = pos;
     tpkt->json = strdup(msg);
+    for (int i=0; i<16;i++) {
+        tpkt->sender[i] = 0;
+    }
 
     queue_packet(pkt,q);
 }
