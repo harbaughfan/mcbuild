@@ -52,6 +52,8 @@ typedef enum {
     Raider              = 256-31,
     BasePiglin          = 256-32,
     AbstractVillager    = 256-33,
+    AbstractMinecart    = 256-34,
+    AbstractMinecartCont = 256-35,
 
 
     //// Mobs (SP_SpawnMob)
@@ -138,9 +140,12 @@ typedef enum {
     AreaEffectCloud     = 0 ,
 
     Minecart            = 45,
-    ChestMinecart       = 46, // deprecated since 1.6
-    MinecartFurnace     = 48, // deprecated since 1.6
+    MinecartChest       = 46, // deprecated since 1.6
     MinecartCommandBlock= 47, // deprecated
+    MinecartFurnace     = 48, // deprecated since 1.6
+    MinecartHopper      = 49,
+    MinecartSpawner     = 50,
+    MinecartTNT         = 51,
 
     LightningBolt       = 41,
 
