@@ -82,7 +82,6 @@ typedef enum {
     Husk = 34,
     IllusionIllager = 35,
     IronGolem = 36,
-    LightningBolt = 41,
     Llama = 42,
     MagmaCube = 44,
     Mule = 52,
@@ -133,43 +132,47 @@ typedef enum {
 
 
     //// Objects (SP_SpawnObject)
-    Boat                = 1 +256,
-    Item                = 2 +256,
-    AreaEffectCloud     = 3 +256,
+    // Update: I think SpawnObject is using the entity id now
+    Boat                = 6 ,
+    Item                = 37 ,
+    AreaEffectCloud     = 0 ,
 
-    Minecart            = 10+256,
-    ChestMinecart       = 11+256, // deprecated since 1.6
-    MinecartFurnace     = 12+256, // deprecated since 1.6
-    MinecartCommandBlock= 13+256, // deprecated
+    Minecart            = 45,
+    ChestMinecart       = 46, // deprecated since 1.6
+    MinecartFurnace     = 48, // deprecated since 1.6
+    MinecartCommandBlock= 47, // deprecated
 
-    ActivatedTNT        = 50+256,
-    EnderCrystal        = 51+256,
+    LightningBolt       = 41,
 
-    TippedArrow         = 60+256,
-    Snowball            = 61+256,
-    Egg                 = 62+256,
-    Fireball            = 63+256,
-    FireCharge          = 64+256,
-    ThrownEnderpearl    = 65+256,
-    WitherSkull         = 66+256,
-    ShulkerBullet       = 67+256,
-    LlamaSpit           = 68+256, // moved from mob to object
+    ActivatedTNT        = 64,
+    EnderCrystal        = 18,
 
-    FallingBlock        = 70+256,
-    ItemFrame           = 71+256,
-    EyeOfEnder          = 72+256,
-    Potion              = 73+256,
-    FallingDragonEgg    = 74+256, // deprecated
-    ThrownExpBottle     = 75+256,
-    Fireworks           = 76+256,
-    LeashKnot           = 77+256,
-    ArmorStand          = 78+256,
-    EvocationFangs      = 79+256, // moved from mob to object
+    TippedArrow         = 2,
+    Snowball            = 78,
+    Egg                 = 84,
+    Fireball            = 76,
+    FireCharge          = 39,
+    ThrownEnderpearl    = 85,
+    WitherSkull         = 99,
+    ShulkerBullet       = 71,
+    LlamaSpit           = 43, // moved from mob to object
 
-    FishingFloat        = 90+256,
-    SpectralArrow       = 91+256,
-    DragonFireball      = 93+256,
-    Trident             = 94+256, // added
+    FallingBlock        = 26,
+    ItemFrame           = 38,
+    EyeOfEnder          = 24,
+    Potion              = 87,
+    FallingDragonEgg    = 255, // deprecated
+    ThrownExpBottle     = 86,
+    Fireworks           = 27,
+    LeashKnot           = 40,
+    ArmorStand          = 1,
+    EvocationFangs      = 23, // moved from mob to object
+
+    FishingFloat        = 107,
+    SpectralArrow       = 79,
+    DragonFireball      = 15,
+    Trident             = 88, // added
+
 
     //// Terminating ID
     MaxEntityType       = 512,

@@ -1187,7 +1187,8 @@ void gs_packet(MCPacket *pkt) {
             e->y  = tpkt->y;
             e->z  = tpkt->z;
             e->type = ENTITY_OBJECT;
-            e->mtype = tpkt->objtype+256; // +256 for object entities
+            //e->mtype = tpkt->objtype+256; // +256 for object entities
+            e->mtype = tpkt->objtype; //update for 16.2 i think it works better if we dont add 256
             e->mdata = NULL; // updated separately with SP_EntityMetadata
         } _GSP;
 

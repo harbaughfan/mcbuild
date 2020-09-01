@@ -998,6 +998,9 @@ void dump_metadata(metadata *meta, EntityType et) {
             case META_OPTUUID:  hexprint(mm->uuid, sizeof(uuid_t)); break;
             case META_BID:      printf("%2x (%d)", mm->block, mm->block); break; //TODO: print material name
             case META_NBT:      printf("NBT data %p", mm->nbt); break;
+            case META_VILLAGER: printf("Villager: %i %i %i",mm->vil1,mm->vil2,mm->vil3); break;
+            case META_OPTVARINT: printf("%d",  mm->i);   break;
+            case META_POSE:     printf("%d",  mm->i);   break;
             default:            printf("<unknown type>"); break;
         }
     }
