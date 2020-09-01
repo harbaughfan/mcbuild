@@ -1042,12 +1042,14 @@ FREE_BEGIN(SP_ChunkData) {
 ////////////////////////////////////////////////////////////////////////////////
 // 0x21 SP_Effect
 
-DECODE_BEGIN(SP_Effect,_1_8_1) {
+DECODE_BEGIN(SP_Effect,_1_8_1) { //updated for 16.2 but not using this packet
     Pint(id);
     Plong(loc.p);
     Pint(data);
     Pchar(disvol);
 } DECODE_END;
+
+
 
 DUMP_BEGIN(SP_Effect) {
     printf("id=%d loc=%d,%d,%d data=%d disvol=%d",
@@ -1122,7 +1124,7 @@ DUMP_BEGIN(SP_JoinGame) {
 ////////////////////////////////////////////////////////////////////////////////
 // 0x25 SP_Map
 
-DECODE_BEGIN(SP_Map,_1_9) {
+DECODE_BEGIN(SP_Map,_1_9) { //updated for 16.2 but not using this packet
     Pvarint(mapid);
     Pchar(scale);
     Pchar(trackpos);
@@ -1228,6 +1230,13 @@ DECODE_BEGIN(SP_OpenWindow,_1_8_1) {
     }
 } DECODE_END;
 
+DECODE_BEGIN(SP_OpenWindow,_1_16_2) {
+    Pchar(wid);
+    Pstr(wtype);
+    Rstr(title);
+    tpkt->title = strdup(title);
+} DECODE_END;
+
 ENCODE_BEGIN(SP_OpenWindow,_1_8_1) {
     Wchar(wid);
     Wstr(wtype);
@@ -1238,9 +1247,17 @@ ENCODE_BEGIN(SP_OpenWindow,_1_8_1) {
     }
 } ENCODE_END;
 
+ENCODE_BEGIN(SP_OpenWindow,_1_16_2) {
+    Wchar(wid);
+    Wstr(wtype);
+    Wstr(title);
+} ENCODE_END;
+
 DUMP_BEGIN(SP_OpenWindow) {
-    printf("wid=%d wtype=%s title=%s nslots=%d eid=%d",
-           tpkt->wid,tpkt->wtype,tpkt->title,tpkt->nslots,tpkt->eid);
+    // printf("wid=%d wtype=%s title=%s nslots=%d eid=%d",
+    //        tpkt->wid,tpkt->wtype,tpkt->title,tpkt->nslots,tpkt->eid);
+    printf("wid=%d wtype=%s title=%s",
+           tpkt->wid,tpkt->wtype,tpkt->title);
 } DUMP_END;
 
 FREE_BEGIN(SP_OpenWindow) {
@@ -1589,6 +1606,7 @@ ENCODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
 } ENCODE_END;
 
 ENCODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
+    printf("Warning Trying to encode MultiBlockChange\n");
     Wint(X);
     Wint(Z);
     Wvarint(count);
@@ -1601,6 +1619,7 @@ ENCODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
 } ENCODE_END;
 
 DUMP_BEGIN(SP_MultiBlockChange) {
+    printf("Warning Trying to encode MultiBlockChange\n");
     printf("chunk=%d:%d, count=%d",
            tpkt->X, tpkt->Z, tpkt->count);
     int i;
@@ -2081,6 +2100,16 @@ DECODE_BEGIN(CP_PlayerBlockPlacement,_1_11) {
     Pfloat(cz);
 } DECODE_END;
 
+DECODE_BEGIN(CP_PlayerBlockPlacement,_1_16_2) {
+    Pvarint(hand);
+    Plong(bpos.p);
+    Pvarint(face);
+    Pfloat(cx);
+    Pfloat(cy);
+    Pfloat(cz);
+    Pchar(inblock);
+} DECODE_END;
+
 ENCODE_BEGIN(CP_PlayerBlockPlacement,_1_11) {
     Wlong(bpos.p);
     Wvarint(face);
@@ -2090,10 +2119,20 @@ ENCODE_BEGIN(CP_PlayerBlockPlacement,_1_11) {
     Wfloat(cz);
 } ENCODE_END;
 
+ENCODE_BEGIN(CP_PlayerBlockPlacement,_1_16_2) {
+    Wvarint(hand);
+    Wlong(bpos.p);
+    Wvarint(face);
+    Wfloat(cx);
+    Wfloat(cy);
+    Wfloat(cz);
+    Wchar(inblock);
+} ENCODE_END;
+
 DUMP_BEGIN(CP_PlayerBlockPlacement) {
-    printf("bpos=%d,%d,%d, face=%d, cursor=%.2f,%.2f,%.2f, hand=%d",
+    printf("bpos=%d,%d,%d, face=%d, cursor=%.2f,%.2f,%.2f, hand=%d, inblock=%i",
            tpkt->bpos.x,  tpkt->bpos.y,  tpkt->bpos.z,
-           tpkt->face, tpkt->cx, tpkt->cy, tpkt->cz, tpkt->hand);
+           tpkt->face, tpkt->cx, tpkt->cy, tpkt->cz, tpkt->hand, tpkt->inblock);
 } DUMP_END;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2173,7 +2212,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_DD  (0x2a,SP_EntityRelMove,_1_9),
         SUPPORT_    (0x2b,SP_VehicleMove),
         SUPPORT_    (0x2c,SP_OpenBook),
-        SUPPORT_DEDF(0x2d,SP_OpenWindow,_1_8_1),
+        SUPPORT_DEDF(0x2d,SP_OpenWindow,_1_16_2),
         SUPPORT_    (0x2e,SP_OpenSignEditor),
         SUPPORT_    (0x2f,SP_CraftRecipeResponse),
 
@@ -2274,7 +2313,7 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_    (0x2b,CP_UpdateSign),
         SUPPORT_DED (0x2c,CP_Animation,_1_9),
         SUPPORT_    (0x2d,CP_Spectate),
-        SUPPORT_DED (0x2e,CP_PlayerBlockPlacement,_1_11),
+        SUPPORT_DED (0x2e,CP_PlayerBlockPlacement,_1_16_2),
         SUPPORT_DED (0x2f,CP_UseItem,_1_9),
         SUPPORT_    (0x30,CP___),
     },

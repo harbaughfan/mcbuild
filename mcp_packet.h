@@ -721,6 +721,7 @@ typedef struct {
     int32_t face;
     int32_t hand;
     float   cx,cy,cz;
+    uint8_t inblock;
 } CP_PlayerBlockPlacement_pkt;
 
 // 0x2f
