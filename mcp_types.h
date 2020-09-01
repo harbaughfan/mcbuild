@@ -72,8 +72,8 @@ typedef uint8_t angle_t;
 typedef struct {
     union {
         struct {
+            int64_t y : 12;  //y LSB in 1.14+
             int64_t z : 26;
-            int64_t y : 12;
             int64_t x : 26;
         };
         uint64_t p;
