@@ -161,7 +161,7 @@ typedef enum {
     ItemFrame           = 38,
     EyeOfEnder          = 24,
     Potion              = 87,
-    FallingDragonEgg    = 255, // deprecated
+
     ThrownExpBottle     = 86,
     Fireworks           = 27,
     LeashKnot           = 40,
@@ -174,6 +174,7 @@ typedef enum {
     Trident             = 88, // added
 
 
+    FallingDragonEgg    = 255+256, // deprecated
     //// Terminating ID
     MaxEntityType       = 512,
 } EntityType;
