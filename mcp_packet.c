@@ -2563,7 +2563,6 @@ int set_protocol(int protocol, char * reply) {
             currentProtocol = supported[i].protocolId;
             printf("Selecting protocol %d (%s) ID=%08x\n", protocol, supported[i].minecraftVersion, currentProtocol);
             int rc = db_load(protocol);
-            db_dump_items_to_csv_file();
             assert (!rc);
             return 1;
         }
