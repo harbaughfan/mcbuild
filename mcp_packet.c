@@ -1540,30 +1540,30 @@ DECODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
     }
 } DECODE_END;
 
+uint64_t lh_read_varlong(uint8_t **p) {
+    uint64_t v=0;
+    int s=0;
+    uint8_t c;
+    do {
+        c = *(*p)++;
+        v += ((c&0x7f)<<s);
+        s += 7;
+    } while (c&0x80);
+    return v;
+}
+
 DECODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
     //Pint(X);
     //Pint(Z);
     //encoded chunk x and z with each 22 bits, and section y with 20 bits, from left to right
     Rlong(encodedcubecoord);
-    printf("MultiBlockChangeDecode:  Encoded Cube Coord: %x\n",encodedcubecoord);
-    uint64_t templong;
-    templong = encodedcubecoord & 0xFFFFF80000000000;
-    printf("MultiBlockChangeDecode:  tpkt.X %x\n",templong);
-    templong >>= 42;
-    printf("MultiBlockChangeDecode:  tpkt.X %x\n",templong);
-    tpkt->X = (int)templong;
-    printf("MultiBlockChangeDecode:  tpkt.X %x\n",tpkt->X);
-    templong = encodedcubecoord & 0x000007FFFFF00000;
-    printf("MultiBlockChangeDecode:  tpkt.Z %x\n",templong);
-    templong >>= 20;
-    printf("MultiBlockChangeDecode:  tpkt.Z %x\n",templong);
-    tpkt->Z = (int)templong;
-    printf("MultiBlockChangeDecode:  tpkt.Z %x\n",tpkt->Z);
-    templong = encodedcubecoord & 0x00000000000FFFFF;
-    printf("MultiBlockChangeDecode:  tpkt.Y %x\n",templong);
-    tpkt->Y = (int)templong;
-    printf("MultiBlockChangeDecode:  tpkt.Y %x\n",tpkt->Y);
-
+    tpkt->Y = encodedcubecoord & 0x00000000000FFFFF;
+    encodedcubecoord >>=20;
+    tpkt->Z = encodedcubecoord & 0x00000000003FFFFF;
+    if (tpkt->Z >= 0x200000) tpkt->Z -= 0x400000;
+    encodedcubecoord >>=22;
+    tpkt->X = encodedcubecoord & 0x00000000003FFFFF;
+    if (tpkt->X >= 0x200000) tpkt->Z -= 0x400000;
 
     //trustedges is always inverse the preceding Update Light packet's "Trust Edges" bool
     Pchar(trustedges);
@@ -1575,20 +1575,12 @@ DECODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
     //Array of VarLong:  Each entry is composed of the block id, shifted right by 12,
     //and the relative block position in the chunk section (4 bits for x, z, and y, from left to right).
     for(i=0; i<tpkt->count; i++) {
-        Rlong(encodedblockrecord);
-        printf("MultiBlockChangeDecode:  Encoded Block Record: %x\n",encodedblockrecord);
-        templong = encodedblockrecord >> 12;
-        printf("MultiBlockChangeDecode:  Block ID: %x\n",templong);
-        tpkt->blocks[i].bid.raw = (uint16_t)templong;
-        printf("MultiBlockChangeDecode:  Block ID: %x\n",tpkt->blocks[i].bid.raw);
-        templong = encodedblockrecord & 0x0000000000000FF0;
-        printf("MultiBlockChangeDecode:  POS: %x\n",templong);
-        templong >>= 4;
-        printf("MultiBlockChangeDecode:  POS: %x\n",templong);
-        tpkt->blocks[i].pos = templong;
-        printf("MultiBlockChangeDecode:  POS: %x\n",tpkt->blocks[i].pos);
+        uint64_t encodedblockrecord = lh_read_varlong(&p);
         tpkt->blocks[i].y = encodedblockrecord & 0x000000000000000F;
-        printf("MultiBlockChangeDecode:  Y: %x\n",tpkt->blocks[i].y);
+        encodedblockrecord >>=4;
+        tpkt->blocks[i].pos = encodedblockrecord & 0x00000000000000FF;
+        encodedblockrecord >>=8;
+        tpkt->blocks[i].bid.raw = (uint16_t) encodedblockrecord;
     }
 } DECODE_END;
 
@@ -1619,7 +1611,6 @@ ENCODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
 } ENCODE_END;
 
 DUMP_BEGIN(SP_MultiBlockChange) {
-    printf("Warning Trying to encode MultiBlockChange\n");
     printf("chunk=%d:%d, count=%d",
            tpkt->X, tpkt->Z, tpkt->count);
     int i;
