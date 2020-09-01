@@ -2314,11 +2314,11 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
 
 // Uncomment packet IDs that should be dumped
 uint32_t DUMP_ENABLED[] = {
-    SP_SpawnObject,
-    SP_SpawnExperienceOrb,
-    SP_SpawnMob,
-    SP_SpawnPainting,
-    SP_SpawnPlayer,
+    // SP_SpawnObject,
+    // SP_SpawnExperienceOrb,
+    // SP_SpawnMob,
+    // SP_SpawnPainting,
+    // SP_SpawnPlayer,
     // SP_Animation,
     // SP_Statistics,
     // SP_AckPlayerDigging,
@@ -2328,8 +2328,8 @@ uint32_t DUMP_ENABLED[] = {
     SP_BlockChange,
     // SP_BossBar,
     // SP_ServerDifficulty,
-    SP_ChatMessage,
-    SP_TabComplete,
+    // SP_ChatMessage,
+    // SP_TabComplete,
 
     // SP_DeclareCommands,
     SP_ConfirmTransaction,
@@ -2342,17 +2342,17 @@ uint32_t DUMP_ENABLED[] = {
     // SP_NamedSoundEffect,
     // SP_Disconnect,
     // SP_EntityStatus,
-    SP_Explosion,
+    // SP_Explosion,
     // SP_UnloadChunk,
     SP_ChangeGameState,
     // SP_OpenHorseWindow,
     // SP_KeepAlive,
 
     // SP_ChunkData,
-    SP_Effect,
+    // SP_Effect,
     // SP_Particle,
     // SP_UpdateLight,
-    SP_JoinGame,
+    // SP_JoinGame,
     // SP_Map,
     // SP_TradeList,
     // SP_Entity,
@@ -2365,7 +2365,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_OpenSignEditor,
     // SP_CraftRecipeResponse,
 
-    SP_PlayerAbilities,
+    // SP_PlayerAbilities,
     // SP_CombatEffect,
     SP_PlayerListItem,
     // SP_FacePlayer,
@@ -2374,7 +2374,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_DestroyEntities,
     // SP_RemoveEntityEffect,
     // SP_ResourcePackSent,
-    SP_Respawn,
+    // SP_Respawn,
     // SP_EntityHeadLook,
     SP_MultiBlockChange,
     // SP_SelectAdvancementTab,
@@ -2390,8 +2390,8 @@ uint32_t DUMP_ENABLED[] = {
     // SP_AttachEntity,
     // SP_EntityVelocity,
     // SP_EntityEquipment,
-    SP_SetExperience,
-    SP_UpdateHealth,
+    // SP_SetExperience,
+    // SP_UpdateHealth,
     // SP_ScoreboardObjective,
     // SP_SetPassengers,
     // SP_Teams,
@@ -2400,7 +2400,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_Title,
 
     // SP_EntitySoundEffect,
-    SP_SoundEffect,
+    // SP_SoundEffect,
     // SP_StopSound,
     // SP_PlayerListHeader,
     // SP_NbtQueryResponse,
@@ -2416,10 +2416,10 @@ uint32_t DUMP_ENABLED[] = {
     // SP_SpawnGlobalEntity,
 
 
-    CP_TeleportConfirm,
+    // CP_TeleportConfirm,
     // CP_QueryBlockNbt,
     // CP_SetDifficulty,
-    CP_ChatMessage,
+    // CP_ChatMessage,
     // CP_ClientStatus,
     // CP_ClientSettings,
     // CP_TabComplete,
@@ -2563,6 +2563,7 @@ int set_protocol(int protocol, char * reply) {
             currentProtocol = supported[i].protocolId;
             printf("Selecting protocol %d (%s) ID=%08x\n", protocol, supported[i].minecraftVersion, currentProtocol);
             int rc = db_load(protocol);
+            db_dump_items_to_csv_file();
             assert (!rc);
             return 1;
         }
