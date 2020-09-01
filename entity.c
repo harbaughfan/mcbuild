@@ -842,7 +842,7 @@ uint8_t * read_metadata(uint8_t *p, metadata **meta) {
     slot_t ds;
 
     // debug
-    hexdump(p,64);
+    // hexdump(p,64);
 
     // mark all entries as not present - we use the same 0xff value
     // that Mojang uses as terminator

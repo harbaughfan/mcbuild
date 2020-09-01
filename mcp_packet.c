@@ -1665,7 +1665,7 @@ ENCODE_BEGIN(SP_EntityMetadata,_1_13_2) {
 DUMP_BEGIN(SP_EntityMetadata) {
     printf("eid=%08x", tpkt->eid);
     // unfortunately we don't have access to proper entity type here
-    dump_metadata(tpkt->meta, Entity);
+    // dump_metadata(tpkt->meta, Entity);
 } DUMP_END;
 
 FREE_BEGIN(SP_EntityMetadata) {
