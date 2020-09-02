@@ -1552,6 +1552,17 @@ uint64_t lh_read_varlong(uint8_t **p) {
     return v;
 }
 
+#define lh_write_varlong(ptr,val)        ptr=lh_place_varlong(ptr,val)
+
+static inline uint8_t * lh_place_varlong(uint8_t *p, uint64_t v) {
+    do {
+        *p++ = (v&0x7f)|0x80;
+        v >>= 7;
+    } while (v>0);
+    *(p-1) &= 0x7f;
+    return p;
+}
+
 DECODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
     //Pint(X);
     //Pint(Z);
@@ -1598,15 +1609,31 @@ ENCODE_BEGIN(SP_MultiBlockChange,_1_13_2) {
 } ENCODE_END;
 
 ENCODE_BEGIN(SP_MultiBlockChange,_1_16_2) {
-    printf("Warning Trying to encode MultiBlockChange\n");
-    Wint(X);
-    Wint(Z);
+    uint64_t encodedcubecoord = 0;
+    if (tpkt->X < 0) encodedcubecoord |= (tpkt->X +0x400000);
+    else encodedcubecoord |= tpkt->X;
+    encodedcubecoord <<=22;
+    if (tpkt->Z < 0) encodedcubecoord |= (tpkt->Z + 0x400000);
+    else encodedcubecoord |= tpkt->Z;
+    encodedcubecoord <<=20;
+    encodedcubecoord |= tpkt->Y;
+    printf("Cube Coord:  x=%i z=%i y=%i\n",tpkt->X,tpkt->Z,tpkt->Y);
+    printf("Encoded Cube Coord: %016lx\n",encodedcubecoord);
+    lh_write_long_be(w,encodedcubecoord);
+
+    lh_write_char(w, 0x01);  //TODO: Trustedges
+
     Wvarint(count);
+
     int i;
     for(i=0; i<tpkt->count; i++) {
-        Wchar(blocks[i].pos);
-        Wchar(blocks[i].y);
-        Wvarint(blocks[i].bid.raw);
+        uint64_t encodedblockrecord = 0;
+        encodedblockrecord |= tpkt->blocks[i].bid.raw;
+        encodedblockrecord <<= 8;
+        encodedblockrecord |= tpkt->blocks[i].pos;
+        encodedblockrecord <<= 4;
+        encodedblockrecord |= tpkt->blocks[i].y;
+        lh_write_varlong(w,encodedblockrecord);
     }
 } ENCODE_END;
 

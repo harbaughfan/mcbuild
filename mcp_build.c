@@ -1830,6 +1830,7 @@ void build_show_preview(MCPacketQueue *sq, MCPacketQueue *cq, int mode) {
 
         int32_t X=b->x>>4;
         int32_t Z=b->z>>4;
+        int32_t Y=b->y>>4;   //1.16.2 now does chunk sections
 
         // skip blocks located in unloaded chunks
         gschunk *gc = find_chunk(gs.world, X, Z, 0);
@@ -1839,6 +1840,7 @@ void build_show_preview(MCPacketQueue *sq, MCPacketQueue *cq, int mode) {
         SP_MultiBlockChange_pkt *tpkt=NULL;
         for(j=0; j<npackets; j++) {
             if (packets[j]->_SP_MultiBlockChange.X==X &&
+                packets[j]->_SP_MultiBlockChange.Y==Y &&   //1.16.2 now does chunk sections
                 packets[j]->_SP_MultiBlockChange.Z==Z) {
                 tpkt = &packets[j]->_SP_MultiBlockChange;
                 break;
@@ -1853,6 +1855,7 @@ void build_show_preview(MCPacketQueue *sq, MCPacketQueue *cq, int mode) {
             tpkt = tmbc;
             tmbc->X = X;
             tmbc->Z = Z;
+            tmbc->Y = Y;
         }
 
         // depending on the preview mode, select which block will be shown
@@ -1874,7 +1877,7 @@ void build_show_preview(MCPacketQueue *sq, MCPacketQueue *cq, int mode) {
         lh_resize(tpkt->blocks, tpkt->count+1);
         tpkt->blocks[tpkt->count].x = b->x&15;
         tpkt->blocks[tpkt->count].z = b->z&15;
-        tpkt->blocks[tpkt->count].y = b->y;
+        tpkt->blocks[tpkt->count].y = b->y&15;
         tpkt->blocks[tpkt->count].bid = bid;
         tpkt->count++;
     }
