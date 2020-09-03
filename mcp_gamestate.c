@@ -107,7 +107,7 @@ static gschunk * insert_chunk(chunk_t *c, int cont) {
     }
 
     if (cont)
-        memmove(gc->biome, c->biome, 256);
+        memmove(gc->biome, c->biome, 1024);
     return gc;
 }
 
@@ -507,7 +507,7 @@ bid_t get_block_at(int32_t x, int32_t z, int32_t y) {
 ////////////////////////////////////////////////////////////////////////////////
 // Inventory tracking
 
-#define DEBUG_INVENTORY 0
+#define DEBUG_INVENTORY 1
 
 int sameitem(slot_t *a, slot_t *b) {
     assert(a->item < db_num_items);

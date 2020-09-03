@@ -76,7 +76,7 @@ typedef struct {
     bid_t       blocks[65536];
     light_t     light[32768];
     light_t     skylight[32768];
-    uint8_t     biome[256];
+    uint8_t     biome[1024];
     nbt_t      *tent;
 } gschunk;
 

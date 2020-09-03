@@ -339,6 +339,7 @@ void gmi_failed(MCPacketQueue *sq, MCPacketQueue *cq) {
 }
 
 void gmi_process_queue(MCPacketQueue *sq, MCPacketQueue *cq) {
+    if (DEBUG_INVENTORY) printf("GMI Process Queue\n");
     assert(invq.state);
 
     // Watchdog for the timeouted tasks
@@ -352,6 +353,7 @@ void gmi_process_queue(MCPacketQueue *sq, MCPacketQueue *cq) {
 
     switch (invq.state) {
         case IASTATE_START: {
+            if (DEBUG_INVENTORY) printf("IASTATE_START\n");
             invq.base_aid = aid;
             gmi_click(sq, invq.sid_a, invq.base_aid);
             invq.state = IASTATE_PICK_SENT;
@@ -366,6 +368,7 @@ void gmi_process_queue(MCPacketQueue *sq, MCPacketQueue *cq) {
             break;
         }
         case IASTATE_PICK_ACCEPTED: {
+            if (DEBUG_INVENTORY) printf("IASTATE_PICK_ACCEPTED\n");
             gmi_click(sq, invq.sid_b, invq.base_aid+1);
             clone_slot(a, &invq.drag);
             clear_slot(a);
@@ -380,6 +383,7 @@ void gmi_process_queue(MCPacketQueue *sq, MCPacketQueue *cq) {
             break;
         }
         case IASTATE_SWAP_ACCEPTED: {
+            if (DEBUG_INVENTORY) printf("IASTATE_SWAP_ACCEPTED\n");
             gmi_click(sq, invq.sid_a, invq.base_aid+2);
             slot_t temp;
             clone_slot(b, &temp);
@@ -399,6 +403,7 @@ void gmi_process_queue(MCPacketQueue *sq, MCPacketQueue *cq) {
             break;
         }
         case IASTATE_PUT_ACCEPTED: {
+            if (DEBUG_INVENTORY) printf("IASTATE_PUT_ACCEPTED\n");
             // Swap action complete, update client
 
             // Swap slots in our inventory state
@@ -458,8 +463,14 @@ int gmi_confirm(SP_ConfirmTransaction_pkt *tpkt, MCPacketQueue *sq, MCPacketQueu
         gmi_failed(sq, cq);
     }
     else {
+        if (DEBUG_INVENTORY) {
+            printf("Inventory action is accepted (wid=%d aid=%d base_aid=%d sid_a=%d sid_b=%d)",
+            tpkt->wid, tpkt->aid, invq.base_aid, invq.sid_a, invq.sid_b);
+            printf(" invq.state = %i\n",invq.state);
+        }
         switch (invq.state) {
             case IASTATE_PICK_SENT:
+                if (DEBUG_INVENTORY) printf("IASTATE_PICK_SENT\n");
                 if(tpkt->aid != invq.base_aid) return 1;
                 invq.state = IASTATE_PICK_ACCEPTED;
                 if (DEBUG_INVENTORY) {
@@ -472,6 +483,7 @@ int gmi_confirm(SP_ConfirmTransaction_pkt *tpkt, MCPacketQueue *sq, MCPacketQueu
                 }
                 break;
             case IASTATE_SWAP_SENT:
+                if (DEBUG_INVENTORY) printf("IASTATE_SWAP_SENT\n");
                 if(tpkt->aid != invq.base_aid+1) return 1;
                 invq.state = IASTATE_SWAP_ACCEPTED;
                 if (DEBUG_INVENTORY) {
@@ -484,6 +496,8 @@ int gmi_confirm(SP_ConfirmTransaction_pkt *tpkt, MCPacketQueue *sq, MCPacketQueu
                 }
                 break;
             case IASTATE_PUT_SENT:
+                if (DEBUG_INVENTORY) printf("IASTATE_PUT_SENT\n");
+
                 if(tpkt->aid != invq.base_aid+2) return 1;
                 invq.state = IASTATE_PUT_ACCEPTED;
                 if (DEBUG_INVENTORY) {

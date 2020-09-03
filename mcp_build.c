@@ -1227,9 +1227,10 @@ void build_progress(MCPacketQueue *sq, MCPacketQueue *cq) {
         if (islot==-1) continue; // we don't have this material
         if (islot==-2) return; // inventory action is in progress, postpone building
         //TODO: notify user about missing materials
-
+        printf("Changing Held\n");
         // silently switch to this slot
         gmi_change_held(sq, cq, islot, 0);
+        printf("Changed Held\n");
         slot_t * hslot = &gs.inv.slots[islot+36];
 
         int8_t face, cx, cy, cz;

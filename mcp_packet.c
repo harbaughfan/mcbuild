@@ -2352,7 +2352,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_BlockBreakAnimation,
     SP_UpdateBlockEntity,
     SP_BlockAction,
-    SP_BlockChange,
+    // SP_BlockChange,
     // SP_BossBar,
     // SP_ServerDifficulty,
     // SP_ChatMessage,
@@ -2362,7 +2362,7 @@ uint32_t DUMP_ENABLED[] = {
     SP_ConfirmTransaction,
     SP_CloseWindow,
     SP_WindowItems,
-    // SP_WindowProperty,
+    SP_WindowProperty,
     SP_SetSlot,
     // SP_SetCooldown,
     // SP_PluginMessage,
@@ -2372,7 +2372,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_Explosion,
     // SP_UnloadChunk,
     SP_ChangeGameState,
-    // SP_OpenHorseWindow,
+    SP_OpenHorseWindow,
     // SP_KeepAlive,
 
     // SP_ChunkData,
@@ -2403,7 +2403,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_ResourcePackSent,
     // SP_Respawn,
     // SP_EntityHeadLook,
-    SP_MultiBlockChange,
+    // SP_MultiBlockChange,
     // SP_SelectAdvancementTab,
     // SP_WorldBorder,
     // SP_Camera,
@@ -2638,7 +2638,7 @@ MCPacket * decode_packet(int is_client, uint8_t *data, ssize_t len) {
     pkt->rawtype = rawtype;
     pkt->pid  = SUPPORT[is_client][rawtype].pid;
     pkt->ver  = PROTO_NONE;
-    //printf("Got packet %02x\n",pkt->rawtype);
+    // printf("Got %s packet %02x\n",is_client?"Client":"Server",pkt->rawtype);
     // make a raw data copy
     pkt->rawlen = data+len-p;
     if (pkt->rawlen <= 0) {
