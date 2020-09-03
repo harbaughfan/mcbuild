@@ -1,5 +1,5 @@
-CFLAGS=-g
-DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
+CFLAGS= -g -Warray-bounds=2
+DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -g -fstack-protector-strong
 INC=-I../libhelper
 LIBS_LIBHELPER=-L../libhelper -lhelper
 LIBS=$(LIBS_LIBHELPER) -lm -lpng -lz -lcurl -lcrypto -ljson-c -lresolv
