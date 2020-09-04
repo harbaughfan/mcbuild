@@ -626,6 +626,8 @@ int get_base_meta(int id, int meta) {
 // for the block and the item used for placement of such block
 //#define BI(block,item) if (mat.bid == block) return BLOCKTYPE(item,0)
 
+#if 0
+//moved to db module
 int get_base_material(blid_t blk_id) {
     const char *blk_name = db_get_blk_name(blk_id);
     int item_id = db_get_item_id(blk_name);
@@ -633,7 +635,7 @@ int get_base_material(blid_t blk_id) {
 
     //TODO: verify which blocks require a different type of material for building
 
-#if 0
+
     //DISABLED: transition to dev_3.0
     assert(mat.bid <0x100);
 
@@ -688,8 +690,9 @@ int get_base_material(blid_t blk_id) {
 
     mat.meta = get_base_meta(mat.bid, mat.meta);
     return mat;
-#endif
+
 }
+#endif
 
 // select a block material that matches best a block derived from it,
 // e.g. Oak Woodplanks for Oak stairs or slabs

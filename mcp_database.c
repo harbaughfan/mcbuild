@@ -263,6 +263,16 @@ const char *db_get_item_name(int item_id) {
     return "ID not found";
 };
 
+// Gets the corresponding item ID from a block ID
+const int db_get_item_id_from_blk_id(blid_t id) {
+    //TODO:handle blocks whose item name is different
+    int item_id = db_get_item_id(db_get_blk_name(id));
+    assert(item_id > 0);
+    return item_id;
+}
+
+
+
 // Private:  Gets the database record for a block given its block_id
 block_t *db_blk_record_from_id(blid_t block_id) {
     for (int i=0; i < C(activedb->block); i++) {
@@ -2150,6 +2160,15 @@ int db_item_is_chest (int item_id) {
 int db_item_is_furnace (int item_id) {
     assert ( item_id >= 0 && item_id < db_num_items );
     if (item_flags[item_id] & I_FURNACE) {
+        return 1;
+    }
+    return 0;
+}
+
+// True if item is adjustable (ie need crouch to place, other than a container I_CONT)
+int db_item_is_adj (int item_id) {
+    assert ( item_id >= 0 && item_id < db_num_items );
+    if (item_flags[item_id] & I_ADJ) {
         return 1;
     }
     return 0;

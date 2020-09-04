@@ -137,7 +137,7 @@ extern const biome_id BIOMES[];
 
 #include "mcp_types.h"
 
-int get_base_material(blid_t mat);
+//int get_base_material(blid_t mat); moved to db module
 uint8_t get_state_mask(int bid);
 bid_t get_base_block_material(bid_t mat);
 

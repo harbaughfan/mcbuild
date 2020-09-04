@@ -321,14 +321,14 @@ build_info * get_build_info(int plan) {
     int i,j;
     if (plan) {
         for (i=0; build.bp && i<C(build.bp->plan); i++) {
-            int item_id = get_base_material(P(build.bp->plan)[i].b.raw);
+            int item_id = db_get_item_id_from_blk_id(P(build.bp->plan)[i].b.raw);
             total[item_id]++;
             bi->total ++;
         }
     }
     else {
         for (i=0; i<C(build.task); i++) {
-            int item_id = get_base_material(P(build.task)[i].b.raw);
+            int item_id = db_get_item_id_from_blk_id(P(build.task)[i].b.raw);
             total[item_id]++;
             bi->total ++;
             if (P(build.task)[i].placed) {
@@ -574,32 +574,33 @@ void set_block_dots(blk *b) {
     // determine usable dots on the neighbor faces
     lh_clear_obj(b->dots);
 
-    const item_id *it = &ITEMS[b->b.bid];
+    //const item_id *it = &ITEMS[b->b.bid];
+    const int item_id = db_get_item_id_from_blk_id(b->b.raw);
 
-    if (it->flags&I_SLAB) { // Halfslabs
+    if (db_item_is_slab(item_id)) { // Halfslabs
         // Slabs
-        if (b->b.meta&8) // upper half placement
+        if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"upper")) // upper half placement
             setdots(b, DOTS_ALL, DOTS_NONE, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER);
         else // lower half placement
             setdots(b, DOTS_NONE, DOTS_ALL, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER);
     }
 
-    else if (it->flags&I_STAIR) { // Stairs
+    else if (db_item_is_stair(item_id)) { // Stairs
         // Stairs
 
         // determine the required look direction for the correct block placement
-        b->rdir = (b->b.meta&2) ?
-            ((b->b.meta&1) ? DIR_NORTH : DIR_SOUTH ) :
-            ((b->b.meta&1) ? DIR_WEST  : DIR_EAST );
+        //b->rdir = (b->b.meta&2) ?
+        //    ((b->b.meta&1) ? DIR_NORTH : DIR_SOUTH ) :
+        //    ((b->b.meta&1) ? DIR_WEST  : DIR_EAST );
         // the direction will be checked for each dot in remove_distant_dots()
 
-        if (b->b.meta&4) // upside-down placement
-            setdots(b, DOTS_ALL, DOTS_NONE, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER);
-        else // straight placement
-            setdots(b, DOTS_NONE, DOTS_ALL, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER);
+        // if (b->b.meta&4) // upside-down placement
+            // setdots(b, DOTS_ALL, DOTS_NONE, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER);
+        // else // straight placement
+            // setdots(b, DOTS_NONE, DOTS_ALL, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER);
     }
 
-    else if (it->flags&I_LOG) { // Wood Logs and Hay Bales
+    else if (db_item_is_axis(item_id)) { // Wood Logs and Hay Bales
         switch((b->b.meta>>2)&3) {
             case 0: // Up-Down
             case 3: // All-bark (not possible, but we just assume up-down)
@@ -614,130 +615,113 @@ void set_block_dots(blk *b) {
         }
     }
 
-    else if (b->b.bid == 155) { // Quartz Blocks
-        switch(b->b.meta) {
-            case 2: // Up-Down
-                setdots(b, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE);
-                break;
-            case 3: // East-West
-                setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL);
-                break;
-            case 4: // North-South
-                setdots(b, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE);
-                break;
-            default: // Plain and Chiseled
-                PLACE_ALL(b);
-                break;
-        }
-    }
+    // else if (it->flags&I_TORCH) { // Torches and Redstone Torches
+    //     switch(b->b.meta) {
+    //         case 1: PLACE_EAST(b); break;
+    //         case 2: PLACE_WEST(b); break;
+    //         case 3: PLACE_SOUTH(b); break;
+    //         case 4: PLACE_NORTH(b); break;
+    //         case 5: PLACE_FLOOR(b); break;
+    //         default: PLACE_NONE(b); break;
+    //     }
+    // }
 
-    else if (it->flags&I_TORCH) { // Torches and Redstone Torches
-        switch(b->b.meta) {
-            case 1: PLACE_EAST(b); break;
-            case 2: PLACE_WEST(b); break;
-            case 3: PLACE_SOUTH(b); break;
-            case 4: PLACE_NORTH(b); break;
-            case 5: PLACE_FLOOR(b); break;
-            default: PLACE_NONE(b); break;
-        }
-    }
+    // else if (it->flags&I_ONWALL) { // Ladder, Wall Signs and Banners
+    //     switch(b->b.meta) {
+    //         case 2: PLACE_NORTH(b); break;
+    //         case 3: PLACE_SOUTH(b); break;
+    //         case 4: PLACE_WEST(b); break;
+    //         case 5: PLACE_EAST(b); break;
+    //         default: PLACE_NONE(b); break;
+    //     }
+    // }
 
-    else if (it->flags&I_ONWALL) { // Ladder, Wall Signs and Banners
-        switch(b->b.meta) {
-            case 2: PLACE_NORTH(b); break;
-            case 3: PLACE_SOUTH(b); break;
-            case 4: PLACE_WEST(b); break;
-            case 5: PLACE_EAST(b); break;
-            default: PLACE_NONE(b); break;
-        }
-    }
+    // else if (it->flags&I_RSRC) { // Redstone Repeater / Comparator
+    //     // required look direction for the correct block placement
+    //     b->rdir = (b->b.meta&1) ?
+    //         ((b->b.meta&2) ? DIR_WEST  : DIR_EAST ) :
+    //         ((b->b.meta&2) ? DIR_SOUTH : DIR_NORTH);
+    //     PLACE_ALL(b);
+    // }
 
-    else if (it->flags&I_RSRC) { // Redstone Repeater / Comparator
-        // required look direction for the correct block placement
-        b->rdir = (b->b.meta&1) ?
-            ((b->b.meta&2) ? DIR_WEST  : DIR_EAST ) :
-            ((b->b.meta&2) ? DIR_SOUTH : DIR_NORTH);
-        PLACE_ALL(b);
-    }
+    // else if (b->b.bid == 0x9a) { // Hopper
+    //     switch(b->b.meta&7) { // ignore state bit
+    //         case 0: PLACE_FLOOR(b); break;
+    //         case 2: PLACE_SOUTH(b); break;
+    //         case 3: PLACE_NORTH(b); break;
+    //         case 4: PLACE_EAST(b); break;
+    //         case 5: PLACE_WEST(b); break;
+    //         default: PLACE_NONE(b); break;
+    //     }
+    // }
 
-    else if (b->b.bid == 0x9a) { // Hopper
-        switch(b->b.meta&7) { // ignore state bit
-            case 0: PLACE_FLOOR(b); break;
-            case 2: PLACE_SOUTH(b); break;
-            case 3: PLACE_NORTH(b); break;
-            case 4: PLACE_EAST(b); break;
-            case 5: PLACE_WEST(b); break;
-            default: PLACE_NONE(b); break;
-        }
-    }
+    // else if (it->flags&I_RSDEV) { // Pistons, Dispensers and Droppers
+    //     int px = floor(gs.own.x);
+    //     int pz = floor(gs.own.z);
+    //     int py = round(gs.own.y); // rounded
 
-    else if (it->flags&I_RSDEV) { // Pistons, Dispensers and Droppers
-        int px = floor(gs.own.x);
-        int pz = floor(gs.own.z);
-        int py = round(gs.own.y); // rounded
+    //     int dx = b->x-px;
+    //     int dz = b->z-pz;
 
-        int dx = b->x-px;
-        int dz = b->z-pz;
+    //     if (dx>-2 && dx<3 && dz>-2 && dz<3) {
+    //         // placing in a 4x4 block zone around the player
+    //         // (1 block to the north and west, 2 blocks to south and east)
+    //         // printf("Dead zone dx=%d, dz=%d, by=%d py=%d\n", dx, dz, b->y, py);
+    //         switch(b->b.meta&7) {
+    //             case 0: if (b->y>=py+2) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
+    //             case 1: if (b->y<py) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
+    //             case 2: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); } break;
+    //             case 3: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); } break;
+    //             case 4: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); } break;
+    //             case 5: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); } break;
+    //             default: PLACE_NONE(b); break;
+    //         }
+    //     }
+    //     else {
+    //         switch(b->b.meta&7) {
+    //             case 2:  PLACE_ALL(b);  b->rdir=DIR_SOUTH; break;
+    //             case 3:  PLACE_ALL(b);  b->rdir=DIR_NORTH; break;
+    //             case 4:  PLACE_ALL(b);  b->rdir=DIR_EAST;  break;
+    //             case 5:  PLACE_ALL(b);  b->rdir=DIR_WEST;  break;
+    //             default: PLACE_NONE(b); break;
+    //         }
+    //     }
+    // }
 
-        if (dx>-2 && dx<3 && dz>-2 && dz<3) {
-            // placing in a 4x4 block zone around the player
-            // (1 block to the north and west, 2 blocks to south and east)
-            // printf("Dead zone dx=%d, dz=%d, by=%d py=%d\n", dx, dz, b->y, py);
-            switch(b->b.meta&7) {
-                case 0: if (b->y>=py+2) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
-                case 1: if (b->y<py) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
-                case 2: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); } break;
-                case 3: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); } break;
-                case 4: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); } break;
-                case 5: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); } break;
-                default: PLACE_NONE(b); break;
-            }
-        }
-        else {
-            switch(b->b.meta&7) {
-                case 2:  PLACE_ALL(b);  b->rdir=DIR_SOUTH; break;
-                case 3:  PLACE_ALL(b);  b->rdir=DIR_NORTH; break;
-                case 4:  PLACE_ALL(b);  b->rdir=DIR_EAST;  break;
-                case 5:  PLACE_ALL(b);  b->rdir=DIR_WEST;  break;
-                default: PLACE_NONE(b); break;
-            }
-        }
-    }
+    // else if (it->flags&I_OBSERVER) { // Observer blocks
+    //     int px = floor(gs.own.x);
+    //     int pz = floor(gs.own.z);
+    //     int py = round(gs.own.y); // rounded
 
-    else if (it->flags&I_OBSERVER) { // Observer blocks
-        int px = floor(gs.own.x);
-        int pz = floor(gs.own.z);
-        int py = round(gs.own.y); // rounded
+    //     int dx = b->x-px;
+    //     int dz = b->z-pz;
 
-        int dx = b->x-px;
-        int dz = b->z-pz;
+    //     if (dx>-2 && dx<3 && dz>-2 && dz<3) {
+    //         // placing in a 4x4 block zone around the player
+    //         // (1 block to the north and west, 2 blocks to south and east)
+    //         // printf("Dead zone dx=%d, dz=%d, by=%d py=%d\n", dx, dz, b->y, py);
+    //         switch(b->b.meta&7) {
+    //             case 0: if (b->y>=py+2) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
+    //             case 1: if (b->y<py) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
+    //             case 2: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); } break;
+    //             case 3: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); } break;
+    //             case 4: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); } break;
+    //             case 5: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); } break;
+    //             default: PLACE_NONE(b); break;
+    //         }
+    //     }
+    //     else {
+    //         switch(b->b.meta&7) {
+    //             case 2:  PLACE_ALL(b);  b->rdir=DIR_NORTH; break;
+    //             case 3:  PLACE_ALL(b);  b->rdir=DIR_SOUTH; break;
+    //             case 4:  PLACE_ALL(b);  b->rdir=DIR_WEST;  break;
+    //             case 5:  PLACE_ALL(b);  b->rdir=DIR_EAST;  break;
+    //             default: PLACE_NONE(b); break;
+    //         }
+    //     }
+    // }
 
-        if (dx>-2 && dx<3 && dz>-2 && dz<3) {
-            // placing in a 4x4 block zone around the player
-            // (1 block to the north and west, 2 blocks to south and east)
-            // printf("Dead zone dx=%d, dz=%d, by=%d py=%d\n", dx, dz, b->y, py);
-            switch(b->b.meta&7) {
-                case 0: if (b->y>=py+2) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
-                case 1: if (b->y<py) { PLACE_ALL(b); } else { PLACE_NONE(b); } break;
-                case 2: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); } break;
-                case 3: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); } break;
-                case 4: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); } break;
-                case 5: if (b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); } break;
-                default: PLACE_NONE(b); break;
-            }
-        }
-        else {
-            switch(b->b.meta&7) {
-                case 2:  PLACE_ALL(b);  b->rdir=DIR_NORTH; break;
-                case 3:  PLACE_ALL(b);  b->rdir=DIR_SOUTH; break;
-                case 4:  PLACE_ALL(b);  b->rdir=DIR_WEST;  break;
-                case 5:  PLACE_ALL(b);  b->rdir=DIR_EAST;  break;
-                default: PLACE_NONE(b); break;
-            }
-        }
-    }
-
-    else if (it->flags&I_DOOR) { // Doors
+    else if (db_item_is_door(item_id)) { // Doors
         if (b->b.meta&8) {
             // top half can't be placed
             PLACE_NONE(b);
@@ -756,7 +740,7 @@ void set_block_dots(blk *b) {
         // by default. For this we need access to the top half meta value though
     }
 
-    else if (it->flags&I_TDOOR) {
+    else if (db_item_is_tdoor(item_id)) {
         switch (b->b.meta&11) { // ignore the open state bit
             case 0:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE, DOTS_NONE); break;
             case 1:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE); break;
@@ -769,127 +753,127 @@ void set_block_dots(blk *b) {
         };
     }
 
-    else if (b->b.bid == 26) { // bed
-        if (b->b.meta < 8) { // only place the foot of the bed
-            switch (b->b.meta&3) { // ignore the occupied bit
-                case 0: b->rdir = DIR_SOUTH; break;
-                case 1: b->rdir = DIR_WEST; break;
-                case 2: b->rdir = DIR_NORTH; break;
-                case 3: b->rdir = DIR_EAST; break;
-            }
-            PLACE_FLOOR(b);
-        }
-        else {
-            PLACE_NONE(b);
-        }
-    }
+    // else if (b->b.bid == 26) { // bed
+    //     if (b->b.meta < 8) { // only place the foot of the bed
+    //         switch (b->b.meta&3) { // ignore the occupied bit
+    //             case 0: b->rdir = DIR_SOUTH; break;
+    //             case 1: b->rdir = DIR_WEST; break;
+    //             case 2: b->rdir = DIR_NORTH; break;
+    //             case 3: b->rdir = DIR_EAST; break;
+    //         }
+    //         PLACE_FLOOR(b);
+    //     }
+    //     else {
+    //         PLACE_NONE(b);
+    //     }
+    // }
 
-    else if (it->flags&I_PLANT) {
-        PLACE_FLOOR(b);
-        int fl = b->nblocks[DIR_DOWN].bid;
+    // else if (it->flags&I_PLANT) {
+    //     PLACE_FLOOR(b);
+    //     int fl = b->nblocks[DIR_DOWN].bid;
 
-        switch (b->b.bid) {
-            case 0x06: // Sapling
-            case 0x26: // Flower
-            case 0xaf: // Large flower
-                if (fl!=0x02 && fl!=0x03 && fl!=0x3c)
-                    PLACE_NONE(b);
-                break;
+    //     switch (b->b.bid) {
+    //         case 0x06: // Sapling
+    //         case 0x26: // Flower
+    //         case 0xaf: // Large flower
+    //             if (fl!=0x02 && fl!=0x03 && fl!=0x3c)
+    //                 PLACE_NONE(b);
+    //             break;
 
-            case 0x3b: // Wheat
-            case 0x68: // Pumpkin stem
-            case 0x69: // Melon stem
-            case 0x8d: // Crrot plant
-            case 0x8e: // Potato plant
-                if (fl!=0x3c)
-                    PLACE_NONE(b);
-                break;
+    //         case 0x3b: // Wheat
+    //         case 0x68: // Pumpkin stem
+    //         case 0x69: // Melon stem
+    //         case 0x8d: // Crrot plant
+    //         case 0x8e: // Potato plant
+    //             if (fl!=0x3c)
+    //                 PLACE_NONE(b);
+    //             break;
 
-            case 0x51: // Cactus
-                if (fl!=0x0c)
-                    PLACE_NONE(b);
-                break;
+    //         case 0x51: // Cactus
+    //             if (fl!=0x0c)
+    //                 PLACE_NONE(b);
+    //             break;
 
-            case 0x53: // Sugar Cane
-                if (fl!=0x0c && fl!=0x02 && fl!=0x03)
-                    PLACE_NONE(b);
-                break;
+    //         case 0x53: // Sugar Cane
+    //             if (fl!=0x0c && fl!=0x02 && fl!=0x03)
+    //                 PLACE_NONE(b);
+    //             break;
 
-            case 0x6f: // Lily pads
-                if (fl!=8 && fl!=9)
-                    PLACE_NONE(b);
-                break;
-        }
-    }
+    //         case 0x6f: // Lily pads
+    //             if (fl!=8 && fl!=9)
+    //                 PLACE_NONE(b);
+    //             break;
+    //     }
+    // }
 
-    else if (it->flags&I_CHEST) {
-        switch (b->b.meta&7) {
-            case 2: b->rdir = DIR_SOUTH; break;
-            case 3: b->rdir = DIR_NORTH; break;
-            case 4: b->rdir = DIR_EAST; break;
-            case 5: b->rdir = DIR_WEST; break;
-        }
-        PLACE_ALL(b);
-    }
+    // else if (it->flags&I_CHEST) {
+    //     switch (b->b.meta&7) {
+    //         case 2: b->rdir = DIR_SOUTH; break;
+    //         case 3: b->rdir = DIR_NORTH; break;
+    //         case 4: b->rdir = DIR_EAST; break;
+    //         case 5: b->rdir = DIR_WEST; break;
+    //     }
+    //     PLACE_ALL(b);
+    // }
 
-    else if (b->b.bid == 69) { // Lever
-        switch(b->b.meta&7) {
-            case 0: PLACE_CEIL(b); b->rdir=DIR_SOUTH; break;
-            case 7: PLACE_CEIL(b); b->rdir=DIR_EAST; break;
+    // else if (b->b.bid == 69) { // Lever
+    //     switch(b->b.meta&7) {
+    //         case 0: PLACE_CEIL(b); b->rdir=DIR_SOUTH; break;
+    //         case 7: PLACE_CEIL(b); b->rdir=DIR_EAST; break;
 
-            case 5: PLACE_FLOOR(b); b->rdir=DIR_SOUTH; break;
-            case 6: PLACE_FLOOR(b); b->rdir=DIR_EAST; break;
+    //         case 5: PLACE_FLOOR(b); b->rdir=DIR_SOUTH; break;
+    //         case 6: PLACE_FLOOR(b); b->rdir=DIR_EAST; break;
 
-            case 1: PLACE_EAST(b); break;
-            case 2: PLACE_WEST(b); break;
-            case 3: PLACE_SOUTH(b); break;
-            case 4: PLACE_NORTH(b); break;
-        }
-    }
+    //         case 1: PLACE_EAST(b); break;
+    //         case 2: PLACE_WEST(b); break;
+    //         case 3: PLACE_SOUTH(b); break;
+    //         case 4: PLACE_NORTH(b); break;
+    //     }
+    // }
 
-    else if (b->b.bid==77 || b->b.bid==143) { // Buttons
-        switch(b->b.meta) {
-            case 0: PLACE_CEIL(b); break;
-            case 1: PLACE_EAST(b); break;
-            case 2: PLACE_WEST(b); break;
-            case 3: PLACE_SOUTH(b); break;
-            case 4: PLACE_NORTH(b); break;
-            case 5: PLACE_FLOOR(b); break;
-            default: PLACE_NONE(b); break;
-        }
-    }
+    // else if (b->b.bid==77 || b->b.bid==143) { // Buttons
+    //     switch(b->b.meta) {
+    //         case 0: PLACE_CEIL(b); break;
+    //         case 1: PLACE_EAST(b); break;
+    //         case 2: PLACE_WEST(b); break;
+    //         case 3: PLACE_SOUTH(b); break;
+    //         case 4: PLACE_NORTH(b); break;
+    //         case 5: PLACE_FLOOR(b); break;
+    //         default: PLACE_NONE(b); break;
+    //     }
+    // }
 
-    else if (it->flags&I_GATE) {
-        switch (b->b.meta&3) {
-            case 0: b->rdir = DIR_SOUTH; break;
-            case 1: b->rdir = DIR_WEST;  break;
-            case 2: b->rdir = DIR_NORTH; break;
-            case 3: b->rdir = DIR_EAST;  break;
-        }
-        PLACE_ALL(b);
-    }
+    // else if (it->flags&I_GATE) {
+    //     switch (b->b.meta&3) {
+    //         case 0: b->rdir = DIR_SOUTH; break;
+    //         case 1: b->rdir = DIR_WEST;  break;
+    //         case 2: b->rdir = DIR_NORTH; break;
+    //         case 3: b->rdir = DIR_EAST;  break;
+    //     }
+    //     PLACE_ALL(b);
+    // }
 
-    else if (b->b.bid==198) { // End Rod
-        switch(b->b.meta) {
-            case 0: PLACE_CEIL(b); break;
-            case 1: PLACE_FLOOR(b); break;
-            case 2: PLACE_NORTH(b); break;
-            case 3: PLACE_SOUTH(b); break;
-            case 4: PLACE_WEST(b); break;
-            case 5: PLACE_EAST(b); break;
-            default: PLACE_NONE(b); break;
-        }
-    }
+    // else if (b->b.bid==198) { // End Rod
+    //     switch(b->b.meta) {
+    //         case 0: PLACE_CEIL(b); break;
+    //         case 1: PLACE_FLOOR(b); break;
+    //         case 2: PLACE_NORTH(b); break;
+    //         case 3: PLACE_SOUTH(b); break;
+    //         case 4: PLACE_WEST(b); break;
+    //         case 5: PLACE_EAST(b); break;
+    //         default: PLACE_NONE(b); break;
+    //     }
+    // }
 
-    else if (it->flags&I_TERRACOTA) { // Glazed Terracota
-        switch (b->b.meta) {
-            case 0: b->rdir = DIR_NORTH; break;
-            case 1: b->rdir = DIR_EAST;  break;
-            case 2: b->rdir = DIR_SOUTH; break;
-            case 3: b->rdir = DIR_WEST;  break;
-        }
-        PLACE_ALL(b);
-    }
+    // else if (it->flags&I_TERRACOTA) { // Glazed Terracota
+    //     switch (b->b.meta) {
+    //         case 0: b->rdir = DIR_NORTH; break;
+    //         case 1: b->rdir = DIR_EAST;  break;
+    //         case 2: b->rdir = DIR_SOUTH; break;
+    //         case 3: b->rdir = DIR_WEST;  break;
+    //     }
+    //     PLACE_ALL(b);
+    // }
 
     else {
         // Blocks that don't have I_MPOS or not supported
@@ -960,43 +944,47 @@ int update_placed() {
         int smask = (it->flags&I_STATE_MASK)^15;
 
         // check if this block is already correctly placed (including meta)
-        if ( bl.bid == b->b.bid ) {
-            if ((bl.meta&smask) == (b->b.meta&smask)) {
-                // meta is already correct
-                // note that we exclude the dynamic state bits (e.g. redstone power)
-                b->placed = 1;
-            }
-            else if (it->flags&I_ADJ) {
-                // meta is not correct, but this block is adjustable
-                // consider it placed, but mark it for adjustment
-                b->placed = 1;
-                b->needadj = 1;
-            }
-            // else - some block with the correct ID, but incorrect meta was placed
-            // (e.g. wrong wool color)
+        if ( bl.raw == b->b.raw ) {
+            //raws match - TODO also allow waterlogged differences.
+            b->placed = 1;
         }
+        else if (db_get_blk_default_id(bl.raw ) == db_get_blk_default_id(b->b.raw ) ) {
+            printf("Block match but different state ID %i vs %i\n", bl.raw,b->b.raw);
 
-        #if 0
-        //DISABLED: transition to dev_3.0
-
-        else if (it->flags&I_DSLAB) {
-            // special case - doubleslabs
-            bid_t bm = get_base_material(b->b);
-            if (bm.bid==bl.bid && bm.meta==(bl.meta&7)) {
+            if ( db_item_is_slab(db_get_item_id_from_blk_id(b->b.raw)) &&
+                !strcmp(db_get_blk_propval(b->b.raw ,"type"),"double") ) {
+                //NOTE: above assumes all slabs have the type property which they do, but...
+                if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"bottom")) {
                 // we want to place a doubleslab here and the block already contains
                 // a suitable slab - mark it as empty, so we can place the second slab
-                b->empty = 1;
+                    b->empty = 1;
+                }
             }
+            //TODO: else if ( adjustable ) { }
+
+            else b->placed = 1;  //I guess just mark it placed for now...defaults are matching.  Need to do better
+
+            //else if (it->flags&I_ADJ) {
+                // meta is not correct, but this block is adjustable
+                // consider it placed, but mark it for adjustment
+            //        b->placed = 1;
+            //        b->needadj = 1;
+            //    }
+            // else - some block with the correct ID, but incorrect meta was placed
+            // (e.g. wrong wool color)
+            // }
+        }
+        else {
             // else - the block is occupied by something insuitable
         }
-        else if ( (bl.bid == 0x97 && b->b.bid == 0xb2) || (bl.bid == 0xb2 && b->b.bid == 0x97) ) {
+        //else if ( (bl.bid == 0x97 && b->b.bid == 0xb2) || (bl.bid == 0xb2 && b->b.bid == 0x97) ) {
             // special case - daylight sensor
             // adjustment toggles between two block IDs instead of meta
-            b->placed = 1;
-            b->needadj = 1;
-        }
+        //    b->placed = 1;
+        //    b->needadj = 1;
+        //}
         // else - placed is set to 0
-        #endif
+
 
         // check if the block is empty, but ignore those that are already
         // placed - this way we can support "empty" blocks like water in our buildplan
@@ -1227,10 +1215,10 @@ void build_progress(MCPacketQueue *sq, MCPacketQueue *cq) {
         if (islot==-1) continue; // we don't have this material
         if (islot==-2) return; // inventory action is in progress, postpone building
         //TODO: notify user about missing materials
-        printf("Changing Held\n");
+        //printf("Changing Held\n");
         // silently switch to this slot
         gmi_change_held(sq, cq, islot, 0);
-        printf("Changed Held\n");
+        //printf("Changed Held\n");
         slot_t * hslot = &gs.inv.slots[islot+36];
 
         int8_t face, cx, cy, cz;
@@ -1251,8 +1239,8 @@ void build_progress(MCPacketQueue *sq, MCPacketQueue *cq) {
                    b->x,b->y,b->z, db_get_item_name(hslot->item));
         }
         else {
-            const item_id *nit = &ITEMS[b->nblocks[face].bid];
-            if (nit->flags&(I_CONT|I_ADJ) && !gs.own.crouched)
+            const int nit = db_get_item_id_from_blk_id(b->nblocks[face].raw );
+            if ( ( db_item_is_container(nit) || db_item_is_adj(nit) ) && !gs.own.crouched )
                 needcrouch=1;
 
 #if 0
@@ -1312,7 +1300,7 @@ void build_progress(MCPacketQueue *sq, MCPacketQueue *cq) {
         queue_packet(pbp,sq);
         dump_packet(pbp);
 
-        if ((hslot->item == 326 || hslot->item == 327)) {
+        if (hslot->item == db_get_item_id("water_bucket") || hslot->item == db_get_item_id("lava_bucket") ) {
             // Placing a water or lava - requires a different procedure
             if (currentProtocol >= PROTO_1_9) {
                 // 1.9+ clients send CP_UseItem after the placement

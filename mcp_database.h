@@ -69,6 +69,9 @@ const char *db_get_blk_name(blid_t id);
 // Gets the blockname from the old-style block ID (only relevant for the SP_BlockAction packet)
 const char *db_get_blk_name_from_old_id(blid_t oldid);
 
+// Gets the corresponding item ID from a block ID
+const int db_get_item_id_from_blk_id(blid_t id);
+
 // input is another block id, returning that block id's default id
 blid_t db_get_blk_default_id(blid_t id);
 
@@ -154,3 +157,6 @@ int db_item_is_chest (int item_id);
 
 // True if item is a enderchest or furnace  (orientable containers)
 int db_item_is_furnace (int item_id);
+
+// True if item is adjustable (ie need crouch to place, other than a container I_CONT)
+int db_item_is_adj (int item_id);
