@@ -652,18 +652,24 @@ void set_block_dots(blk *b) {
     }
 
     else if (db_item_is_axis(item_id)) { // Wood Logs and Hay Bales
-        switch((b->b.meta>>2)&3) {
-            case 0: // Up-Down
-            case 3: // All-bark (not possible, but we just assume up-down)
-                setdots(b, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE);
-                break;
-            case 1: // East-West
-                setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL);
-                break;
-            case 2: // North-South
-                setdots(b, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE);
-                break;
-        }
+        const char *axis = db_get_blk_propval(b->b.raw,"axis");
+        assert (axis);
+        if (!strcmp(axis, "x")) setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL);
+        else if (!strcmp(axis, "y")) setdots(b, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE);
+        else if (!strcmp(axis, "z")) setdots(b, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE);
+        else assert(0);
+        // switch((b->b.meta>>2)&3) {
+        //     case 0: // Up-Down
+        //     case 3: // All-bark (not possible, but we just assume up-down)
+        //         setdots(b, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE);
+        //         break;
+        //     case 1: // East-West
+        //         setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL);
+        //         break;
+        //     case 2: // North-South
+        //         setdots(b, DOTS_NONE, DOTS_NONE, DOTS_ALL, DOTS_ALL, DOTS_NONE, DOTS_NONE);
+        //         break;
+        // }
     }
 
     // else if (it->flags&I_TORCH) { // Torches and Redstone Torches
