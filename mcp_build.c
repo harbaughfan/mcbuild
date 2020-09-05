@@ -626,7 +626,19 @@ void set_block_dots(blk *b) {
 
     else if (db_item_is_stair(item_id)) { // Stairs
         // Stairs
+        const char *facing = db_get_blk_propval(b->b.raw,"facing");
+        assert (facing);
+        if (!strcmp(facing, "north")) b->rdir = DIR_NORTH;
+        else if (!strcmp(facing, "south")) b->rdir = DIR_SOUTH;
+        else if (!strcmp(facing, "east")) b->rdir = DIR_EAST;
+        else if (!strcmp(facing, "west")) b->rdir = DIR_WEST;
+        else assert(0);
 
+        const char *half = db_get_blk_propval(b->b.raw,"half");
+        assert (half);
+        if (!strcmp(half, "top")) setdots(b, DOTS_ALL, DOTS_NONE, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER);
+        else if (!strcmp(half, "bottom")) setdots(b, DOTS_NONE, DOTS_ALL, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER);
+        else assert(0);
         // determine the required look direction for the correct block placement
         //b->rdir = (b->b.meta&2) ?
         //    ((b->b.meta&1) ? DIR_NORTH : DIR_SOUTH ) :
