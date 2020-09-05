@@ -516,6 +516,30 @@ static inline int count_dots(blk *b) {
     return c;
 }
 
+// if neighbor is a halfslab, there are only half the dots available on that face.
+// remove the empty half of the neighbor by updating the dot masks
+static void remove_slab_dots(blk *b) {
+    int st = count_dots(b);
+    for (int j=2; j<6;j++) { // j = DIR_SOUTH, DIR_NORTH, DIR_EAST, DIR_WEST
+        if (!b->nblocks[j].raw) continue;
+        // if neighbor is a halfslab, we only have half the dots available on its face
+        if ( db_item_is_slab(db_get_item_id_from_blk_id( b->nblocks[j].raw ))) {
+            if (!strcmp(db_get_blk_propval(b->nblocks[j].raw ,"type"),"top")) {
+                // neighbor is upper slab
+                for (int i=0;i<15;i++) {
+                    b->dots[j][i] &= DOTS_UPPER[i];
+                }
+            }
+            else if (!strcmp(db_get_blk_propval(b->nblocks[j].raw ,"type"),"bottom")) {
+                // neighbor is upper slab
+                for (int i=0;i<15;i++) {
+                    b->dots[j][i] &= DOTS_LOWER[i];
+                }
+            }
+        }
+    }
+}
+
 // predicate function to sort the blocks by their distance to the player
 static int sort_blocks(const void *a, const void *b) {
     int ia = *((int *)a);
@@ -554,7 +578,7 @@ static void build_update_placed() {
         bid_t *row = slice+(b->z-build.zmin)*c.sa.x;
         bid_t bl = row[b->x-build.xmin];
         int smask = (ITEMS[b->b.bid].flags&I_STATE_MASK)^15;
-        b->placed = (bl.bid == b->b.bid && (bl.meta&smask)==(b->b.meta&smask) );
+        b->placed = (bl.raw == b->b.raw  );
         b->empty  = db_blk_is_empty(bl.raw) && !b->placed;
         b->current = bl;
     }
@@ -579,10 +603,25 @@ void set_block_dots(blk *b) {
 
     if (db_item_is_slab(item_id)) { // Halfslabs
         // Slabs
-        if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"upper")) // upper half placement
+        if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"top")) // upper half placement
             setdots(b, DOTS_ALL, DOTS_NONE, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER);
-        else // lower half placement
+        else if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"bottom"))// lower half placement
             setdots(b, DOTS_NONE, DOTS_ALL, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER);
+        else if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"double")) { // double slab
+            bid_t bl = get_block_at(b->x,b->y,b->z);
+            if (db_get_blk_default_id(bl.raw) == db_get_blk_default_id(b->b.raw)) {
+                //slab already there is same material as slab we are trying to place
+                //this is much more restrictive than it needs to be but we can expand later
+                if (!strcmp(db_get_blk_propval(bl.raw ,"type"),"top"))  //there is already an upper so place like lowaer
+                    setdots(b, DOTS_NONE, DOTS_ALL, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER, DOTS_LOWER);
+                else if (!strcmp(db_get_blk_propval(bl.raw ,"type"),"bottom")) //there is already a lower so place like upper
+                    setdots(b, DOTS_ALL, DOTS_NONE, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER, DOTS_UPPER);
+                else
+                    PLACE_ALL(b); //we want a double and there's already a double - i guess don't restrict?
+            }
+            else PLACE_ALL(b);
+        }
+        else assert(0);
     }
 
     else if (db_item_is_stair(item_id)) { // Stairs
@@ -951,13 +990,14 @@ int update_placed() {
         else if (db_get_blk_default_id(bl.raw ) == db_get_blk_default_id(b->b.raw ) ) {
             printf("Block match but different state ID %i vs %i\n", bl.raw,b->b.raw);
 
-            if ( db_item_is_slab(db_get_item_id_from_blk_id(b->b.raw)) &&
-                !strcmp(db_get_blk_propval(b->b.raw ,"type"),"double") ) {
-                //NOTE: above assumes all slabs have the type property which they do, but...
-                if (!strcmp(db_get_blk_propval(b->b.raw ,"type"),"bottom")) {
-                // we want to place a doubleslab here and the block already contains
-                // a suitable slab - mark it as empty, so we can place the second slab
-                    b->empty = 1;
+            if ( db_item_is_slab(db_get_item_id_from_blk_id(b->b.raw)) ) {
+                //item is a slab
+                if ( !strcmp(db_get_blk_propval(b->b.raw ,"type"),"double") )  {
+                    // we want to place a doubleslab here and the block already contains
+                    // a suitable slab - mark it as empty, so we can place the second slab
+                    if ( !strcmp(db_get_blk_propval(bl.raw ,"type"),"bottom") ||
+                         !strcmp(db_get_blk_propval(bl.raw ,"type"),"top") )
+                        b->empty = 1;
                 }
             }
             //TODO: else if ( adjustable ) { }
@@ -1139,7 +1179,7 @@ void build_update() {
     for(i=0; i<C(build.task); i++) {
         blk *b = P(build.task)+i;
         if (!b->empty) continue;
-
+        remove_slab_dots(b);
         remove_distant_dots(b);
         b->ndots = count_dots(b);
         if (b->ndots>0 && build.nbq<MAXBUILDABLE)
