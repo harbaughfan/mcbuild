@@ -106,7 +106,6 @@ int bplan_add(bplan *bp, blkr block) {
 // around a pivot block
 
 blkr abs2rel(pivot_t pv, blkr b) {
-    printf("Warning abs2rel()\n");
     blkr r;
     const char *axis = db_get_blk_propval(b.b.raw ,"axis");
     const char *facing = db_get_blk_propval(b.b.raw ,"facing");
@@ -172,7 +171,6 @@ blkr abs2rel(pivot_t pv, blkr b) {
 }
 
 blkr rel2abs(pivot_t pv, blkr b) {
-    printf("Warning rel2abs()\n");
     blkr r;
     const char *axis = db_get_blk_propval(b.b.raw ,"axis");
     const char *facing = db_get_blk_propval(b.b.raw ,"facing");
