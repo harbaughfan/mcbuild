@@ -112,22 +112,22 @@ blkr abs2rel(pivot_t pv, blkr b) {
         case DIR_SOUTH:
             r.x=pv.pos.x-b.x;
             r.z=pv.pos.z-b.z;
-            r.b=rotate_meta(b.b,-2);
+            r.b=b.b;
             break;
         case DIR_NORTH:
             r.x=b.x-pv.pos.x;
             r.z=b.z-pv.pos.z;
-            r.b=rotate_meta(b.b,0);
+            r.b=b.b;
             break;
         case DIR_EAST:
             r.x=b.z-pv.pos.z;
             r.z=pv.pos.x-b.x;
-            r.b=rotate_meta(b.b,-1);
+            r.b=b.b;
             break;
         case DIR_WEST:
             r.x=pv.pos.z-b.z;
             r.z=b.x-pv.pos.x;
-            r.b=rotate_meta(b.b,-3);
+            r.b=b.b;
             break;
         default: assert(0);
     }
@@ -142,22 +142,22 @@ blkr rel2abs(pivot_t pv, blkr b) {
         case DIR_SOUTH:
             r.x=pv.pos.x-b.x;
             r.z=pv.pos.z-b.z;
-            r.b=rotate_meta(b.b,2);
+            r.b=b.b;
             break;
         case DIR_NORTH:
             r.x=pv.pos.x+b.x;
             r.z=pv.pos.z+b.z;
-            r.b=rotate_meta(b.b,0);
+            r.b=b.b;
             break;
         case DIR_EAST:
             r.x=pv.pos.x-b.z;
             r.z=pv.pos.z+b.x;
-            r.b=rotate_meta(b.b,1);
+            r.b=b.b;
             break;
         case DIR_WEST:
             r.x=pv.pos.x+b.z;
             r.z=pv.pos.z-b.x;
-            r.b=rotate_meta(b.b,3);
+            r.b=b.b;
             break;
         default: assert(0);
     }
