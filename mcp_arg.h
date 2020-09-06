@@ -91,8 +91,8 @@ int argparse(char **words, char **names, char **fmt, ...);
     }                                                                                           \
     mvar.raw = db_get_blk_id(matname);                                                          \
     if (db_get_num_states(mvar.raw) != 1) {                                                     \
-        sprintf(reply, "Material %s has more than one state - currently unsupported", matname); \
-        goto Error;                                                                             \
+        sprintf(reply, "Material %s has more than one state - currently experimental", matname); \
+        /* goto Error; */                                                                       \
     }
 
 

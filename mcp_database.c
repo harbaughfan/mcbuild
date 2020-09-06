@@ -246,6 +246,109 @@ int db_get_item_id(const char *name) {
         }
     }
     //TODO: if this is a blockname with a different itemname for the base material
+    if (!strcmp(name, "water")) return db_get_item_id("water_bucket");
+    if (!strcmp(name, "lava")) return db_get_item_id("lava_bucket");
+    if (!strcmp(name, "tall_seagrass")) return db_get_item_id("air");
+    if (!strcmp(name, "piston_head")) return db_get_item_id("air");
+    if (!strcmp(name, "moving_piston")) return db_get_item_id("air");
+    if (!strcmp(name, "wall_torch")) return db_get_item_id("torch");
+    if (!strcmp(name, "fire")) return db_get_item_id("air");
+    if (!strcmp(name, "soul_fire")) return db_get_item_id("air");
+    if (!strcmp(name, "redstone_wire")) return db_get_item_id("redstone");
+    if (!strcmp(name, "oak_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "spruce_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "birch_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "acacia_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "jungle_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "dark_oak_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "redstone_wall_torch")) return db_get_item_id("redstone_torch");
+    if (!strcmp(name, "soul_wall_torch")) return db_get_item_id("soul_torch");
+    if (!strcmp(name, "nether_portal")) return db_get_item_id("air");
+    if (!strcmp(name, "attached_pumpkin_stem")) return db_get_item_id("air");
+    if (!strcmp(name, "attached_melon_stem")) return db_get_item_id("air");
+    if (!strcmp(name, "pumpkin_stem")) return db_get_item_id("air");
+    if (!strcmp(name, "melon_stem")) return db_get_item_id("air");
+    if (!strcmp(name, "end_portal")) return db_get_item_id("air");
+    if (!strcmp(name, "cocoa")) return db_get_item_id("air");
+    if (!strcmp(name, "tripwire")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_oak_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_spruce_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_birch_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_jungle_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_acacia_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_dark_oak_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_fern")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_dandelion")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_poppy")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_blue_orchid")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_allium")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_azure_bluet")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_red_tulip")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_orange_tulip")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_white_tulip")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_pink_tulip")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_oxeye_daisy")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_cornflower")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_lily_of_the_valley")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_wither_rose")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_red_mushroom")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_brown_mushroom")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_dead_bush")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_cactus")) return db_get_item_id("air");
+    if (!strcmp(name, "carrots")) return db_get_item_id("air");
+    if (!strcmp(name, "potatoes")) return db_get_item_id("air");
+    if (!strcmp(name, "skeleton_wall_skull")) return db_get_item_id("skeleton_skull");
+    if (!strcmp(name, "wither_skeleton_wall_skull")) return db_get_item_id("wither_skull");
+    if (!strcmp(name, "zombie_wall_head")) return db_get_item_id("zombie_head");
+    if (!strcmp(name, "player_wall_head")) return db_get_item_id("player_head");
+    if (!strcmp(name, "creeper_wall_head")) return db_get_item_id("creeper_head");
+    if (!strcmp(name, "dragon_wall_head")) return db_get_item_id("dragon_head");
+    if (!strcmp(name, "white_wall_banner")) return db_get_item_id("white_banner");
+    if (!strcmp(name, "orange_wall_banner")) return db_get_item_id("orange_banner");
+    if (!strcmp(name, "magenta_wall_banner")) return db_get_item_id("magenta_banner");
+    if (!strcmp(name, "light_blue_wall_banner")) return db_get_item_id("light_banner");
+    if (!strcmp(name, "yellow_wall_banner")) return db_get_item_id("yellow_banner");
+    if (!strcmp(name, "lime_wall_banner")) return db_get_item_id("lime_banner");
+    if (!strcmp(name, "pink_wall_banner")) return db_get_item_id("pink_banner");
+    if (!strcmp(name, "gray_wall_banner")) return db_get_item_id("gray_banner");
+    if (!strcmp(name, "light_gray_wall_banner")) return db_get_item_id("light_banner");
+    if (!strcmp(name, "cyan_wall_banner")) return db_get_item_id("cyan_banner");
+    if (!strcmp(name, "purple_wall_banner")) return db_get_item_id("purple_banner");
+    if (!strcmp(name, "blue_wall_banner")) return db_get_item_id("blue_banner");
+    if (!strcmp(name, "brown_wall_banner")) return db_get_item_id("brown_banner");
+    if (!strcmp(name, "green_wall_banner")) return db_get_item_id("green_banner");
+    if (!strcmp(name, "red_wall_banner")) return db_get_item_id("red_banner");
+    if (!strcmp(name, "black_wall_banner")) return db_get_item_id("black_banner");
+    if (!strcmp(name, "beetroots")) return db_get_item_id("air");
+    if (!strcmp(name, "end_gateway")) return db_get_item_id("air");
+    if (!strcmp(name, "frosted_ice")) return db_get_item_id("ice");
+    if (!strcmp(name, "kelp_plant")) return db_get_item_id("air");
+    if (!strcmp(name, "dead_tube_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "dead_brain_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "dead_bubble_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "dead_fire_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "dead_horn_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "tube_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "brain_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "bubble_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "fire_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "horn_coral_wall_fan")) return db_get_item_id("air");
+    if (!strcmp(name, "bamboo_sapling")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_bamboo")) return db_get_item_id("air");
+    if (!strcmp(name, "void_air")) return db_get_item_id("air");
+    if (!strcmp(name, "cave_air")) return db_get_item_id("air");
+    if (!strcmp(name, "bubble_column")) return db_get_item_id("air");
+    if (!strcmp(name, "sweet_berry_bush")) return db_get_item_id("sweet_berries");
+    if (!strcmp(name, "weeping_vines_plant")) return db_get_item_id("air");
+    if (!strcmp(name, "twisting_vines_plant")) return db_get_item_id("air");
+    if (!strcmp(name, "crimson_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "warped_wall_sign")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_crimson_fungus")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_warped_fungus")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_crimson_roots")) return db_get_item_id("air");
+    if (!strcmp(name, "potted_warped_roots")) return db_get_item_id("air");
+
+    assert ( 0 );
     return -1;
 };
 
@@ -267,7 +370,6 @@ const char *db_get_item_name(int item_id) {
 const int db_get_item_id_from_blk_id(blid_t id) {
     //TODO:handle blocks whose item name is different
     int item_id = db_get_item_id(db_get_blk_name(id));
-    assert(item_id > 0);
     return item_id;
 }
 
@@ -579,6 +681,13 @@ int db_blk_is_noscan(blid_t blk_id) {
     if (!strcmp(blk_name, "carrots")) return 1;
     if (!strcmp(blk_name, "potatoes")) return 1;
     if (!strcmp(blk_name, "beetroots")) return 1;
+    if (!strcmp(blk_name, "soul_fire")) return 1;
+    if (!strcmp(blk_name, "void_air")) return 1;
+    if (!strcmp(blk_name, "cave_air")) return 1;
+    if (!strcmp(blk_name, "bubble_column")) return 1;
+    if (!strcmp(blk_name, "piston_head")) return 1;
+    if (!strcmp(blk_name, "tripwire")) return 1;
+    if (!strcmp(blk_name, "end_gateway")) return 1;
     return 0;
 }
 
@@ -593,6 +702,10 @@ int db_blk_is_empty(blid_t blk_id) {
     if (!strcmp(blk_name, "tall_seagrass")) return 1;
     if (!strcmp(blk_name, "fire")) return 1;
     if (!strcmp(blk_name, "snow")) return 1;
+    if (!strcmp(blk_name, "soul_fire")) return 1;
+    if (!strcmp(blk_name, "void_air")) return 1;
+    if (!strcmp(blk_name, "cave_air")) return 1;
+    if (!strcmp(blk_name, "bubble_column")) return 1;
     return 0;
 }
 
@@ -1064,6 +1177,9 @@ int test_examples() {
 // item is observer (NESWUD except flipped placement)
 #define I_OBS (1ULL<<40)
 
+// item is gravity (will fall if placed without a block beneath)
+#define I_GRAVITY (1ULL<<41)
+
 // example - placeholder should each armor type get its own designation
 #define I_ARMOR 0ULL
 
@@ -1098,9 +1214,9 @@ const uint64_t item_flags[] = {
     [27] = 0,                                     //acacia_sapling
     [28] = 0,                                     //dark_oak_sapling
     [29] = 0,                                     //bedrock
-    [30] = 0,                                     //sand
-    [31] = 0,                                     //red_sand
-    [32] = 0,                                     //gravel
+    [30] = I_GRAVITY,                             //sand
+    [31] = I_GRAVITY,                             //red_sand
+    [32] = I_GRAVITY,                             //gravel
     [33] = 0,                                     //gold_ore
     [34] = 0,                                     //iron_ore
     [35] = 0,                                     //coal_ore
@@ -2208,6 +2324,15 @@ int db_item_is_furnace (int item_id) {
 int db_item_is_adj (int item_id) {
     assert ( item_id >= 0 && item_id < db_num_items );
     if (item_flags[item_id] & I_ADJ) {
+        return 1;
+    }
+    return 0;
+}
+
+// True if item has gravity (ie sand gravel etc)
+int db_item_is_gravity (int item_id) {
+    assert ( item_id >= 0 && item_id < db_num_items );
+    if (item_flags[item_id] & I_GRAVITY) {
         return 1;
     }
     return 0;

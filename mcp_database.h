@@ -172,3 +172,6 @@ int db_item_is_furnace (int item_id);
 
 // True if item is adjustable (ie need crouch to place, other than a container I_CONT)
 int db_item_is_adj (int item_id);
+
+// True if item has gravity (may want to place only if there's a block beneath)
+int db_item_is_gravity (int item_id);
