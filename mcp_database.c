@@ -1061,6 +1061,9 @@ int test_examples() {
 // item is adjustable (such as a repeater delay)
 #define I_ADJ (1ULL<<39)
 
+// item is observer (NESWUD except flipped placement)
+#define I_OBS (1ULL<<40)
+
 // example - placeholder should each armor type get its own designation
 #define I_ARMOR 0ULL
 
@@ -1495,7 +1498,7 @@ const uint64_t item_flags[] = {
     [427] = 0,                                    //red_nether_bricks
     [428] = I_AXIS,                               //bone_block
     [429] = 0,                                    //structure_void
-    [430] = I_RSDEV | I_FACINGNESWUD,             //observer
+    [430] = I_RSDEV | I_FACINGNESWUD | I_OBS,     //observer
     [431] = I_NSTACK | I_CONT | I_FACINGNESWUD,   //shulker_box
     [432] = I_NSTACK | I_CONT | I_FACINGNESWUD,   //white_shulker_box
     [433] = I_NSTACK | I_CONT | I_FACINGNESWUD,   //orange_shulker_box
@@ -2169,6 +2172,15 @@ int db_item_is_bed (int item_id) {
 int db_item_is_rsdev (int item_id) {
     assert ( item_id >= 0 && item_id < db_num_items );
     if (item_flags[item_id] & I_RSDEV) {
+        return 1;
+    }
+    return 0;
+}
+
+// True if item is an observer (NESWUD but flipped)
+int db_item_is_obs (int item_id) {
+    assert ( item_id >= 0 && item_id < db_num_items );
+    if (item_flags[item_id] & I_OBS) {
         return 1;
     }
     return 0;

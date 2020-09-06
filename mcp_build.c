@@ -734,14 +734,16 @@ void set_block_dots(blk *b) {
         int dx = b->x-px;
         int dz = b->z-pz;
 
+        int obs = db_item_is_obs(item_id);
+
         // much more restrictive than before but we can try to loosen it later
         // printf("NESWUD dx=%d, dz=%d, by=%d py=%d\n", dx, dz, b->y, py);
-        if (!strcmp(facing, "down"))       {if (dx>-2 && dx<2 && dz>-2 && dz<2 && b->y>py+2 )      { PLACE_CEIL(b); } else { PLACE_NONE(b); }}
-        else if (!strcmp(facing, "up"))    {if (dx>-2 && dx<2 && dz>-2 && dz<2 && b->y<py )        { PLACE_FLOOR(b); } else { PLACE_NONE(b); }}
-        else if (!strcmp(facing, "north")) {if (dx==0 && (dz>2 || dz<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); }}
-        else if (!strcmp(facing, "south")) {if (dx==0 && (dz>2 || dz<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); }}
-        else if (!strcmp(facing, "east"))  {if (dz==0 && (dx>2 || dx<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); }}
-        else if (!strcmp(facing, "west"))  {if (dz==0 && (dx>2 || dx<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); }}
+        if (obs ? !strcmp(facing, "up") : !strcmp(facing, "down"))       {if (dx>-2 && dx<2 && dz>-2 && dz<2 && b->y>py+2 )      { PLACE_CEIL(b); } else { PLACE_NONE(b); }}
+        else if (obs ? !strcmp(facing, "down") : !strcmp(facing, "up"))    {if (dx>-2 && dx<2 && dz>-2 && dz<2 && b->y<py )        { PLACE_FLOOR(b); } else { PLACE_NONE(b); }}
+        else if (obs ? !strcmp(facing, "south") : !strcmp(facing, "north")) {if (dx==0 && (dz>2 || dz<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); }}
+        else if (obs ? !strcmp(facing, "north") : !strcmp(facing, "south")) {if (dx==0 && (dz>2 || dz<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); }}
+        else if (obs ? !strcmp(facing, "west") : !strcmp(facing, "east"))  {if (dz==0 && (dx>2 || dx<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); }}
+        else if (obs ? !strcmp(facing, "east") : !strcmp(facing, "west"))  {if (dz==0 && (dx>2 || dx<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); }}
         else PLACE_NONE(b);
 
     // else if (it->flags&I_RSDEV) { // Pistons, Dispensers and Droppers
