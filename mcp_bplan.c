@@ -108,6 +108,8 @@ int bplan_add(bplan *bp, blkr block) {
 blkr abs2rel(pivot_t pv, blkr b) {
     printf("Warning abs2rel()\n");
     blkr r;
+    const char *axis = db_get_blk_propval(b.b.raw ,"axis");
+    const char *facing = db_get_blk_propval(b.b.raw ,"facing");
     switch(pv.dir) {
         case DIR_SOUTH:
             r.x=pv.pos.x-b.x;
@@ -122,12 +124,22 @@ blkr abs2rel(pivot_t pv, blkr b) {
         case DIR_EAST:
             r.x=b.z-pv.pos.z;
             r.z=pv.pos.x-b.x;
-            r.b=b.b;
+            if (axis) {
+                if (!strcmp(axis,"x")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "z");
+                else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
+                else r.b=b.b;
+            }
+            else r.b=b.b;
             break;
         case DIR_WEST:
             r.x=pv.pos.z-b.z;
             r.z=b.x-pv.pos.x;
-            r.b=b.b;
+            if (axis) {
+                if (!strcmp(axis,"x")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "z");
+                else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
+                else r.b=b.b;
+            }
+            else r.b=b.b;
             break;
         default: assert(0);
     }
@@ -138,11 +150,16 @@ blkr abs2rel(pivot_t pv, blkr b) {
 blkr rel2abs(pivot_t pv, blkr b) {
     printf("Warning rel2abs()\n");
     blkr r;
+    const char *axis = db_get_blk_propval(b.b.raw ,"axis");
+    const char *facing = db_get_blk_propval(b.b.raw ,"facing");
     switch(pv.dir) {
         case DIR_SOUTH:
             r.x=pv.pos.x-b.x;
             r.z=pv.pos.z-b.z;
-            r.b=b.b;
+            if (axis) {
+                r.b=b.b;
+            }
+            else r.b=b.b;
             break;
         case DIR_NORTH:
             r.x=pv.pos.x+b.x;
@@ -152,12 +169,22 @@ blkr rel2abs(pivot_t pv, blkr b) {
         case DIR_EAST:
             r.x=pv.pos.x-b.z;
             r.z=pv.pos.z+b.x;
-            r.b=b.b;
+            if (axis) {
+                if (!strcmp(axis,"x")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "z");
+                else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
+                else r.b=b.b;
+            }
+            else r.b=b.b;
             break;
         case DIR_WEST:
             r.x=pv.pos.x+b.z;
             r.z=pv.pos.z-b.x;
-            r.b=b.b;
+            if (axis) {
+                if (!strcmp(axis,"x")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "z");
+                else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
+                else r.b=b.b;
+            }
+            else r.b=b.b;
             break;
         default: assert(0);
     }
