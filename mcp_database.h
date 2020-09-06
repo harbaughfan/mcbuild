@@ -146,6 +146,15 @@ int db_item_is_tdoor (int item_id);
 // True if item has the face property (buttons, lever, upcoming grindstone)
 int db_item_is_face (int item_id);
 
+// True if item has the facing property with NESW variants
+int db_item_is_facing_nesw (int item_id);
+
+// True if item has the facing property with NESWD variants
+int db_item_is_facing_neswd (int item_id);
+
+// True if item has the facing property with NESWUD variants
+int db_item_is_facing_neswud (int item_id);
+
 // True if item is a bed
 int db_item_is_bed (int item_id);
 

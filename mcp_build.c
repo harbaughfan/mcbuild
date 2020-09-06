@@ -701,16 +701,27 @@ void set_block_dots(blk *b) {
     //     PLACE_ALL(b);
     // }
 
-    // else if (b->b.bid == 0x9a) { // Hopper
-    //     switch(b->b.meta&7) { // ignore state bit
-    //         case 0: PLACE_FLOOR(b); break;
-    //         case 2: PLACE_SOUTH(b); break;
-    //         case 3: PLACE_NORTH(b); break;
-    //         case 4: PLACE_EAST(b); break;
-    //         case 5: PLACE_WEST(b); break;
-    //         default: PLACE_NONE(b); break;
-    //     }
-    // }
+    else if (db_item_is_facing_neswd(item_id)) {  // Hopper (facing property with NESWD variants)
+        const char *facing = db_get_blk_propval(b->b.raw,"facing");
+        assert (facing);
+        if (!strcmp(facing, "down")) {PLACE_FLOOR(b);}
+        else if (!strcmp(facing, "north")) {PLACE_SOUTH(b);}
+        else if (!strcmp(facing, "south")) {PLACE_NORTH(b);}
+        else if (!strcmp(facing, "east")) {PLACE_WEST(b);}
+        else if (!strcmp(facing, "west")) {PLACE_EAST(b);}
+        else assert(0);
+
+        // else if (b->b.bid == 0x9a) { // Hopper
+        //     switch(b->b.meta&7) { // ignore state bit
+        //         case 0: PLACE_FLOOR(b); break;
+        //         case 2: PLACE_SOUTH(b); break;
+        //         case 3: PLACE_NORTH(b); break;
+        //         case 4: PLACE_EAST(b); break;
+        //         case 5: PLACE_WEST(b); break;
+        //         default: PLACE_NONE(b); break;
+        //     }
+        // }
+    }
 
     // else if (it->flags&I_RSDEV) { // Pistons, Dispensers and Droppers
     //     int px = floor(gs.own.x);

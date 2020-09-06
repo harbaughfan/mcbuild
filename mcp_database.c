@@ -2129,6 +2129,33 @@ int db_item_is_face (int item_id) {
     return 0;
 }
 
+// True if item has the facing property with NESW variants
+int db_item_is_facing_nesw (int item_id) {
+    assert ( item_id >= 0 && item_id < db_num_items );
+    if (item_flags[item_id] & I_FACINGNESW) {
+        return 1;
+    }
+    return 0;
+}
+
+// True if item has the facing property with NESWD variants
+int db_item_is_facing_neswd (int item_id) {
+    assert ( item_id >= 0 && item_id < db_num_items );
+    if (item_flags[item_id] & I_FACINGNESWD) {
+        return 1;
+    }
+    return 0;
+}
+
+// True if item has the facing property with NESWUD variants
+int db_item_is_facing_neswud (int item_id) {
+    assert ( item_id >= 0 && item_id < db_num_items );
+    if (item_flags[item_id] & I_FACINGNESWUD) {
+        return 1;
+    }
+    return 0;
+}
+
 // True if item is a bed
 int db_item_is_bed (int item_id) {
     assert ( item_id >= 0 && item_id < db_num_items );
