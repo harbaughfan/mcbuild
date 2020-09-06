@@ -506,7 +506,7 @@ typedef struct {
     int32_t     gamemode;
     int32_t     ping;
     uint8_t     has_dispname;
-    char        dispname[64];
+    char        dispname[1024];
 } pli_t;
 
 typedef struct {
@@ -623,7 +623,7 @@ typedef struct {
 
 // 0x03
 typedef struct {
-    char        str[320];
+    char        str[1024];
 } CP_ChatMessage_pkt;
 
 // 0x07
