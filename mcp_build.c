@@ -577,7 +577,7 @@ static void build_update_placed() {
         bid_t *slice = c.data[b->y-build.ymin]+c.boff;
         bid_t *row = slice+(b->z-build.zmin)*c.sa.x;
         bid_t bl = row[b->x-build.xmin];
-        int smask = (ITEMS[b->b.bid].flags&I_STATE_MASK)^15;
+        //int smask = (ITEMS[b->b.bid].flags&I_STATE_MASK)^15;
         b->placed = (bl.raw == b->b.raw  );
         b->empty  = db_blk_is_empty(bl.raw) && !b->placed;
         b->current = bl;
@@ -723,6 +723,27 @@ void set_block_dots(blk *b) {
         // }
     }
 
+    else if (db_item_is_facing_neswud(item_id)) {  // Pistons, Dispensers Droppers etc (NESWUD variants)
+        const char *facing = db_get_blk_propval(b->b.raw,"facing");
+        assert (facing);
+
+        int px = floor(gs.own.x);
+        int pz = floor(gs.own.z);
+        int py = round(gs.own.y); // rounded
+
+        int dx = b->x-px;
+        int dz = b->z-pz;
+
+        // much more restrictive than before but we can try to loosen it later
+        // printf("NESWUD dx=%d, dz=%d, by=%d py=%d\n", dx, dz, b->y, py);
+        if (!strcmp(facing, "down"))       {if (dx>-2 && dx<2 && dz>-2 && dz<2 && b->y>py+2 )      { PLACE_CEIL(b); } else { PLACE_NONE(b); }}
+        else if (!strcmp(facing, "up"))    {if (dx>-2 && dx<2 && dz>-2 && dz<2 && b->y<py )        { PLACE_FLOOR(b); } else { PLACE_NONE(b); }}
+        else if (!strcmp(facing, "north")) {if (dx==0 && (dz>2 || dz<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_SOUTH; } else { PLACE_NONE(b); }}
+        else if (!strcmp(facing, "south")) {if (dx==0 && (dz>2 || dz<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_NORTH; } else { PLACE_NONE(b); }}
+        else if (!strcmp(facing, "east"))  {if (dz==0 && (dx>2 || dx<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_WEST; } else { PLACE_NONE(b); }}
+        else if (!strcmp(facing, "west"))  {if (dz==0 && (dx>2 || dx<-2) && b->y>=py && b->y<py+2) { PLACE_ALL(b); b->rdir=DIR_EAST; } else { PLACE_NONE(b); }}
+        else PLACE_NONE(b);
+
     // else if (it->flags&I_RSDEV) { // Pistons, Dispensers and Droppers
     //     int px = floor(gs.own.x);
     //     int pz = floor(gs.own.z);
@@ -755,6 +776,7 @@ void set_block_dots(blk *b) {
     //         }
     //     }
     // }
+    }
 
     // else if (it->flags&I_OBSERVER) { // Observer blocks
     //     int px = floor(gs.own.x);
@@ -1049,8 +1071,8 @@ int update_placed() {
         // world block at the position this btask block would be placed
         bid_t bl = get_block_at(b->x, b->z, b->y);
 
-        const item_id *it = &ITEMS[b->b.bid];
-        int smask = (it->flags&I_STATE_MASK)^15;
+        //const item_id *it = &ITEMS[b->b.bid];
+        //int smask = (it->flags&I_STATE_MASK)^15;
 
         // check if this block is already correctly placed (including meta)
         if ( bl.raw == b->b.raw ) {

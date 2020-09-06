@@ -106,6 +106,7 @@ int bplan_add(bplan *bp, blkr block) {
 // around a pivot block
 
 blkr abs2rel(pivot_t pv, blkr b) {
+    printf("Warning abs2rel()\n");
     blkr r;
     switch(pv.dir) {
         case DIR_SOUTH:
@@ -135,6 +136,7 @@ blkr abs2rel(pivot_t pv, blkr b) {
 }
 
 blkr rel2abs(pivot_t pv, blkr b) {
+    printf("Warning rel2abs()\n");
     blkr r;
     switch(pv.dir) {
         case DIR_SOUTH:
