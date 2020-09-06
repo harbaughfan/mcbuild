@@ -779,17 +779,37 @@ void set_block_dots(blk *b) {
     // }
 
     else if (db_item_is_door(item_id)) { // Doors
-        if (b->b.meta&8) {
-            // top half can't be placed
-            PLACE_NONE(b);
-        }
-        else {
-            b->rdir = (b->b.meta&1) ?
-                ((b->b.meta&2) ? DIR_NORTH : DIR_SOUTH) :
-                ((b->b.meta&2) ? DIR_WEST  : DIR_EAST );
+        const char *half = db_get_blk_propval(b->b.raw,"half");
+        assert (half);
+        if (!strcmp(half, "upper")) { PLACE_NONE(b); }
+        else if (!strcmp(half, "lower")) {
+            const char *facing = db_get_blk_propval(b->b.raw,"facing");
+            assert (facing);
+            if (!strcmp(facing, "north")) b->rdir = DIR_NORTH;
+            else if (!strcmp(facing, "south")) b->rdir = DIR_SOUTH;
+            else if (!strcmp(facing, "east")) b->rdir = DIR_EAST;
+            else if (!strcmp(facing, "west")) b->rdir = DIR_WEST;
+            else assert(0);
 
-            PLACE_FLOOR(b);
+            const char *hinge = db_get_blk_propval(b->b.raw,"hinge");
+            assert (hinge);
+            if (!strcmp(hinge, "left")) { PLACE_FLOOR(b); }
+            else if (!strcmp(hinge, "right")) { PLACE_FLOOR(b); }
+            else assert(0);
         }
+        else assert(0);
+
+        // if (b->b.meta&8) {
+        //     // top half can't be placed
+        //     PLACE_NONE(b);
+        // }
+        // else {
+        //     b->rdir = (b->b.meta&1) ?
+        //         ((b->b.meta&2) ? DIR_NORTH : DIR_SOUTH) :
+        //         ((b->b.meta&2) ? DIR_WEST  : DIR_EAST );
+
+        //     PLACE_FLOOR(b);
+        // }
 
         //TODO: check if the door we are trying to place is right-hinged
         // in that case we need to place it only if there is a block
@@ -797,17 +817,38 @@ void set_block_dots(blk *b) {
         // by default. For this we need access to the top half meta value though
     }
 
-    else if (db_item_is_tdoor(item_id)) {
-        switch (b->b.meta&11) { // ignore the open state bit
-            case 0:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE, DOTS_NONE); break;
-            case 1:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE); break;
-            case 2:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE); break;
-            case 3:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER); break;
-            case 8:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE, DOTS_NONE, DOTS_NONE); break;
-            case 9:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE, DOTS_NONE); break;
-            case 10: setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE); break;
-            case 11: setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER); break;
-        };
+    else if (db_item_is_tdoor(item_id)) { //trapdoors
+        // Trapdoors
+        const char *facing = db_get_blk_propval(b->b.raw,"facing");
+        const char *half = db_get_blk_propval(b->b.raw,"half");
+        assert (facing);
+        assert (half);
+        if (!strcmp(half, "top")) {
+            if (!strcmp(facing, "north"))     { setdots(b, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE, DOTS_NONE, DOTS_NONE);}
+            else if (!strcmp(facing, "south")){ setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE, DOTS_NONE);}
+            else if (!strcmp(facing, "west")) { setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE);}
+            else if (!strcmp(facing, "east")) { setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER);}
+            else assert(0);
+        }
+        else if (!strcmp(half, "bottom")) {
+            if (!strcmp(facing, "north"))     { setdots(b, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE, DOTS_NONE);}
+            else if (!strcmp(facing, "south")){ setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE);}
+            else if (!strcmp(facing, "west")) { setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE);}
+            else if (!strcmp(facing, "east")) { setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER);}
+            else assert(0);
+        }
+        else assert(0);
+
+        // switch (b->b.meta&11) { // ignore the open state bit
+        //     case 0:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE, DOTS_NONE); break;
+        //     case 1:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE, DOTS_NONE); break;
+        //     case 2:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER, DOTS_NONE); break;
+        //     case 3:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_LOWER); break;
+        //     case 8:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE, DOTS_NONE, DOTS_NONE); break;
+        //     case 9:  setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE, DOTS_NONE); break;
+        //     case 10: setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER, DOTS_NONE); break;
+        //     case 11: setdots(b, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_NONE, DOTS_UPPER); break;
+        // };
     }
 
     // else if (b->b.bid == 26) { // bed
