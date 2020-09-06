@@ -114,7 +114,17 @@ blkr abs2rel(pivot_t pv, blkr b) {
         case DIR_SOUTH:
             r.x=pv.pos.x-b.x;
             r.z=pv.pos.z-b.z;
-            r.b=b.b;
+            if (axis) {
+                r.b=b.b;
+            }
+            else if (facing) {
+                if (!strcmp(facing,"north")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "south");
+                else if (!strcmp(facing,"east")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "west");
+                else if (!strcmp(facing,"south")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "north");
+                else if (!strcmp(facing,"west")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "east");
+                else r.b=b.b;
+            }
+            else r.b=b.b;
             break;
         case DIR_NORTH:
             r.x=b.x-pv.pos.x;
@@ -129,6 +139,13 @@ blkr abs2rel(pivot_t pv, blkr b) {
                 else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
                 else r.b=b.b;
             }
+            else if (facing) {
+                if (!strcmp(facing,"north")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "east");
+                else if (!strcmp(facing,"east")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "south");
+                else if (!strcmp(facing,"south")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "west");
+                else if (!strcmp(facing,"west")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "north");
+                else r.b=b.b;
+            }
             else r.b=b.b;
             break;
         case DIR_WEST:
@@ -137,6 +154,13 @@ blkr abs2rel(pivot_t pv, blkr b) {
             if (axis) {
                 if (!strcmp(axis,"x")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "z");
                 else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
+                else r.b=b.b;
+            }
+            else if (facing) {
+                if (!strcmp(facing,"north")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "west");
+                else if (!strcmp(facing,"east")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "north");
+                else if (!strcmp(facing,"south")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "east");
+                else if (!strcmp(facing,"west")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "south");
                 else r.b=b.b;
             }
             else r.b=b.b;
@@ -159,6 +183,13 @@ blkr rel2abs(pivot_t pv, blkr b) {
             if (axis) {
                 r.b=b.b;
             }
+            else if (facing) {
+                if (!strcmp(facing,"north")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "south");
+                else if (!strcmp(facing,"east")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "west");
+                else if (!strcmp(facing,"south")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "north");
+                else if (!strcmp(facing,"west")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "east");
+                else r.b=b.b;
+            }
             else r.b=b.b;
             break;
         case DIR_NORTH:
@@ -174,6 +205,13 @@ blkr rel2abs(pivot_t pv, blkr b) {
                 else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
                 else r.b=b.b;
             }
+            else if (facing) {
+                if (!strcmp(facing,"north")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "west");
+                else if (!strcmp(facing,"east")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "north");
+                else if (!strcmp(facing,"south")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "east");
+                else if (!strcmp(facing,"west")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "south");
+                else r.b=b.b;
+            }
             else r.b=b.b;
             break;
         case DIR_WEST:
@@ -182,6 +220,13 @@ blkr rel2abs(pivot_t pv, blkr b) {
             if (axis) {
                 if (!strcmp(axis,"x")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "z");
                 else if (!strcmp(axis,"z")) r.b.raw = db_blk_property_change(b.b.raw, "axis", "x");
+                else r.b=b.b;
+            }
+            else if (facing) {
+                if (!strcmp(facing,"north")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "east");
+                else if (!strcmp(facing,"east")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "south");
+                else if (!strcmp(facing,"south")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "west");
+                else if (!strcmp(facing,"west")) r.b.raw = db_blk_property_change(b.b.raw, "facing", "north");
                 else r.b=b.b;
             }
             else r.b=b.b;
