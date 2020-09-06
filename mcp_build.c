@@ -378,14 +378,14 @@ void calculate_material(int plan) {
         build_info_material *m = P(bi->mat)+i;
         char buf[256];
         printf("%3d %-32s %5d  %5d  ",
-            m->material.raw, db_get_blk_name(m->material.raw),
+            m->material.raw, db_get_item_name(m->material.raw),
             m->total-m->placed, m->available);
 
         int need = m->total-m->placed-m->available;
         if (need <= 0)
             printf("-\n");
         else
-            printf("%5d ($%.1f)\n", need, (float)need/db_stacksize(db_get_item_id(db_get_blk_name(m->material.raw))));
+            printf("%5d ($%.1f)\n", need, (float)need/db_stacksize(m->material.raw));
     }
 
     printf("=========================================\n");
@@ -996,15 +996,25 @@ void set_block_dots(blk *b) {
     //     }
     // }
 
-    // else if (it->flags&I_TERRACOTA) { // Glazed Terracota
-    //     switch (b->b.meta) {
-    //         case 0: b->rdir = DIR_NORTH; break;
-    //         case 1: b->rdir = DIR_EAST;  break;
-    //         case 2: b->rdir = DIR_SOUTH; break;
-    //         case 3: b->rdir = DIR_WEST;  break;
-    //     }
-    //     PLACE_ALL(b);
-    // }
+    else if (db_item_is_facing_nesw(item_id)) {  // Terracotta & various others (facing with NESW variants)
+        const char *facing = db_get_blk_propval(b->b.raw,"facing");
+        assert (facing);
+        if (!strcmp(facing, "north")) {b->rdir = DIR_SOUTH;}
+        else if (!strcmp(facing, "south")) {b->rdir = DIR_NORTH;}
+        else if (!strcmp(facing, "east")) {b->rdir = DIR_WEST;}
+        else if (!strcmp(facing, "west")) {b->rdir = DIR_EAST;}
+        else assert(0);
+        PLACE_ALL(b);
+        // else if (it->flags&I_TERRACOTA) { // Glazed Terracota
+        //     switch (b->b.meta) {
+        //         case 0: b->rdir = DIR_NORTH; break;
+        //         case 1: b->rdir = DIR_EAST;  break;
+        //         case 2: b->rdir = DIR_SOUTH; break;
+        //         case 3: b->rdir = DIR_WEST;  break;
+        //     }
+        //     PLACE_ALL(b);
+        // }
+    }
 
     else {
         // Blocks that don't have I_MPOS or not supported
