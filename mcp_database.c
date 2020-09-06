@@ -688,6 +688,7 @@ int db_blk_is_noscan(blid_t blk_id) {
     if (!strcmp(blk_name, "piston_head")) return 1;
     if (!strcmp(blk_name, "tripwire")) return 1;
     if (!strcmp(blk_name, "end_gateway")) return 1;
+    if (!strcmp(blk_name, "tall_grass")) return 1;
     return 0;
 }
 
@@ -706,6 +707,7 @@ int db_blk_is_empty(blid_t blk_id) {
     if (!strcmp(blk_name, "void_air")) return 1;
     if (!strcmp(blk_name, "cave_air")) return 1;
     if (!strcmp(blk_name, "bubble_column")) return 1;
+    if (!strcmp(blk_name, "tall_grass")) return 1;
     return 0;
 }
 

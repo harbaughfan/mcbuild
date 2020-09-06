@@ -1018,6 +1018,11 @@ void set_block_dots(blk *b) {
         // }
     }
 
+    else if (db_item_is_gravity(item_id)) {  // place sand and gravel only if a block beneath it
+        if (!(b->neigh>>DIR_DOWN&1)) {PLACE_NONE(b);}
+        else {PLACE_ALL(b);}
+    }
+
     else {
         // Blocks that don't have I_MPOS or not supported
         PLACE_ALL(b);
