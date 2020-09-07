@@ -925,7 +925,7 @@ uint8_t * read_metadata(uint8_t *p, metadata **meta) {
             case META_VILLAGER:     mm->vil1 = read_varint(p);
                                     mm->vil2 = read_varint(p);
                                     mm->vil3 = read_varint(p); break;
-            case META_OPTVARINT:    mm->i = read_varint(p); break;
+            case META_OPTVARINT:    mm->i = read_varint(p); if (mm->i >0) mm->i--; break;
             case META_POSE:         mm->i = read_varint(p); break;
         }
     }
@@ -979,6 +979,11 @@ uint8_t * write_metadata(uint8_t *w, metadata *meta) {
                                 break;
             case META_BID:      write_char(w, mm->block); break;
             case META_NBT:      nbt_write(&w, mm->nbt); break;
+            case META_VILLAGER:  write_varint(w, mm->vil1);
+                                 write_varint(w, mm->vil2);
+                                 write_varint(w, mm->vil3);  break;
+            case META_OPTVARINT: printf("writing optvarint\n"); write_varint(w, mm->i ? mm->i+1 : 0); break;
+            case META_POSE:      write_varint(w, mm->i); break;
         }
     }
     lh_write_char(w, 0xff);

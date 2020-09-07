@@ -441,7 +441,7 @@ nbt_t * nbt_aget(nbt_t *nbt, int idx) {
 // compoiund       : count, obj0, obj1, obj2, ...
 //   - element names are taken from inserted objects
 nbt_t * nbt_new(int type, const char *name, ...) {
-    assert(type>NBT_END && type<=NBT_INT_ARRAY);
+    assert(type>NBT_END && type<=NBT_LONG_ARRAY);
 
     lh_create_obj(nbt_t, nbt);
     nbt->type = type;
