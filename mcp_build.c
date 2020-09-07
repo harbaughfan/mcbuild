@@ -1866,7 +1866,7 @@ void buildopt(char **words, MCPacketQueue *cq) {
         }
     }
 
-    char reply[256]; reply[0]=0;
+    char reply[273]; reply[0]=0;
 
     if (!OPTIONS[i].name) {
         sprintf(reply, "No such variable %s", name);

@@ -74,7 +74,7 @@ static void nbt_dump_ind(nbt_t *nbt, int indent) {
         case NBT_LONG_ARRAY:
             printf("Long Array '%s'[%zd] = { ",name,nbt->count);
             for(i=0; i<nbt->count; i++)
-                printf("%s%d",i?", ":"",nbt->la[i]);
+                printf("%s%ld",i?", ":"",nbt->la[i]);
             printf(" }\n");
             break;
 

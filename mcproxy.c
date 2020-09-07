@@ -128,7 +128,7 @@ struct {
     // Note: serverID is received as UTF-16 string, but converted to ASCII
     // for hashing. The string itself is a hexstring, but it's not converted
     // to bytes or anything
-    char s_id[256];
+    char s_id[4096];
 
     // DER-encoded public key from the server
     uint8_t s_pkey[1024];
@@ -1000,7 +1000,7 @@ int query_auth_server() {
     if (hex_import(userId, gs.own.uuid, 16)!=16)
         printf("Error parsing UUID '%s'\n",userId);
 
-    char buf[4096];
+    char buf[8500];
     sprintf(buf,"{\"accessToken\":\"%s\",\"selectedProfile\":\"%s\",\"serverId\":\"%s\"}",
             accessToken, userId, auth);
 

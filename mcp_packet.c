@@ -1106,7 +1106,7 @@ DUMP_BEGIN(SP_JoinGame) {
     printf("dimensionnbt=%s, ",tpkt->dimensionnbt? "present" : "none");
     // if (tpkt->dimensionnbt) nbt_dump(tpkt->dimensionnbt);
     printf("worldname=%s, ",tpkt->worldname);
-    printf("hashedseed=%08x, ",tpkt->hashedseed);
+    printf("hashedseed=%08lx, ",tpkt->hashedseed);
     printf("maxplayers=%i, ",tpkt->maxplayers);
     printf("viewdistance=%i, ",tpkt->viewdistance);
     printf("reduceddebuginfo=%c, ",tpkt->reduced_debug_info?'T':'F');
