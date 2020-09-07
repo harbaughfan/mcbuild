@@ -93,5 +93,3 @@ uint8_t * write_slot(uint8_t *w, slot_t *s) {
     }
     return w;
 }
-
-

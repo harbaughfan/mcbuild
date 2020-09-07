@@ -368,7 +368,7 @@ DECODE_BEGIN(SP_SpawnPlayer,_1_13_2) {
     Pdouble(z);
     Pchar(yaw);
     Pchar(pitch);
-    Pmeta(meta);
+    //Pmeta(meta); removed in 16.2
 } DECODE_END;
 
 DUMP_BEGIN(SP_SpawnPlayer) {
@@ -2192,7 +2192,8 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_    (0x06,SP_Statistics),
         SUPPORT_    (0x07,SP_AckPlayerDigging),
         SUPPORT_    (0x08,SP_BlockBreakAnimation),
-        SUPPORT_DDF (0x09,SP_UpdateBlockEntity,_1_8_1),
+        //SUPPORT_DDF (0x09,SP_UpdateBlockEntity,_1_8_1),
+        SUPPORT_ (0x09,SP_UpdateBlockEntity),
         SUPPORT_DD  (0x0a,SP_BlockAction,_1_8_1),
         SUPPORT_DED (0x0b,SP_BlockChange,_1_13_2),
         SUPPORT_    (0x0c,SP_BossBar),
@@ -2236,7 +2237,8 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
 
         SUPPORT_DED (0x30,SP_PlayerAbilities,_1_8_1),
         SUPPORT_    (0x31,SP_CombatEffect),
-        SUPPORT_DEDF(0x32,SP_PlayerListItem,_1_9),
+        //SUPPORT_DEDF(0x32,SP_PlayerListItem,_1_9),
+        SUPPORT_    (0x32,SP_PlayerListItem),
         SUPPORT_    (0x33,SP_FacePlayer),
         SUPPORT_DED (0x34,SP_PlayerPositionLook,_1_9),
         SUPPORT_    (0x35,SP_UnlockRecipes),
@@ -2255,7 +2257,8 @@ const static packet_methods SUPPORT_1_16_2[2][MAXPACKETTYPES] = {
         SUPPORT_    (0x41,SP_UpdateViewDistance),
         SUPPORT_    (0x42,SP_SpawnPosition),
         SUPPORT_    (0x43,SP_DisplayScoreboard),
-        SUPPORT_DEDF(0x44,SP_EntityMetadata,_1_13_2),
+        //SUPPORT_DEDF(0x44,SP_EntityMetadata,_1_13_2),
+        SUPPORT_ (0x44,SP_EntityMetadata ),
         SUPPORT_    (0x45,SP_AttachEntity),
         SUPPORT_    (0x46,SP_EntityVelocity),
         SUPPORT_    (0x47,SP_EntityEquipment),
