@@ -348,8 +348,9 @@ int db_get_item_id(const char *name) {
     if (!strcmp(name, "potted_crimson_roots")) return db_get_item_id("air");
     if (!strcmp(name, "potted_warped_roots")) return db_get_item_id("air");
 
-    assert ( 0 );
-    return -1;
+    printf("##### WARNING ##### Cannot convert block to item: %s\n",name);
+    return db_get_item_id("air");
+    //return -1;
 };
 
 // Gets the item name given the item id
