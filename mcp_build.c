@@ -272,7 +272,7 @@ int prefetch_material(MCPacketQueue *sq, MCPacketQueue *cq, blid_t blk_id) {
     const char *blk_name = db_get_blk_name(blk_id);
     assert(blk_name);
     int item_id = db_get_item_id(blk_name);
-    printf("prefetch_material: blk_id=%d, blk_name=%s, item_id=%d\n", blk_id, blk_name, item_id);
+    //printf("prefetch_material: blk_id=%d, blk_name=%s, item_id=%d\n", blk_id, blk_name, item_id);
 
     // try to find the suitable material in any inventory slot, starting from quickbar
     int mslot = -1;
@@ -1397,9 +1397,9 @@ void build_progress(MCPacketQueue *sq, MCPacketQueue *cq) {
                    "Face:%d Cursor:%d,%d,%d  "
                    "Player: %.1f,%.1f,%.1f  Dot: %.1f,%.1f,%.1f  "
                    "Rot=%.2f,%.2f  Dir=%d (%s) %s\n",
-                   b->x,b->y,b->z, get_item_name(buf, hslot),
+                   b->x,b->y,b->z, db_get_item_name(hslot->item),
                    b->x+NOFF[face][0],b->z+NOFF[face][1],b->y+NOFF[face][2],
-                   b->nblocks[face].bid, get_bid_name(buf2, b->nblocks[face]),
+                   b->nblocks[face].raw, db_get_blk_name(b->nblocks[face].raw),
                    face, cx, cy, cz,
                    gs.own.x, (double)gs.own.y+EYEHEIGHT, gs.own.z,
                    tx,ty,tz,
@@ -1896,7 +1896,7 @@ void build_dump_task() {
     char buf[256];
     for(i=0; i<C(build.task); i++) {
         blk *b = &P(build.task)[i];
-        printf("%3d %+5d,%+5d,%3d   %.2f   %c%c%c %c%c%c%c%c%c %-3d   %4d (%s)\n",
+        printf("%3d %+5d,%+5d,%3d   %.2f   %c%c%c %c%c%c%c%c%c %-3d   %5d %4d (%s) \n",
                i, b->x, b->z, b->y,
                b->dist,
                b->inreach?'R':'.',
@@ -1911,7 +1911,7 @@ void build_dump_task() {
                b->n_xn ? '*':'.',
                b->ndots,
 
-               b->b.raw, db_get_blk_name(b->b.raw));
+               b->b.raw, db_get_item_id_from_blk_id(b->b.raw), db_get_blk_name(b->b.raw));
     }
 }
 
