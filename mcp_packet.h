@@ -478,7 +478,7 @@ typedef struct {
 // 0x2d
 typedef struct {
     uint8_t  wid;
-    char     wtype[256];
+    uint32_t wtype;
     char    *title;
     uint8_t  nslots;
     uint32_t eid;   // horse's ID - only used if the window type is a EntityHorse

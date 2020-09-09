@@ -1219,6 +1219,7 @@ DUMP_BEGIN(SP_EntityRelMove) {
 ////////////////////////////////////////////////////////////////////////////////
 // 0x2D SP_OpenWindow
 
+#if 0
 DECODE_BEGIN(SP_OpenWindow,_1_8_1) {
     Pchar(wid);
     Pstr(wtype);
@@ -1229,14 +1230,16 @@ DECODE_BEGIN(SP_OpenWindow,_1_8_1) {
         Pint(eid);
     }
 } DECODE_END;
+#endif
 
 DECODE_BEGIN(SP_OpenWindow,_1_16_2) {
     Pchar(wid);
-    Pstr(wtype);
+    Pvarint(wtype);
     Rstr(title);
     tpkt->title = strdup(title);
 } DECODE_END;
 
+#if 0
 ENCODE_BEGIN(SP_OpenWindow,_1_8_1) {
     Wchar(wid);
     Wstr(wtype);
@@ -1246,17 +1249,18 @@ ENCODE_BEGIN(SP_OpenWindow,_1_8_1) {
         Wint(eid);
     }
 } ENCODE_END;
+#endif
 
 ENCODE_BEGIN(SP_OpenWindow,_1_16_2) {
     Wchar(wid);
-    Wstr(wtype);
+    Wvarint(wtype);
     Wstr(title);
 } ENCODE_END;
 
 DUMP_BEGIN(SP_OpenWindow) {
     // printf("wid=%d wtype=%s title=%s nslots=%d eid=%d",
     //        tpkt->wid,tpkt->wtype,tpkt->title,tpkt->nslots,tpkt->eid);
-    printf("wid=%d wtype=%s title=%s",
+    printf("wid=%d wtype=%i title=%s",
            tpkt->wid,tpkt->wtype,tpkt->title);
 } DUMP_END;
 
@@ -2353,8 +2357,8 @@ uint32_t DUMP_ENABLED[] = {
     // SP_Statistics,
     // SP_AckPlayerDigging,
     // SP_BlockBreakAnimation,
-    SP_UpdateBlockEntity,
-    SP_BlockAction,
+    // SP_UpdateBlockEntity,
+    // SP_BlockAction,
     // SP_BlockChange,
     // SP_BossBar,
     // SP_ServerDifficulty,
@@ -2374,7 +2378,7 @@ uint32_t DUMP_ENABLED[] = {
     // SP_EntityStatus,
     // SP_Explosion,
     // SP_UnloadChunk,
-    SP_ChangeGameState,
+    // SP_ChangeGameState,
     SP_OpenHorseWindow,
     // SP_KeepAlive,
 
@@ -2397,7 +2401,7 @@ uint32_t DUMP_ENABLED[] = {
 
     // SP_PlayerAbilities,
     // SP_CombatEffect,
-    SP_PlayerListItem,
+    // SP_PlayerListItem,
     // SP_FacePlayer,
     // SP_PlayerPositionLook,
     // SP_UnlockRecipes,

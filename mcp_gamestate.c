@@ -1549,42 +1549,95 @@ void gs_packet(MCPacket *pkt) {
 
         GSP(SP_OpenWindow) {
             if (DEBUG_INVENTORY) {
-                printf("*** Open Window wid=%d type=%s\n",
+                printf("*** Open Window wid=%d type=%i\n",
                        tpkt->wid, tpkt->wtype);
             }
 
             gs.inv.windowopen = 1;
             gs.inv.wid = tpkt->wid;
-            sprintf(gs.inv.wtype, "%s", tpkt->wtype);
+            gs.inv.wtype = tpkt->wtype;
 
-            if (tpkt->nslots) {
-                // this is a window with storable slots
-                // we can use the direct offset specified in the packet
+            //TODO: Grab these from the database (it's a registry in the items file)
+            //   "minecraft:generic_9x1":       "protocol_id": 0
+            //   "minecraft:generic_9x2":       "protocol_id": 1
+            //   "minecraft:generic_9x3":       "protocol_id": 2
+            //   "minecraft:generic_9x4":       "protocol_id": 3
+            //   "minecraft:generic_9x5":       "protocol_id": 4
+            //   "minecraft:generic_9x6":       "protocol_id": 5
+            //   "minecraft:generic_3x3":       "protocol_id": 6
+            //   "minecraft:anvil":             "protocol_id": 7
+            //   "minecraft:beacon":            "protocol_id": 8
+            //   "minecraft:blast_furnace":     "protocol_id": 9
+            //   "minecraft:brewing_stand":     "protocol_id": 10
+            //   "minecraft:crafting":          "protocol_id": 11
+            //   "minecraft:enchantment":       "protocol_id": 12
+            //   "minecraft:furnace":           "protocol_id": 13
+            //   "minecraft:grindstone":        "protocol_id": 14
+            //   "minecraft:hopper":            "protocol_id": 15
+            //   "minecraft:lectern":           "protocol_id": 16
+            //   "minecraft:loom":              "protocol_id": 17
+            //   "minecraft:merchant":          "protocol_id": 18
+            //   "minecraft:shulker_box":       "protocol_id": 19
+            //   "minecraft:smithing":          "protocol_id": 20
+            //   "minecraft:smoker":            "protocol_id": 21
+            //   "minecraft:cartography_table": "protocol_id": 22
+            //   "minecraft:stonecutter":       "protocol_id": 23
 
-                if (!strcmp(tpkt->wtype, "minecraft:beacon")) {
-                    // except when it's a beacon :/
-                    gs.inv.woffset = 1;
-                }
-                else {
-                    gs.inv.woffset = tpkt->nslots;
-                }
-            }
-            else {
-                // otherwise we need to determine the number of slots from
-                // the window type. Mojang.... sigh
-                if (!strcmp(tpkt->wtype, "minecraft:crafting_table")) {
-                    gs.inv.woffset = 10;
-                }
-                else if (!strcmp(tpkt->wtype, "minecraft:enchanting_table")) {
-                    gs.inv.woffset = 2;
-                }
-                else if (!strcmp(tpkt->wtype, "minecraft:anvil")) {
-                    gs.inv.woffset = 3;
-                }
-                else {
-                    printf("*** Unknown window type %s, inventory offset is likely incorrect\n",tpkt->wtype);
-                }
-            }
+        switch (tpkt->wtype) {
+            case 0 : gs.inv.woffset = 9;  break;   //   "minecraft:generic_9x1"
+            case 1 : gs.inv.woffset = 18; break;   //   "minecraft:generic_9x2"
+            case 2 : gs.inv.woffset = 27; break;   //   "minecraft:generic_9x3"
+            case 3 : gs.inv.woffset = 36; break;   //   "minecraft:generic_9x4"
+            case 4 : gs.inv.woffset = 45; break;   //   "minecraft:generic_9x5"
+            case 5 : gs.inv.woffset = 54; break;   //   "minecraft:generic_9x6"
+            case 6 : gs.inv.woffset = 9;  break;   //   "minecraft:generic_3x3"
+            case 7 : gs.inv.woffset = 3;  break;   //   "minecraft:anvil"
+            case 8 : gs.inv.woffset = 1;  break;   //   "minecraft:beacon"
+            case 9 : gs.inv.woffset = 3;  break;   //   "minecraft:blast_furnace"
+            case 10: gs.inv.woffset = 5;  break;   //   "minecraft:brewing_stand"
+            case 11: gs.inv.woffset = 10; break;   //   "minecraft:crafting"
+            case 12: gs.inv.woffset = 2;  break;   //   "minecraft:enchantment"
+            case 13: gs.inv.woffset = 3;  break;   //   "minecraft:furnace"
+            case 14: gs.inv.woffset = 3;  break;   //   "minecraft:grindstone"
+            case 15: gs.inv.woffset = 5;  break;   //   "minecraft:hopper"
+            case 16: gs.inv.woffset = 1;  break;   //   "minecraft:lectern"
+            case 17: gs.inv.woffset = 4;  break;   //   "minecraft:loom"
+            case 18: gs.inv.woffset = 3;  break;   //   "minecraft:merchant"
+            case 19: gs.inv.woffset = 27; break;   //   "minecraft:shulker_box"
+            case 20: gs.inv.woffset = 3;  break;   //   "minecraft:smithing"
+            case 21: gs.inv.woffset = 3;  break;   //   "minecraft:smoker"
+            case 22: gs.inv.woffset = 3;  break;   //   "minecraft:cartography_table"
+            case 23: gs.inv.woffset = 2;  break;   //   "minecraft:stonecutter"
+            default: gs.inv.woffset = 0;  printf("**Warning Unknown Window Type**\n");
+        }
+            // if (tpkt->nslots) {
+            //     // this is a window with storable slots
+            //     // we can use the direct offset specified in the packet
+
+            //     if (!strcmp(tpkt->wtype, "minecraft:beacon")) {
+            //         // except when it's a beacon :/
+            //         gs.inv.woffset = 1;
+            //     }
+            //     else {
+            //         gs.inv.woffset = tpkt->nslots;
+            //     }
+            // }
+            // else {
+            //     // otherwise we need to determine the number of slots from
+            //     // the window type. Mojang.... sigh
+            //     if (!strcmp(tpkt->wtype, "minecraft:crafting_table")) {
+            //         gs.inv.woffset = 10;
+            //     }
+            //     else if (!strcmp(tpkt->wtype, "minecraft:enchanting_table")) {
+            //         gs.inv.woffset = 2;
+            //     }
+            //     else if (!strcmp(tpkt->wtype, "minecraft:anvil")) {
+            //         gs.inv.woffset = 3;
+            //     }
+            //     else {
+            //         printf("*** Unknown window type %s, inventory offset is likely incorrect\n",tpkt->wtype);
+            //     }
+            // }
 
             if (DEBUG_INVENTORY) {
                 printf("*** Inventory offset=%d\n",gs.inv.woffset);
@@ -1612,10 +1665,11 @@ void gs_packet(MCPacket *pkt) {
             prune_slot(&gs.inv.drag);
 
             // discard the crafting and the product slot
+            // FIXME TODO: These are not thrown anymore right? and why 5 wouldnt it depend on the window?
             int i;
             for(i=0; i<5; i++) {
                 if (DEBUG_INVENTORY && gs.inv.slots[i].item!=-1) {
-                    printf("  discarding crafting slot %d: ",i);
+                    printf("WARNING  discarding crafting slot %d: ",i);
                     dump_slot(&gs.inv.slots[i]);
                     printf("\n");
                 }
@@ -1635,6 +1689,10 @@ void gs_packet(MCPacket *pkt) {
             // This happens when accessing villagers - it sends me
             // SP_WindowItems first, and then SP_OpenWindow
             if (tpkt->wid != gs.inv.wid) break;
+
+            // ignore this update if the window is a lectern
+            // TODO: Use a database lookup for the lectern ID
+            if (gs.inv.wtype == 16) break;
 
             // Start of player's inventory slots in the dialog window
             int woffset = (tpkt->wid == 0) ? 0 : gs.inv.woffset;
