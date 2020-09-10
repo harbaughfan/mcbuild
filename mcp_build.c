@@ -282,7 +282,7 @@ int prefetch_material(MCPacketQueue *sq, MCPacketQueue *cq, blid_t blk_id) {
             break;
         }
     if (mslot<0) return -1; // material not available in the inventory
-    printf("Found in slot %d\n", mslot);
+    //printf("Found in slot %d\n", mslot);
 
     if (mslot>=36 && mslot<=44) return mslot-36; // found in the quickbar
 
