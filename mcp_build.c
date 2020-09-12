@@ -1097,7 +1097,7 @@ int update_placed() {
             b->placed = 1;
         }
         else if (db_get_blk_default_id(bl.raw ) == db_get_blk_default_id(b->b.raw ) ) {
-            printf("Block match but different state ID %i vs %i\n", bl.raw,b->b.raw);
+            //printf("Block match but different state ID %i vs %i\n", bl.raw,b->b.raw);
 
             if ( db_item_is_slab(db_get_item_id_from_blk_id(b->b.raw)) ) {
                 //item is a slab

@@ -1077,6 +1077,26 @@ bplan * bplan_pngload(const char *name, const char *setname) {
         { 0x000000, 0 },   // terminator
     };
 
+    cmap_t CMAP_CARPET[] = {
+        { 0xdedede, db_get_blk_id("white_carpet") },  // white
+        { 0xba6d2c, db_get_blk_id("orange_carpet") },
+        { 0x9941ba, db_get_blk_id("magenta_carpet") },
+        { 0x5884ba, db_get_blk_id("light_blue_carpet") },
+        { 0xc5c52c, db_get_blk_id("yellow_carpet") },
+        { 0x6db015, db_get_blk_id("lime_carpet") },
+        { 0xd06d8e, db_get_blk_id("pink_carpet") },
+        { 0x414141, db_get_blk_id("gray_carpet") },
+        { 0x848484, db_get_blk_id("light_gray_carpet") },
+        { 0x416d84, db_get_blk_id("cyan_carpet") },
+        { 0x6d3699, db_get_blk_id("purple_carpet") },
+        { 0x2c4199, db_get_blk_id("blue_carpet") },
+        { 0x58412c, db_get_blk_id("brown_carpet") },
+        { 0x586d2c, db_get_blk_id("green_carpet") },
+        { 0x842c2c, db_get_blk_id("red_carpet") },
+        { 0x151515, db_get_blk_id("black_carpet") },
+        { 0x000000, 0 },   // terminator
+    };
+
     cmap_t CMAP_GLASS[] = {
         { 0xDBF2F5, db_get_blk_id("glass") },  // plain
         { 0xFFFFFF, db_get_blk_id("white_stained_glass") },  // white
@@ -1121,134 +1141,221 @@ bplan * bplan_pngload(const char *name, const char *setname) {
 
     // all colors
     cmap_t CMAP_MAP_ALL[] = {
-        { 0x6e9a30, db_get_blk_id("grass") },   // Grass
-        { 0xd5c98d, db_get_blk_id("sandstone_slab") },   // Sandtone slab
-        { 0x909090, db_get_blk_id("cobweb") },   // Cobweb
-        { 0xdc0000, db_get_blk_id("redstone_block") },   // Redstone block
-        { 0x8a8adc, db_get_blk_id("packed_ice") },   // Packed ice
-        { 0x909090, db_get_blk_id("heavy_weighted_pressure_plate")  },   // Iron pressure plate
-        { 0x006b00, db_get_blk_id("oak_leaves") },   // Oak leaves
-        { 0xdcdcdc, db_get_blk_id("white_carpet") },   // White carpet
-        { 0x8d919f, db_get_blk_id("clay") },   // Clay block
-        { 0x9e5b29, db_get_blk_id("jungle_slab") },   // Jungle wood slab
-        { 0x616161, db_get_blk_id("cobblestone_slab") },   // Cobblestone slab
-        { 0x3737dc, db_get_blk_id("water") },   // Water
-        { 0x5a482b, db_get_blk_id("oak_slab") },   // Oak wood slab
-        { 0xdcd9d3, db_get_blk_id("diorite_slab") },   // Diorite
-        { 0xba6e2c, db_get_blk_id("orange_carpet") },   // Orange carpet
-        { 0x9a42ba, db_get_blk_id("magenta_carpet") },   // Magenta carpet
-        { 0x5884ba, db_get_blk_id("light_blue_carpet") },   // Light blue carpet
-        { 0xc6c62c, db_get_blk_id("yellow_carpet") },   // Yellow carpet
-        { 0x6eb016, db_get_blk_id("lime_carpet") },   // Lime carpet
-        { 0xd16e8e, db_get_blk_id("ping_carpet") },   // Pink carpet
-        { 0x424242, db_get_blk_id("gray_carpet") },   // Gray carpet
-        { 0x848484, db_get_blk_id("light_gray_carpet") },   // Light gray carpet
-        { 0x426e84, db_get_blk_id("cyan_carpet") },   // Cyan carpet
-        { 0x6e369a, db_get_blk_id("purple_carpet") },   // Purple carpet
-        { 0x2c429a, db_get_blk_id("blue_carpet") },   // Blue carpet
-        { 0x58422c, db_get_blk_id("brown_carpet") },   // Brown carpet
-        { 0x586e2c, db_get_blk_id("green_carpet") },   // Green carpet
-        { 0x842c2c, db_get_blk_id("red_carpet") },   // Red carpet
-        { 0x161616, db_get_blk_id("black_carpet") },   // Black carpet
-        { 0xd8cd42, db_get_blk_id("light_weighted_pressure_plate") },   // Gold pressure plate
-        { 0x4fbdb8, db_get_blk_id("prismarine_slab") },   // Prismarine bricks
-        { 0x406edc, db_get_blk_id("lapis_block") },   // Lapis lazuli block
-        { 0x00bb32, db_get_blk_id("emerald_block") },   // Emerald block
-        { 0x12111b, db_get_blk_id("spruce_slab") },   // Spruce Wood Slab
-        { 0x610200, db_get_blk_id("netherrack") },   // Netherrack
-        { 0xa3292a, db_get_blk_id("crimson_nylium") },   //52 CRIMSON_NYLIUM
-        { 0x7f3653, db_get_blk_id("crimson_slab") },   //53 CRIMSON_STEM
-        { 0x4f1519, db_get_blk_id("crimson_hyphae") },   //54 CRIMSON_HYPHAE
-        { 0x126c73, db_get_blk_id("warped_nylium") },   //55 WARPED_NYLIUM
-        { 0x327a78, db_get_blk_id("warped_slab") },   //56 WARPED_STEM
-        { 0x4a2535, db_get_blk_id("warped_hyphae") },   //57 WARPED_HYPHAE
-        { 0x119b72, db_get_blk_id("warped_wart_block") },   //58 WARPED_WART_BLOCK
+        { 0x6d9930, db_get_blk_id("grass_block") },
+        { 0xd5c98c, db_get_blk_id("birch_pressure_plate") },  // birch_slab  // sandstone_slab  // end_stone_slab
+        { 0xababab, db_get_blk_id("mushroom_stem") },  // cobweb
+        { 0xdc0000, db_get_blk_id("redstone_block") },  // tnt
+        { 0x8a8adc, db_get_blk_id("packed_ice") },  // ice  // blue_ice
+        { 0x909090, db_get_blk_id("heavy_weighted_pressure_plate") },  // lantern
+        { 0x006a00, db_get_blk_id("oak_leaves") },  // flowers  // sugar_cane  // sweet_berry_bush  // grass (blades)  // sapling
+        { 0xdcdcdc, db_get_blk_id("white_carpet") },
+        { 0x8d909e, db_get_blk_id("clay") },
+        { 0x825e42, db_get_blk_id("jungle_pressure_plate") },  // jungle_slab  // granite_slab  // dirt
+        { 0x606060, db_get_blk_id("stone_pressure_plate") },  // stone_slab  // cobblestone_slab  // smooth_stone_slab
+        { 0x3737dc, db_get_blk_id("water") },
+        { 0x7b663e, db_get_blk_id("oak_pressure_plate") },  // oak_slab  // dead_bush
+        { 0xdcd9d3, db_get_blk_id("diorite_slab") },  // sea_lantern  // quartz_slab
+        { 0xba6d2c, db_get_blk_id("orange_carpet") },
+        { 0x9941ba, db_get_blk_id("magenta_carpet") },
+        { 0x5884ba, db_get_blk_id("light_blue_carpet") },
+        { 0xc5c52c, db_get_blk_id("yellow_carpet") },
+        { 0x6db015, db_get_blk_id("lime_carpet") },
+        { 0xd06d8e, db_get_blk_id("pink_carpet") },
+        { 0x414141, db_get_blk_id("gray_carpet") },
+        { 0x848484, db_get_blk_id("light_gray_carpet") },
+        { 0x416d84, db_get_blk_id("cyan_carpet") },
+        { 0x6d3699, db_get_blk_id("purple_carpet") },
+        { 0x2c4199, db_get_blk_id("blue_carpet") },
+        { 0x58412c, db_get_blk_id("brown_carpet") },
+        { 0x586d2c, db_get_blk_id("green_carpet") },
+        { 0x842c2c, db_get_blk_id("red_carpet") },
+        { 0x151515, db_get_blk_id("black_carpet") },
+        { 0xd7cd42, db_get_blk_id("light_weighted_pressure_plate") },  // bell
+        { 0x4fbcb7, db_get_blk_id("prismarine_slab") },  // dark_prismarine_slab
+        { 0x3f6edc, db_get_blk_id("lapis_block") },
+        { 0x00bb32, db_get_blk_id("emerald_block") },
+        { 0x6f4a2a, db_get_blk_id("spruce_pressure_plate") },  // spruce_slab
+        { 0x600100, db_get_blk_id("crimson_pressure_plate") },  // nether_brick_slab  // netherrack
+        { 0xb4988a, db_get_blk_id("white_terracotta") },
+        { 0x89461f, db_get_blk_id("orange_terracotta") },
+        { 0x804b5d, db_get_blk_id("magenta_terracotta") },
+        { 0x605d77, db_get_blk_id("light_blue_terracotta") },
+        { 0xa0721f, db_get_blk_id("yellow_terracotta") },
+        { 0x58642d, db_get_blk_id("lime_terracotta") },
+        { 0x8a4243, db_get_blk_id("pink_terracotta") },
+        { 0x31231e, db_get_blk_id("gray_terracotta") },
+        { 0x745c54, db_get_blk_id("light_gray_terracotta") },
+        { 0x4b4f4f, db_get_blk_id("cyan_terracotta") },
+        { 0x693e4b, db_get_blk_id("purple_terracotta") },
+        { 0x41354f, db_get_blk_id("blue_terracotta") },
+        { 0x412b1e, db_get_blk_id("brown_terracotta") },
+        { 0x414624, db_get_blk_id("green_terracotta") },
+        { 0x7a3327, db_get_blk_id("red_terracotta") },
+        { 0x1f120d, db_get_blk_id("black_terracotta") },
+        { 0xa3292a, db_get_blk_id("crimson_nylium") },
+        { 0x7f3653, db_get_blk_id("crimson_slab") },
+        { 0x4f1519, db_get_blk_id("crimson_hyphae") },
+        { 0x126c73, db_get_blk_id("warped_nylium") },
+        { 0x327a78, db_get_blk_id("warped_slab") },
+        { 0x4a2535, db_get_blk_id("warped_hyphae") },
+        { 0x119b72, db_get_blk_id("warped_wart_block") },
         { 0x000000, 0 },       // terminator
     };
 
     // all colors except inconvenient ones (cobweb/bed and water)
     cmap_t CMAP_MAP_DEFAULT[] = {
-        { 0x6e9a30, db_get_blk_id("grass") },   // Grass
-        { 0xd5c98d, db_get_blk_id("sandstone_slab") },   // Sandtone slab
-        { 0xdc0000, db_get_blk_id("redstone_block") },   // Redstone block
-        { 0x8a8adc, db_get_blk_id("packed_ice") },   // Packed ice
-        { 0x909090, db_get_blk_id("heavy_weighted_pressure_plate")  },   // Iron pressure plate
-        { 0x006b00, db_get_blk_id("oak_leaves") },   // Oak leaves
-        { 0xdcdcdc, db_get_blk_id("white_carpet") },   // White carpet
-        { 0x8d919f, db_get_blk_id("clay") },   // Clay block
-        { 0x9e5b29, db_get_blk_id("jungle_slab") },   // Jungle wood slab
-        { 0x616161, db_get_blk_id("cobblestone_slab") },   // Cobblestone slab
-        { 0x5a482b, db_get_blk_id("oak_slab") },   // Oak wood slab
-        { 0xdcd9d3, db_get_blk_id("diorite_slab") },   // Diorite
-        { 0xba6e2c, db_get_blk_id("orange_carpet") },   // Orange carpet
-        { 0x9a42ba, db_get_blk_id("magenta_carpet") },   // Magenta carpet
-        { 0x5884ba, db_get_blk_id("light_blue_carpet") },   // Light blue carpet
-        { 0xc6c62c, db_get_blk_id("yellow_carpet") },   // Yellow carpet
-        { 0x6eb016, db_get_blk_id("lime_carpet") },   // Lime carpet
-        { 0xd16e8e, db_get_blk_id("ping_carpet") },   // Pink carpet
-        { 0x424242, db_get_blk_id("gray_carpet") },   // Gray carpet
-        { 0x848484, db_get_blk_id("light_gray_carpet") },   // Light gray carpet
-        { 0x426e84, db_get_blk_id("cyan_carpet") },   // Cyan carpet
-        { 0x6e369a, db_get_blk_id("purple_carpet") },   // Purple carpet
-        { 0x2c429a, db_get_blk_id("blue_carpet") },   // Blue carpet
-        { 0x58422c, db_get_blk_id("brown_carpet") },   // Brown carpet
-        { 0x586e2c, db_get_blk_id("green_carpet") },   // Green carpet
-        { 0x842c2c, db_get_blk_id("red_carpet") },   // Red carpet
-        { 0x161616, db_get_blk_id("black_carpet") },   // Black carpet
-        { 0xd8cd42, db_get_blk_id("light_weighted_pressure_plate") },   // Gold pressure plate
-        { 0x4fbdb8, db_get_blk_id("prismarine_slab") },   // Prismarine bricks
-        { 0x406edc, db_get_blk_id("lapis_block") },   // Lapis lazuli block
-        { 0x00bb32, db_get_blk_id("emerald_block") },   // Emerald block
-        { 0x12111b, db_get_blk_id("spruce_slab") },   // Spruce Wood Slab
-        { 0x610200, db_get_blk_id("netherrack") },   // Netherrack
-        { 0xa3292a, db_get_blk_id("crimson_nylium") },   //52 CRIMSON_NYLIUM
-        { 0x7f3653, db_get_blk_id("crimson_slab") },   //53 CRIMSON_STEM
-        { 0x4f1519, db_get_blk_id("crimson_hyphae") },   //54 CRIMSON_HYPHAE
-        { 0x126c73, db_get_blk_id("warped_nylium") },   //55 WARPED_NYLIUM
-        { 0x327a78, db_get_blk_id("warped_slab") },   //56 WARPED_STEM
-        { 0x4a2535, db_get_blk_id("warped_hyphae") },   //57 WARPED_HYPHAE
-        { 0x119b72, db_get_blk_id("warped_wart_block") },   //58 WARPED_WART_BLOCK
+        { 0x6d9930, db_get_blk_id("grass_block") },
+        { 0xd5c98c, db_get_blk_id("birch_pressure_plate") },  // birch_slab  // sandstone_slab  // end_stone_slab
+        { 0xababab, db_get_blk_id("mushroom_stem") },  // cobweb
+        { 0xdc0000, db_get_blk_id("redstone_block") },  // tnt
+        { 0x8a8adc, db_get_blk_id("packed_ice") },  // ice  // blue_ice
+        { 0x909090, db_get_blk_id("heavy_weighted_pressure_plate") },  // lantern
+        { 0x006a00, db_get_blk_id("oak_leaves") },  // flowers  // sugar_cane  // sweet_berry_bush  // grass (blades)  // sapling
+        { 0xdcdcdc, db_get_blk_id("white_carpet") },
+        { 0x8d909e, db_get_blk_id("clay") },
+        { 0x825e42, db_get_blk_id("jungle_pressure_plate") },  // jungle_slab  // granite_slab  // dirt
+        { 0x606060, db_get_blk_id("stone_pressure_plate") },  // stone_slab  // cobblestone_slab  // smooth_stone_slab
+        { 0x7b663e, db_get_blk_id("oak_pressure_plate") },  // oak_slab  // dead_bush
+        { 0xdcd9d3, db_get_blk_id("diorite_slab") },  // sea_lantern  // quartz_slab
+        { 0xba6d2c, db_get_blk_id("orange_carpet") },
+        { 0x9941ba, db_get_blk_id("magenta_carpet") },
+        { 0x5884ba, db_get_blk_id("light_blue_carpet") },
+        { 0xc5c52c, db_get_blk_id("yellow_carpet") },
+        { 0x6db015, db_get_blk_id("lime_carpet") },
+        { 0xd06d8e, db_get_blk_id("pink_carpet") },
+        { 0x414141, db_get_blk_id("gray_carpet") },
+        { 0x848484, db_get_blk_id("light_gray_carpet") },
+        { 0x416d84, db_get_blk_id("cyan_carpet") },
+        { 0x6d3699, db_get_blk_id("purple_carpet") },
+        { 0x2c4199, db_get_blk_id("blue_carpet") },
+        { 0x58412c, db_get_blk_id("brown_carpet") },
+        { 0x586d2c, db_get_blk_id("green_carpet") },
+        { 0x842c2c, db_get_blk_id("red_carpet") },
+        { 0x151515, db_get_blk_id("black_carpet") },
+        { 0xd7cd42, db_get_blk_id("light_weighted_pressure_plate") },  // bell
+        { 0x4fbcb7, db_get_blk_id("prismarine_slab") },  // dark_prismarine_slab
+        { 0x3f6edc, db_get_blk_id("lapis_block") },
+        { 0x00bb32, db_get_blk_id("emerald_block") },
+        { 0x6f4a2a, db_get_blk_id("spruce_pressure_plate") },  // spruce_slab
+        { 0x600100, db_get_blk_id("crimson_pressure_plate") },  // nether_brick_slab  // netherrack
+        { 0xb4988a, db_get_blk_id("white_terracotta") },
+        { 0x89461f, db_get_blk_id("orange_terracotta") },
+        { 0x804b5d, db_get_blk_id("magenta_terracotta") },
+        { 0x605d77, db_get_blk_id("light_blue_terracotta") },
+        { 0xa0721f, db_get_blk_id("yellow_terracotta") },
+        { 0x58642d, db_get_blk_id("lime_terracotta") },
+        { 0x8a4243, db_get_blk_id("pink_terracotta") },
+        { 0x31231e, db_get_blk_id("gray_terracotta") },
+        { 0x745c54, db_get_blk_id("light_gray_terracotta") },
+        { 0x4b4f4f, db_get_blk_id("cyan_terracotta") },
+        { 0x693e4b, db_get_blk_id("purple_terracotta") },
+        { 0x41354f, db_get_blk_id("blue_terracotta") },
+        { 0x412b1e, db_get_blk_id("brown_terracotta") },
+        { 0x414624, db_get_blk_id("green_terracotta") },
+        { 0x7a3327, db_get_blk_id("red_terracotta") },
+        { 0x1f120d, db_get_blk_id("black_terracotta") },
+        { 0xa3292a, db_get_blk_id("crimson_nylium") },
+        { 0x7f3653, db_get_blk_id("crimson_slab") },
+        { 0x4f1519, db_get_blk_id("crimson_hyphae") },
+        { 0x126c73, db_get_blk_id("warped_nylium") },
+        { 0x327a78, db_get_blk_id("warped_slab") },
+        { 0x4a2535, db_get_blk_id("warped_hyphae") },
+        { 0x119b72, db_get_blk_id("warped_wart_block") },
         { 0x000000, 0 },       // terminator
     };
 
     // colors only using cheaply available materials
     cmap_t CMAP_MAP_CHEAP[] = {
-        { 0x6e9a30, db_get_blk_id("grass") },   // Grass
-        { 0xd5c98d, db_get_blk_id("sandstone_slab") },   // Sandtone slab
-        { 0x8a8adc, db_get_blk_id("packed_ice") },   // Packed ice
-        { 0x006b00, db_get_blk_id("oak_leaves") },   // Oak leaves
-        { 0xdcdcdc, db_get_blk_id("white_carpet") },   // White carpet
-        { 0x8d919f, db_get_blk_id("clay") },   // Clay block
-        { 0x9e5b29, db_get_blk_id("jungle_slab") },   // Jungle wood slab
-        { 0x616161, db_get_blk_id("cobblestone_slab") },   // Cobblestone slab
-        { 0x5a482b, db_get_blk_id("oak_slab") },   // Oak wood slab
-        { 0xdcd9d3, db_get_blk_id("diorite_slab") },   // Diorite
-        { 0xba6e2c, db_get_blk_id("orange_carpet") },   // Orange carpet
-        { 0x9a42ba, db_get_blk_id("magenta_carpet") },   // Magenta carpet
-        { 0x5884ba, db_get_blk_id("light_blue_carpet") },   // Light blue carpet
-        { 0xc6c62c, db_get_blk_id("yellow_carpet") },   // Yellow carpet
-        { 0x6eb016, db_get_blk_id("lime_carpet") },   // Lime carpet
-        { 0xd16e8e, db_get_blk_id("ping_carpet") },   // Pink carpet
-        { 0x424242, db_get_blk_id("gray_carpet") },   // Gray carpet
-        { 0x848484, db_get_blk_id("light_gray_carpet") },   // Light gray carpet
-        { 0x426e84, db_get_blk_id("cyan_carpet") },   // Cyan carpet
-        { 0x6e369a, db_get_blk_id("purple_carpet") },   // Purple carpet
-        { 0x2c429a, db_get_blk_id("blue_carpet") },   // Blue carpet
-        { 0x58422c, db_get_blk_id("brown_carpet") },   // Brown carpet
-        { 0x586e2c, db_get_blk_id("green_carpet") },   // Green carpet
-        { 0x842c2c, db_get_blk_id("red_carpet") },   // Red carpet
-        { 0x161616, db_get_blk_id("black_carpet") },   // Black carpet
-        { 0x4fbdb8, db_get_blk_id("prismarine_slab") },   // Prismarine bricks
-        { 0x12111b, db_get_blk_id("spruce_slab") },   // Spruce Wood Slab
-        { 0x610200, db_get_blk_id("netherrack") },   // Netherrack
-        { 0xa3292a, db_get_blk_id("crimson_nylium") },   //52 CRIMSON_NYLIUM
-        { 0x7f3653, db_get_blk_id("crimson_slab") },   //53 CRIMSON_STEM
-        { 0x4f1519, db_get_blk_id("crimson_hyphae") },   //54 CRIMSON_HYPHAE
-        { 0x126c73, db_get_blk_id("warped_nylium") },   //55 WARPED_NYLIUM
-        { 0x327a78, db_get_blk_id("warped_slab") },   //56 WARPED_STEM
-        { 0x4a2535, db_get_blk_id("warped_hyphae") },   //57 WARPED_HYPHAE
-        { 0x119b72, db_get_blk_id("warped_wart_block") },   //58 WARPED_WART_BLOCK
+        { 0x6d9930, db_get_blk_id("grass_block") },
+        { 0xd5c98c, db_get_blk_id("birch_pressure_plate") },  // birch_slab  // sandstone_slab  // end_stone_slab
+        { 0xababab, db_get_blk_id("mushroom_stem") },  // cobweb
+        { 0x8a8adc, db_get_blk_id("packed_ice") },  // ice  // blue_ice
+        { 0x909090, db_get_blk_id("heavy_weighted_pressure_plate") },  // lantern
+        { 0x006a00, db_get_blk_id("oak_leaves") },  // flowers  // sugar_cane  // sweet_berry_bush  // grass (blades)  // sapling
+        { 0xdcdcdc, db_get_blk_id("white_carpet") },
+        { 0x8d909e, db_get_blk_id("clay") },
+        { 0x825e42, db_get_blk_id("jungle_pressure_plate") },  // jungle_slab  // granite_slab  // dirt
+        { 0x606060, db_get_blk_id("stone_pressure_plate") },  // stone_slab  // cobblestone_slab  // smooth_stone_slab
+        { 0x7b663e, db_get_blk_id("oak_pressure_plate") },  // oak_slab  // dead_bush
+        { 0xdcd9d3, db_get_blk_id("diorite_slab") },  // sea_lantern  // quartz_slab
+        { 0xba6d2c, db_get_blk_id("orange_carpet") },
+        { 0x9941ba, db_get_blk_id("magenta_carpet") },
+        { 0x5884ba, db_get_blk_id("light_blue_carpet") },
+        { 0xc5c52c, db_get_blk_id("yellow_carpet") },
+        { 0x6db015, db_get_blk_id("lime_carpet") },
+        { 0xd06d8e, db_get_blk_id("pink_carpet") },
+        { 0x414141, db_get_blk_id("gray_carpet") },
+        { 0x848484, db_get_blk_id("light_gray_carpet") },
+        { 0x416d84, db_get_blk_id("cyan_carpet") },
+        { 0x6d3699, db_get_blk_id("purple_carpet") },
+        { 0x2c4199, db_get_blk_id("blue_carpet") },
+        { 0x58412c, db_get_blk_id("brown_carpet") },
+        { 0x586d2c, db_get_blk_id("green_carpet") },
+        { 0x842c2c, db_get_blk_id("red_carpet") },
+        { 0x151515, db_get_blk_id("black_carpet") },
+        { 0xd7cd42, db_get_blk_id("light_weighted_pressure_plate") },  // bell
+        { 0x4fbcb7, db_get_blk_id("prismarine_slab") },  // dark_prismarine_slab
+        { 0x6f4a2a, db_get_blk_id("spruce_pressure_plate") },  // spruce_slab
+        { 0x600100, db_get_blk_id("crimson_pressure_plate") },  // nether_brick_slab  // netherrack
+        { 0xb4988a, db_get_blk_id("white_terracotta") },
+        { 0x89461f, db_get_blk_id("orange_terracotta") },
+        { 0x804b5d, db_get_blk_id("magenta_terracotta") },
+        { 0x605d77, db_get_blk_id("light_blue_terracotta") },
+        { 0xa0721f, db_get_blk_id("yellow_terracotta") },
+        { 0x58642d, db_get_blk_id("lime_terracotta") },
+        { 0x8a4243, db_get_blk_id("pink_terracotta") },
+        { 0x31231e, db_get_blk_id("gray_terracotta") },
+        { 0x745c54, db_get_blk_id("light_gray_terracotta") },
+        { 0x4b4f4f, db_get_blk_id("cyan_terracotta") },
+        { 0x693e4b, db_get_blk_id("purple_terracotta") },
+        { 0x41354f, db_get_blk_id("blue_terracotta") },
+        { 0x412b1e, db_get_blk_id("brown_terracotta") },
+        { 0x414624, db_get_blk_id("green_terracotta") },
+        { 0x7a3327, db_get_blk_id("red_terracotta") },
+        { 0x1f120d, db_get_blk_id("black_terracotta") },
+        { 0xa3292a, db_get_blk_id("crimson_nylium") },
+        { 0x7f3653, db_get_blk_id("crimson_slab") },
+        { 0x4f1519, db_get_blk_id("crimson_hyphae") },
+        { 0x126c73, db_get_blk_id("warped_nylium") },
+        { 0x327a78, db_get_blk_id("warped_slab") },
+        { 0x4a2535, db_get_blk_id("warped_hyphae") },
+        { 0x119b72, db_get_blk_id("warped_wart_block") },
     };
+
+    // walkable (no full height blocks)
+    cmap_t CMAP_WALKABLE[] = {
+        { 0xd5c98c, db_get_blk_id("birch_pressure_plate") },  // birch_slab  // sandstone_slab  // end_stone_slab
+        { 0x909090, db_get_blk_id("heavy_weighted_pressure_plate") },  // lantern
+        { 0x006a00, db_get_blk_id("grass") },  //oak_leaves // flowers  // sugar_cane  // sweet_berry_bush  // grass (blades)  // sapling
+        { 0xdcdcdc, db_get_blk_id("white_carpet") },
+        { 0x825e42, db_get_blk_id("jungle_pressure_plate") },  // jungle_slab  // granite_slab  // dirt
+        { 0x606060, db_get_blk_id("stone_pressure_plate") },  // stone_slab  // cobblestone_slab  // smooth_stone_slab
+        { 0x7b663e, db_get_blk_id("oak_pressure_plate") },  // oak_slab  // dead_bush
+        { 0xdcd9d3, db_get_blk_id("diorite_slab") },  // sea_lantern  // quartz_slab
+        { 0xba6d2c, db_get_blk_id("orange_carpet") },
+        { 0x9941ba, db_get_blk_id("magenta_carpet") },
+        { 0x5884ba, db_get_blk_id("light_blue_carpet") },
+        { 0xc5c52c, db_get_blk_id("yellow_carpet") },
+        { 0x6db015, db_get_blk_id("lime_carpet") },
+        { 0xd06d8e, db_get_blk_id("pink_carpet") },
+        { 0x414141, db_get_blk_id("gray_carpet") },
+        { 0x848484, db_get_blk_id("light_gray_carpet") },
+        { 0x416d84, db_get_blk_id("cyan_carpet") },
+        { 0x6d3699, db_get_blk_id("purple_carpet") },
+        { 0x2c4199, db_get_blk_id("blue_carpet") },
+        { 0x58412c, db_get_blk_id("brown_carpet") },
+        { 0x586d2c, db_get_blk_id("green_carpet") },
+        { 0x842c2c, db_get_blk_id("red_carpet") },
+        { 0x151515, db_get_blk_id("black_carpet") },
+        { 0xd7cd42, db_get_blk_id("light_weighted_pressure_plate") },  // bell
+        { 0x4fbcb7, db_get_blk_id("prismarine_slab") },  // dark_prismarine_slab
+        { 0x6f4a2a, db_get_blk_id("spruce_pressure_plate") },  // spruce_slab
+        { 0x600100, db_get_blk_id("crimson_pressure_plate") },  // nether_brick_slab  // netherrack
+        { 0x7f3653, db_get_blk_id("crimson_slab") },
+        { 0x327a78, db_get_blk_id("warped_slab") },
+        { 0x000000, 0 },       // terminator
+    };
+
 
     // colors suitable for grayscale images -
     cmap_t CMAP_MAP_GRAY[] = {
@@ -1271,11 +1378,13 @@ bplan * bplan_pngload(const char *name, const char *setname) {
     }
     else {
         if (!strcasecmp(setname, "wool"))       set = CMAP_WOOL;
+        if (!strcasecmp(setname, "carpet"))     set = CMAP_CARPET;
         if (!strcasecmp(setname, "clay"))       set = CMAP_CLAY;
         if (!strcasecmp(setname, "glass"))      set = CMAP_GLASS;
         if (!strcasecmp(setname, "map"))        set = CMAP_MAP_DEFAULT;
         if (!strcasecmp(setname, "mapall"))     set = CMAP_MAP_ALL;
         if (!strcasecmp(setname, "mapcheap"))   set = CMAP_MAP_CHEAP;
+        if (!strcasecmp(setname, "walkable"))   set = CMAP_WALKABLE;
         if (!strcasecmp(setname, "mapgray"))    set = CMAP_MAP_GRAY;
         if (!set) LH_ERROR(NULL, "No such color set \"%s\"", setname);
     }
