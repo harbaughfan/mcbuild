@@ -1237,7 +1237,7 @@ bplan * bplan_pngload(const char *name, const char *setname) {
         { 0x3f6edc, db_get_blk_id("lapis_block") },
         { 0x00bb32, db_get_blk_id("emerald_block") },
         { 0x6f4a2a, db_get_blk_id("spruce_pressure_plate") },  // spruce_slab
-        { 0x600100, db_get_blk_id("crimson_pressure_plate") },  // nether_brick_slab  // netherrack
+        { 0x600100, db_get_blk_id("netherrack") },  // nether_brick_slab
         { 0xb4988a, db_get_blk_id("white_terracotta") },
         { 0x89461f, db_get_blk_id("orange_terracotta") },
         { 0x804b5d, db_get_blk_id("magenta_terracotta") },
@@ -1255,7 +1255,7 @@ bplan * bplan_pngload(const char *name, const char *setname) {
         { 0x7a3327, db_get_blk_id("red_terracotta") },
         { 0x1f120d, db_get_blk_id("black_terracotta") },
         { 0xa3292a, db_get_blk_id("crimson_nylium") },
-        { 0x7f3653, db_get_blk_id("crimson_slab") },
+        { 0x7f3653, db_get_blk_id("crimson_slab") },  //crimson_pressure_plate ??
         { 0x4f1519, db_get_blk_id("crimson_hyphae") },
         { 0x126c73, db_get_blk_id("warped_nylium") },
         { 0x327a78, db_get_blk_id("warped_slab") },
