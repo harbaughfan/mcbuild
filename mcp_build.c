@@ -240,7 +240,7 @@ static void build_update_placed();
 // Inventory
 
 // slot range in the quickbar that can be used for material fetching
-int matl=4, math=7;
+int matl=0, math=8;
 
 // timestamps when the material slots were last accessed - used to select evictable slots
 int64_t mat_last[9];
